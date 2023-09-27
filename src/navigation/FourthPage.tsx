@@ -519,47 +519,15 @@ const Cards = ({route, navigation}) => {
 
   return (
     <Block marginTop={sizes.m} paddingHorizontal={sizes.padding}>
-      <Block card padding={0}>
-        <Image
-          background
-          resizeMode="cover"
-          source={assets.greeny}
-          radius={sizes.cardRadius}>
-          <Block color="rgba(0,0,0,0.3)" padding={sizes.padding}>
-            <Text h4 white marginBottom={sizes.sm} marginTop={sizes.sm}>
-              Let’s complete your profile
-            </Text>
-            <Text p white>
-              It will help us to know more about you!
-            </Text>
-            {/* user details */}
-            <Block row marginLeft={sizes.xs} marginTop={sizes.xxl}>
-              <Image
-                source={assets.avatar2}
-                style={{
-                  width: sizes.xl,
-                  height: sizes.xl,
-                  borderRadius: sizes.s,
-                }}
-              />
-              <Block marginLeft={sizes.s}>
-                <Text p white semibold>
-                  {formData.first_name}
-                </Text>
-                <Text p white>
-                  {formData.weightWantTo}
-                </Text>
-              </Block>
-            </Block>
-          </Block>
-        </Image>
-      </Block>
+    
       <Block  marginTop={sizes.m} >
         <Block card padding={0}>
         <Image
           background
+          padding={15}
+          blurRadius={10}
           resizeMode="cover"
-          source={assets.greeny}
+          source={require('../assets/images/bg111.jpg')}
           radius={sizes.cardRadius}>
         <Block flex={1} center>
           <Text center h5 bold paddingTop={10}>Height & Weight</Text>
@@ -773,8 +741,16 @@ const Cards = ({route, navigation}) => {
         </Image>
         </Block>
    
-        <Block marginTop={sizes.m}>
-          <Text h4>Gender & Age</Text>
+        <Block marginTop={sizes.m} card padding={0}>
+          <Image
+          background
+          padding={25}
+          blurRadius={10}
+          resizeMode="cover"
+          // source={require('../assets/images/bg122.jpg')}
+          radius={sizes.cardRadius}
+          >
+  <Text h5 bold center marginTop={10}>Gender & Age</Text>
           <Block
             row
             justify="space-between"
@@ -843,9 +819,20 @@ const Cards = ({route, navigation}) => {
               </Text>
             </Button>
           </Block>
+          </Image>
+        
         </Block>
-        <Block marginTop={sizes.m}>
-          <Text h4>Activity Level</Text>
+        <Block marginTop={sizes.m} card padding={0}>
+        <Image
+          background
+          padding={25}
+          blurRadius={10}
+          resizeMode="cover"
+          source={require('../assets/images/bg123.jpg')}
+          radius={sizes.cardRadius}
+          >
+
+          <Text h5 bold marginTop={10} center>Activity Level</Text>
 
           <Block marginTop={sizes.sm}>
             <Block row justify="space-between" marginBottom={sizes.base}>
@@ -937,6 +924,8 @@ const Cards = ({route, navigation}) => {
               </Block>
             </Block>
           </Block>
+        
+        </Image>
         </Block>
       </Block>
       <Modal visible={showModal} onRequestClose={() => setModal(false)}>
