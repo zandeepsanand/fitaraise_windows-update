@@ -5,6 +5,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {useScreenOptions, useTranslation} from '../hooks';
 import DietPlan from '../screens/DietPlan';
 import MealContextProvider from '../hooks/useMeal';
+import Components from './FourthPage';
 const Stack = createStackNavigator();
  export default function EigthPage(this: any) {
   const {t} = useTranslation();
@@ -21,8 +22,8 @@ const screenOptions = useScreenOptions();
         component={DietPlan}
         options={{title: t('navigation.dietplan') , headerTitleAlign:'center'}}
       />
-
-      {/* <Stack.Screen
+{/* 
+      <Stack.Screen
         name="Components"
         component={Components}
         options={screenOptions.components}

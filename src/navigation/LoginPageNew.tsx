@@ -15,6 +15,7 @@ import {useTheme} from '../hooks';
 import InputField from '../components/inputField';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginContext, {loginSuccess} from '../hooks/LoginContext';
+import { StackActions } from '@react-navigation/native';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -26,6 +27,7 @@ const LoginScreenNew = ({navigation, route}) => {
   const [userId, setUserId] = useState('');
   const [buttonShow, setButtonShow] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
   // console.log(userId, 'userId');
 
   const handleLogin = async () => {
@@ -65,9 +67,7 @@ const LoginScreenNew = ({navigation, route}) => {
         setAuthToken(authData.token); // Set the token for future requests
 
         // You can navigate to another screen or perform other actions here
-        navigation.navigate('Frstpage', {
-          formData: authData.formData,
-        });
+        navigation.dispatch(StackActions.replace('Frstpage', { formData }));
       }
     } catch (error) {
       // Handle login errors here

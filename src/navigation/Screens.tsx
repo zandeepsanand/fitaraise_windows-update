@@ -19,25 +19,25 @@ export default () => {
         options={{title: t('navigation.home')}}
       />
 
-      {/* <Stack.Screen
+      <Stack.Screen
         name="Components"
         component={Components}
         options={screenOptions.components}
-      /> */}
+      />
 
-      {/* <Stack.Screen
+      <Stack.Screen
         name="Articles"
         component={Articles}
         options={{title: t('navigation.articles')}}
-      /> */}
-        {/* <Stack.Screen
+      />
+        <Stack.Screen
         name="Articles"
         component={SecondPage}
         options={{title: t('navigation.articles')}}
-      /> */}
+      />
 
 
-      {/* <Stack.Screen name="Pro" component={Pro} options={screenOptions.pro} />
+      {/* {/* <Stack.Screen name="Pro" component={Pro} options={screenOptions.pro} /> */}
 
       <Stack.Screen
         name="Profile"
@@ -49,7 +49,7 @@ export default () => {
         name="Register"
         component={Register}
         options={{headerShown: false}}
-      /> */}
+      /> 
     </Stack.Navigator>
   );
 };

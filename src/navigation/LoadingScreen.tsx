@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // LoadingScreen.js
 import React, {useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,12 +16,22 @@ const LoadingScreen = () => {
           const authData = JSON.parse(authDataJSON);
           const authToken = authData.token;
           const formData = authData.formData;
+          const data = authData.data;
+          const formDataCopy = authData.formDataCopy;
+          const dietPlan = authData.dietPlan;
 
-          if (authToken && formData) {
+          if (data && formDataCopy ) {
             // Both authToken and formData exist, navigate to 'Frstpage'
+            navigation.navigate('tabNavigator', {
+              screen: 'pie', // Screen name within the TabNavigator
+              params: {data, formDataCopy, dietPlan}, // Pass your parameters here
+            });
+           
+          } else if (authToken && formData ) {
+            // Data, formDataCopy, and dietPlan exist, navigate to 'tabNavigator'
             navigation.navigate('Frstpage', {formData});
           } else {
-            // Either authToken or formData is missing, navigate to 'loginNew'
+            // Navigate to 'loginNew' if none of the required data is present
             navigation.navigate('loginNew');
           }
         } else {

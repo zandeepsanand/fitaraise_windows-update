@@ -18,6 +18,7 @@ import TypingText from 'react-native-typing-text';
 import axios from 'axios';
 import {BASE_URL} from '@env';
 import api from '../../api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const isAndroid = Platform.OS === 'android';
 
 // buttons example
@@ -455,9 +456,7 @@ const Cards = ({route, navigation}) => {
   //      }
 
   // }
-  function checkPage() {
-    // console.log(formData);
-
+  async function checkPage() {
     if (
       formData.gender &&
       formData.weight &&
@@ -465,47 +464,55 @@ const Cards = ({route, navigation}) => {
       formData.acitivity_level
     ) {
       // Create a copy of the formData object
-      const formDataCopy = {...formData};
+      const formDataCopy = { ...formData };
       console.log(formDataCopy, 'form data');
-
-      const fetchData = async () => {
-        try {
-          const response = await api.post(`set_personal_datas`, formDataCopy);
-          console.log(formDataCopy, 'customer id ');
-
-          console.log(response.data, 'hello ');
-          alert(response.data.message)
-
-          if (response.data.success) {
-            console.log('hai testing');
-
-            // Call the second API
-            const secondApiResponse = await api.get(
-              `get_daily_required_calories/${formDataCopy.customer_id}`,
-            );
-            // Do something with the second API response
-            const data = secondApiResponse.data.data;
-            // setData(secondApiResponse.data.data);
-            console.log(data, 'the data of second apifffff');
-            if (data === null) {
-              //  alert('some error occur');
-              console.log('first click');
-
-              checkPage();
-            } else {
-              console.log('success');
-
-              navigation.navigate('AnimationPage', {data, formDataCopy});
-            }
-            // navigation.navigate('donutchart', { data });
+  
+      try {
+        // Retrieve the existing authData from AsyncStorage
+        const existingAuthDataString = await AsyncStorage.getItem('authData');
+        const existingAuthData = JSON.parse(existingAuthDataString) || {};
+  
+        // Add the conditions as fields to authData
+        const updatedAuthData = {
+          ...existingAuthData,
+          formData: {
+            ...existingAuthData.formData,
+            gender: formData.gender,
+            weight: formData.weight,
+            height: formData.feet && formData.inches ? `${formData.feet}'${formData.inches}"` : formData.height,
+            acitivity_level: formData.acitivity_level,
+          },
+        };
+  
+        // Store the updated authData object as a JSON string in AsyncStorage
+        await AsyncStorage.setItem('authData', JSON.stringify(updatedAuthData));
+  
+        const response = await api.post(`set_personal_datas`, formDataCopy);
+        console.log(formDataCopy, 'customer id ');
+        console.log(response.data, 'hello ');
+        alert(response.data.message);
+  
+        if (response.data.success) {
+          console.log('hai testing');
+  
+          // Call the second API
+          const secondApiResponse = await api.get(
+            `get_daily_required_calories/${formDataCopy.customer_id}`,
+          );
+          // Do something with the second API response
+          const data = secondApiResponse.data.data;
+          console.log(data, 'the data of second apifffff');
+          if (data === null) {
+            console.log('first click');
+            checkPage(); // This recursive call may not be necessary, please review if it's needed.
+          } else {
+            console.log('success');
+            navigation.navigate('AnimationPage', { data, formDataCopy });
           }
-          // Do something with the first API response
-          // console.log(response.data);
-        } catch (error) {
-          console.error(error, 'errorsss');
         }
-      };
-      fetchData();
+      } catch (error) {
+        console.error(error, 'errorsss');
+      }
     } else {
       console.log(
         formData.gender,
@@ -515,10 +522,11 @@ const Cards = ({route, navigation}) => {
         formData.acitivity_level,
         formData.height,
       );
-
+  
       alert('Please enter all details');
     }
   }
+  
 
   return (
     <Block marginTop={sizes.m} paddingHorizontal={sizes.padding}>

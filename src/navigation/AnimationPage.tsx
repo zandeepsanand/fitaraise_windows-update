@@ -28,11 +28,14 @@ import {BASE_URL} from '@env';
   } from 'react-native';
   import {useNavigation} from '@react-navigation/core';
   import {useHeaderHeight} from '@react-navigation/stack';
+import api from '../../api';
   
   export default function AnimationPage({navigation, route}) {
     const {assets, fonts, sizes, gradients, colors} = useTheme();
     const {data,formDataCopy} = route.params;
      const [dietPlan, setDietPlan] = useState('');
+     console.log(formDataCopy.customer_id);
+     
 
 
     const animationProgress = useRef(new Animated.Value(0));
@@ -41,46 +44,48 @@ import {BASE_URL} from '@env';
   
     }, []);
     useEffect(() => {
-      console.log(formDataCopy , "formdata");
-      
-        // Start the animation
-        axios
-        .get(`${BASE_URL}get_recommended_diet/${formDataCopy.customer_id}`,)
+      // Start the animation
+      api
+        .get(`get_recommended_diet/${formDataCopy.customer_id}`)
         .then((response) => {
-          // console.log(response.data.data.recommended_diet_list , "data for sandeepsss");
+          console.log(response.data.data.recommended_diet_list, "data for sandeepsss");
           // Handle the successful response from the backend if needed
-          setDietPlan(response.data.data.recommended_diet_list)
-        
+          setDietPlan(response.data.data.recommended_diet_list);
+
+          const diet_list = response.data.data.recommended_diet_list ;
+
+          if (diet_list !== null) {
+            const timeout = setTimeout(() => {
+              // Navigate to the next page
+              navigation.navigate('Progress', { data, formDataCopy, dietPlan : diet_list });
+
+            }, 5000);
+            return () => clearTimeout(timeout);
+          } else {
+            console.log("not ok");
+          }
+
+
         })
         .catch((error) => {
           // Handle the error if needed
         });
-        Animated.timing(animationProgress.current, {
-            toValue: 1,
-            duration: 15000,
-            easing: Easing.linear,
-            useNativeDriver: false,
-          }).start();
-      
-
-     
     
-        // Wait for 2 seconds before showing the next page
-        if(dietPlan !== null){
-          const timeout = setTimeout(() => {
-            // Navigate to the next page n
-            navigation.navigate('Progress', {data ,formDataCopy , dietPlan});
-          }, 5000);
-          return () => clearTimeout(timeout);
-        }else{
-          console.log("not ok");
-          
-        }
+      Animated.timing(animationProgress.current, {
+        toValue: 1,
+        duration: 15000,
+        easing: Easing.linear,
+        useNativeDriver: false,
+      }).start();
     
+      // Clean up the timeout when the component unmounts
+      return () => {
+        // Clear any asynchronous tasks, timers, or listeners here
+      };
+    }, []); // Empty dependency array to run this effect only once when the component mounts
     
-        // Clean up the timeout when the component unmounts
-     
-      });
+    // Wait for 2 seconds before showing the next page
+    
   
 console.log(dietPlan , "new diet plan");
 
