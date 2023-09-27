@@ -57,29 +57,25 @@ console.log(dietPlan);
     <Block  scroll
     showsVerticalScrollIndicator={false}
     contentContainerStyle={{paddingVertical: sizes.padding}}>
-      
+        <Image 
+        marginTop={20}
+            background
+            padding={15}
+            blurRadius={10}
+            resizeMode="cover"
+            source={require('../assets/images/bg111.jpg')}
+            radius={sizes.cardRadius}>
       <Block
         card
         padding={SIZES.s}
         flex={2}
         marginHorizontal={10}
         style={{marginTop: 60, alignSelf: 'center', paddingTop: 30}}>
+           
         <Block flex={2} style={{position: 'relative', paddingBottom: 0}}>
-          {/* <DonutChart
-            data={[
-  {name: 'sandeep', value: 10, color: '#F44336'},
-  {name: 'san', value: 30, color: '#FFC107'},
-  {name: 'sandeepf', value: 20, color: '#03A9F4'},
-]}
-            strokeWidth={15}
-            radius={90}
-            containerWidth={width - PADDING * 2}
-            containerHeight={105 * 2}
-            type="round"
-            startAngle={0}
-            endAngle={360}
-            animationType="slide"
-          /> */}
+     
+
+       
           <Block card style={{width:350}}>
           <DonutChart1 navigation={navigation} route={route}/>
           <View
@@ -103,6 +99,7 @@ console.log(dietPlan);
          
        
         </Block>
+        
         <Block
           flex={1}
           center
@@ -146,9 +143,22 @@ console.log(dietPlan);
               {data.fat_g}g ({data.fat_percent})
             </Text>
           </Block>
+        
         </Block>
+      
+      
       </Block>
-      <Block flex={1} marginTop={10}>
+      </Image>
+      <Block card padding={0} marginHorizontal={10} marginTop={10} >
+        <Image 
+       
+            background
+            padding={15}
+            blurRadius={10}
+            resizeMode="cover"
+            // source={require('../assets/images/bg111.jpg')}
+            radius={sizes.cardRadius}>
+  <Block flex={1} paddingTop={10} >
         <Block>
           <Block
             style={styles.mainCardView}
@@ -156,7 +166,7 @@ console.log(dietPlan);
             radius={46}
             gradient={gradients?.[tab === 0 ? 'success' : '#fffff']}>
             <Block center>
-              <Text p font={fonts.semibold}>
+              <Text p font={fonts.semibold} white>
                 {'For Best Results....'}
               </Text>
               <View
@@ -169,7 +179,7 @@ console.log(dietPlan);
           </Block>
         </Block>
       </Block>
-      <Block flex={1}  marginHorizontal={5} marginTop={20}>
+      <Block flex={1}  marginHorizontal={5}  padding={20} paddingTop={0}>
         <Block row marginHorizontal={20}> 
         <Text bold>*  </Text>
           <Text semibold>Eat an overall balanced diet</Text>
@@ -191,6 +201,10 @@ console.log(dietPlan);
           <Text semibold>Be consistent , The results will follow</Text>
         </Block>
       </Block>
+              </Image>
+
+      </Block>
+    
     
       {/* <Block
         flex={0}

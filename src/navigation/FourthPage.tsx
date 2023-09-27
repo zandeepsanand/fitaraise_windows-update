@@ -17,6 +17,7 @@ import {Ionicons} from '@expo/vector-icons';
 import TypingText from 'react-native-typing-text';
 import axios from 'axios';
 import {BASE_URL} from '@env';
+import api from '../../api';
 const isAndroid = Platform.OS === 'android';
 
 // buttons example
@@ -206,7 +207,7 @@ const Cards = ({route, navigation}) => {
   const {formData} = route.params;
   // console.log(formData ,"checking");
   // const formData = {
-    
+
   //   acitivity_level: 'sedentary',
   //   age: '29',
   //   customer_id: '14',
@@ -231,7 +232,7 @@ const Cards = ({route, navigation}) => {
   const [showModal, setModal] = useState(false);
   const [showModalCm, setModalCm] = useState(false);
   const [showModalFeet, setModalFeet] = useState(false);
-  const [ feetView , setFeetView] = useState(false); 
+  const [feetView, setFeetView] = useState(false);
   const [showModalKg, setModalKg] = useState(false);
   const [age, setAge] = useState('');
   const [kg, setKg] = useState('');
@@ -292,7 +293,7 @@ const Cards = ({route, navigation}) => {
     const updatedFormData = {
       ...formData,
       feet: value,
-      height:'',
+      height: '',
       height_unit: 'ft',
     };
     navigation.setParams({formData: updatedFormData});
@@ -303,33 +304,32 @@ const Cards = ({route, navigation}) => {
     const updatedFormData = {
       ...formData,
       inches: value,
-      height:'',
+      height: '',
       height_unit: 'ft',
     };
     navigation.setParams({formData: updatedFormData});
-    console.log(updatedFormData , "height unit check");
+    console.log(updatedFormData, 'height unit check');
   };
 
   const handlePrimaryPress = () => {
     setIsKg(true); // set isKg state to true when primary button is pressed
     const updatedFormData = {
       ...formData,
-     
+
       weight_unit: 'kg',
     };
     navigation.setParams({formData: updatedFormData});
-   
   };
 
   const handleSecondaryPress = () => {
     setIsKg(false); // set isKg state to false when secondary button is pressed
     const updatedFormData = {
       ...formData,
-     
+
       weight_unit: 'lbs',
     };
     navigation.setParams({formData: updatedFormData});
-    console.log(updatedFormData , "height unit check");
+    console.log(updatedFormData, 'height unit check');
   };
 
   // const handleGenderSelection = (selectedGender) => {
@@ -358,12 +358,9 @@ const Cards = ({route, navigation}) => {
       ...formData,
       acitivity_level: option,
     };
-    console.log(option, "new checking"); // Log the 'option', which is the latest 'acitivity_level'
-  
-    navigation.setParams({ formData: updatedFormData });
-   
-    
+    console.log(option, 'new checking'); // Log the 'option', which is the latest 'acitivity_level'
 
+    navigation.setParams({formData: updatedFormData});
   };
   const handleAgeSelect = (item) => {
     const updatedFormData = {
@@ -376,22 +373,20 @@ const Cards = ({route, navigation}) => {
   };
   const handleHeightSelect = (item) => {
     setSelectedData(item);
-    console.log(selectedData ,"height selected");
+    console.log(selectedData, 'height selected');
     setCm(item);
-    
+
     const updatedFormData = {
       ...formData,
       height: item,
       height_unit: 'cm',
-      feet:'',
-      inches:'' ,
+      feet: '',
+      inches: '',
     };
-    
-    
+
     navigation.setParams({formData: updatedFormData});
     // navigation.navigate('Demo1', {formData: updatedFormData});
-    console.log(formData ,"testing");
-    
+    console.log(formData, 'testing');
   };
 
   const handleUnitSelect = (unit) => {
@@ -463,27 +458,30 @@ const Cards = ({route, navigation}) => {
   function checkPage() {
     // console.log(formData);
 
-    if (formData.gender  && formData.weight && ((formData.feet && formData.inches) || formData.height) && formData.acitivity_level) {
+    if (
+      formData.gender &&
+      formData.weight &&
+      ((formData.feet && formData.inches) || formData.height) &&
+      formData.acitivity_level
+    ) {
       // Create a copy of the formData object
       const formDataCopy = {...formData};
       console.log(formDataCopy, 'form data');
 
       const fetchData = async () => {
         try {
-          const response = await axios.post(
-            `${BASE_URL}set_personal_datas`,
-            formDataCopy,
-          );
+          const response = await api.post(`set_personal_datas`, formDataCopy);
           console.log(formDataCopy, 'customer id ');
 
           console.log(response.data, 'hello ');
+          alert(response.data.message)
 
           if (response.data.success) {
-            console.log("hai testing");
-            
+            console.log('hai testing');
+
             // Call the second API
-            const secondApiResponse = await axios.get(
-              `${BASE_URL}get_daily_required_calories/${formDataCopy.customer_id}`,
+            const secondApiResponse = await api.get(
+              `get_daily_required_calories/${formDataCopy.customer_id}`,
             );
             // Do something with the second API response
             const data = secondApiResponse.data.data;
@@ -497,7 +495,7 @@ const Cards = ({route, navigation}) => {
             } else {
               console.log('success');
 
-              navigation.navigate('AnimationPage', {data , formDataCopy});
+              navigation.navigate('AnimationPage', {data, formDataCopy});
             }
             // navigation.navigate('donutchart', { data });
           }
@@ -505,156 +503,162 @@ const Cards = ({route, navigation}) => {
           // console.log(response.data);
         } catch (error) {
           console.error(error, 'errorsss');
-         
-          
         }
       };
       fetchData();
     } else {
-      console.log(formData.gender, formData.weight , formData.feet ,formData.inches , formData.acitivity_level,formData.height);
-      
+      console.log(
+        formData.gender,
+        formData.weight,
+        formData.feet,
+        formData.inches,
+        formData.acitivity_level,
+        formData.height,
+      );
+
       alert('Please enter all details');
     }
   }
 
   return (
     <Block marginTop={sizes.m} paddingHorizontal={sizes.padding}>
-    
-      <Block  marginTop={sizes.m} >
+      <Block marginTop={sizes.m}>
         <Block card padding={0}>
-        <Image
-          background
-          padding={15}
-          blurRadius={10}
-          resizeMode="cover"
-          source={require('../assets/images/bg111.jpg')}
-          radius={sizes.cardRadius}>
-        <Block flex={1} center>
-          <Text center h5 bold paddingTop={10}>Height & Weight</Text>
-        </Block>
-        <Block
-          row
-          justify="space-between"
-          marginBottom={sizes.base}
-          marginTop={sizes.m}>
-         
-          {feetView === true ? (
-    <Button
-    flex={2}
-    row
-    onPress={() => setModalKg(true)}
-    marginRight={sizes.base}>
-    <Block row align="center" justify="space-around">
-      {/* <Text dark bold transform="uppercase" marginRight={sizes.sm}>
-        {kg} Kg
-      </Text> */}
-      <Input
-        placeholder={'Foot'}
-        keyboardType="numeric"
-        maxLength={2}
-        value={inputValueFeet}
-        style={{
-          height: 50,
-          width: 60,
-        
-          borderRadius: 10,
-          backgroundColor: 'white',
-          borderWidth: 0,
-         
-        }}
-        onChangeText={handleInputChangeFeet}
-      />
-         <Input
-        placeholder={"Inches"}
-        keyboardType="numeric"
-        maxLength={6}
-        value={inputValueInch}
-        style={{
-          height: 50,
-          width: 60,
-          flex: 0.5,
-          borderRadius: 10,
-          backgroundColor: 'white',
-          borderWidth: 0,
-          marginLeft:10
-        }}
-        onChangeText={handleInputChangeInches}
-      />
-    </Block>
-  </Button>
-          ) : (
-            <Button
-            flex={2}
-            row
-            gradient={gradients.light}
-            onPress={() => setModalCm(true)}
-            marginRight={sizes.base}>
+          <Image
+            background
+            padding={15}
+            blurRadius={10}
+            resizeMode="cover"
+            source={require('../assets/images/bg111.jpg')}
+            radius={sizes.cardRadius}>
+            <Block flex={1} center>
+              <Text center h5 bold paddingTop={10}>
+                Height & Weight
+              </Text>
+            </Block>
             <Block
               row
-              align="center"
               justify="space-between"
-              paddingHorizontal={sizes.sm}>
-              <Text dark bold transform="uppercase" marginRight={sizes.sm}>
-                {selectedData} {isCm ? 'CM' : 'FEET'}
-              </Text>
-              <Image
-                source={assets.arrow}
-                color={colors.white}
-                transform={[{rotate: '90deg'}]}
-              />
-            </Block>
-          </Button>
-          )}
-        
+              marginBottom={sizes.base}
+              marginTop={sizes.m}>
+              {feetView === true ? (
+                <Button
+                  flex={2}
+                  row
+                  onPress={() => setModalKg(true)}
+                  marginRight={sizes.base}>
+                  <Block row align="center" justify="space-around">
+                    {/* <Text dark bold transform="uppercase" marginRight={sizes.sm}>
+        {kg} Kg
+      </Text> */}
+                    <Input
+                      placeholder={'Foot'}
+                      keyboardType="numeric"
+                      maxLength={2}
+                      value={inputValueFeet}
+                      style={{
+                        height: 50,
+                        width: 60,
 
-          <Block
-            flex={4}
-            style={{
-              alignItems: 'center',
-              shadowRadius: 8,
-              shadowOpacity: 0.3,
-              shadowColor: '#757575',
-              shadowOffset: {
-                width: 0,
-                height: 3,
-              },
-            }}>
-            <DuoToggleSwitch
-              primaryText="Cm"
-              secondaryText="Feet"
-              onPrimaryPress={() => {
-                setModalCm(true);
-                setIsCm(true);
-                setFeetView(false); 
-                const updatedFormData = {
-                  ...formData,
-                 
-                  height_unit: 'cm',
-                };
-                navigation.setParams({formData: updatedFormData});
-              }}
-              onSecondaryPress={() => {
-                // setModalFeet(true);
-                setFeetView(true)
-                setIsCm(false);
-                const updatedFormData = {
-                  ...formData,
-                 
-                  height_unit: 'ft',
-                };
-                navigation.setParams({formData: updatedFormData});
-               
-              }}
-              TouchableComponent={Ripple}
-              primaryButtonStyle={{width: 125, height: 50}}
-              secondaryButtonStyle={{width: 90, height: 50}}
-              primaryTextStyle={{marginRight: 32}}
-              rippleColor="#fff"
-              rippleContainerBorderRadius={50}
-              activeColor="#5f9b4c"
-            />
-          </Block>
-          {/* <Button flex={2} gradient={gradients.dark} marginHorizontal={sizes.s}>
+                        borderRadius: 10,
+                        backgroundColor: 'white',
+                        borderWidth: 0,
+                      }}
+                      onChangeText={handleInputChangeFeet}
+                    />
+                    <Input
+                      placeholder={'Inches'}
+                      keyboardType="numeric"
+                      maxLength={6}
+                      value={inputValueInch}
+                      style={{
+                        height: 50,
+                        width: 60,
+                        flex: 0.5,
+                        borderRadius: 10,
+                        backgroundColor: 'white',
+                        borderWidth: 0,
+                        marginLeft: 10,
+                      }}
+                      onChangeText={handleInputChangeInches}
+                    />
+                  </Block>
+                </Button>
+              ) : (
+                <Button
+                  flex={2}
+                  row
+                  gradient={gradients.light}
+                  onPress={() => setModalCm(true)}
+                  marginRight={sizes.base}>
+                  <Block
+                    row
+                    align="center"
+                    justify="space-between"
+                    paddingHorizontal={sizes.sm}>
+                    <Text
+                      dark
+                      bold
+                      transform="uppercase"
+                      marginRight={sizes.sm}>
+                      {selectedData} {isCm ? 'CM' : 'FEET'}
+                    </Text>
+                    <Image
+                      source={assets.arrow}
+                      color={colors.white}
+                      transform={[{rotate: '90deg'}]}
+                    />
+                  </Block>
+                </Button>
+              )}
+
+              <Block
+                flex={4}
+                style={{
+                  alignItems: 'center',
+                  shadowRadius: 8,
+                  shadowOpacity: 0.3,
+                  shadowColor: '#757575',
+                  shadowOffset: {
+                    width: 0,
+                    height: 3,
+                  },
+                }}>
+                <DuoToggleSwitch
+                  primaryText="Cm"
+                  secondaryText="Feet"
+                  onPrimaryPress={() => {
+                    setModalCm(true);
+                    setIsCm(true);
+                    setFeetView(false);
+                    const updatedFormData = {
+                      ...formData,
+
+                      height_unit: 'cm',
+                    };
+                    navigation.setParams({formData: updatedFormData});
+                  }}
+                  onSecondaryPress={() => {
+                    // setModalFeet(true);
+                    setFeetView(true);
+                    setIsCm(false);
+                    const updatedFormData = {
+                      ...formData,
+
+                      height_unit: 'ft',
+                    };
+                    navigation.setParams({formData: updatedFormData});
+                  }}
+                  TouchableComponent={Ripple}
+                  primaryButtonStyle={{width: 125, height: 50}}
+                  secondaryButtonStyle={{width: 90, height: 50}}
+                  primaryTextStyle={{marginRight: 32}}
+                  rippleColor="#fff"
+                  rippleContainerBorderRadius={50}
+                  activeColor="#5f9b4c"
+                />
+              </Block>
+              {/* <Button flex={2} gradient={gradients.dark} marginHorizontal={sizes.s}>
             <Text white bold transform="uppercase" marginHorizontal={sizes.s}>
               CM
             </Text>
@@ -664,70 +668,70 @@ const Cards = ({route, navigation}) => {
               FEET
             </Text>
           </Button> */}
-        </Block>
-        <Block
-          row
-          justify="space-between"
-          marginBottom={sizes.base}
-          marginTop={sizes.sm}>
-          <Button
-            flex={2}
-            row
-            onPress={() => setModalKg(true)}
-            marginRight={sizes.base}>
-            <Block row align="center" justify="space-between">
-              {/* <Text dark bold transform="uppercase" marginRight={sizes.sm}>
+            </Block>
+            <Block
+              row
+              justify="space-between"
+              marginBottom={sizes.base}
+              marginTop={sizes.sm}>
+              <Button
+                flex={2}
+                row
+                onPress={() => setModalKg(true)}
+                marginRight={sizes.base}>
+                <Block row align="center" justify="space-between">
+                  {/* <Text dark bold transform="uppercase" marginRight={sizes.sm}>
                 {kg} Kg
               </Text> */}
-              <Input
-                placeholder={isKg ? 'Kg' : 'Lbs'}
-                keyboardType="numeric"
-                maxLength={6}
-                value={inputValue}
+                  <Input
+                    placeholder={isKg ? 'Kg' : 'Lbs'}
+                    keyboardType="numeric"
+                    maxLength={6}
+                    value={inputValue}
+                    style={{
+                      height: 50,
+                      width: 125,
+                      flex: 1,
+                      borderRadius: 10,
+                      backgroundColor: 'white',
+                      borderWidth: 0,
+                    }}
+                    onChangeText={handleInputChange}
+                    // onChangeText={(value) => {
+                    //   {
+                    //     setCount(value);
+                    //   }
+                    // }}
+                  />
+                </Block>
+              </Button>
+              <Block
+                flex={4}
                 style={{
-                  height: 50,
-                  width: 125,
-                  flex: 1,
-                  borderRadius: 10,
-                  backgroundColor: 'white',
-                  borderWidth: 0,
-                }}
-                onChangeText={handleInputChange}
-                // onChangeText={(value) => {
-                //   {
-                //     setCount(value);
-                //   }
-                // }}
-              />
-            </Block>
-          </Button>
-          <Block
-            flex={4}
-            style={{
-              alignItems: 'center',
-              shadowRadius: 8,
-              shadowOpacity: 0.3,
-              shadowColor: '#757575',
-              shadowOffset: {
-                width: 0,
-                height: 3,
-              },
-            }}>
-            <DuoToggleSwitch
-              primaryText="Kg"
-              secondaryText="Lbs"
-              onPrimaryPress={handlePrimaryPress}
-              onSecondaryPress={handleSecondaryPress}
-              TouchableComponent={Ripple}
-              primaryButtonStyle={{width: 125, height: 50}}
-              secondaryButtonStyle={{width: 90, height: 50}}
-              primaryTextStyle={{marginRight: 32}}
-              rippleColor="#fff"
-              rippleContainerBorderRadius={50}
-              activeColor="#5f9b4c"
-            />
-          </Block>
-          {/* <Button flex={2} gradient={gradients.dark} marginHorizontal={sizes.s}>
+                  alignItems: 'center',
+                  shadowRadius: 8,
+                  shadowOpacity: 0.3,
+                  shadowColor: '#757575',
+                  shadowOffset: {
+                    width: 0,
+                    height: 3,
+                  },
+                }}>
+                <DuoToggleSwitch
+                  primaryText="Kg"
+                  secondaryText="Lbs"
+                  onPrimaryPress={handlePrimaryPress}
+                  onSecondaryPress={handleSecondaryPress}
+                  TouchableComponent={Ripple}
+                  primaryButtonStyle={{width: 125, height: 50}}
+                  secondaryButtonStyle={{width: 90, height: 50}}
+                  primaryTextStyle={{marginRight: 32}}
+                  rippleColor="#fff"
+                  rippleContainerBorderRadius={50}
+                  activeColor="#5f9b4c"
+                />
+              </Block>
+              {/* <Button flex={2} gradient={gradients.dark} marginHorizontal={sizes.s}>
             <Text white bold  marginHorizontal={sizes.s}>
               Kg
             </Text>
@@ -737,47 +741,48 @@ const Cards = ({route, navigation}) => {
               Lbs
             </Text>
           </Button> */}
+            </Block>
+          </Image>
         </Block>
-        </Image>
-        </Block>
-   
+
         <Block marginTop={sizes.m} card padding={0}>
           <Image
-          background
-          padding={25}
-          blurRadius={10}
-          resizeMode="cover"
-          // source={require('../assets/images/bg122.jpg')}
-          radius={sizes.cardRadius}
-          >
-  <Text h5 bold center marginTop={10}>Gender & Age</Text>
-          <Block
-            row
-            justify="space-between"
-            marginBottom={sizes.base}
-            marginTop={sizes.m}>
-            <Button
-              flex={1}
+            background
+            padding={25}
+            blurRadius={10}
+            resizeMode="cover"
+            // source={require('../assets/images/bg122.jpg')}
+            radius={sizes.cardRadius}>
+            <Text h5 bold center marginTop={10}>
+              Gender & Age
+            </Text>
+            <Block
               row
-              gradient={gradients.light}
-              onPress={() => setModal(true)}>
-              <Block
+              justify="space-between"
+              marginBottom={sizes.base}
+              marginTop={sizes.m}>
+              <Button
+                flex={1}
                 row
-                align="center"
-                justify="space-between"
-                paddingHorizontal={sizes.padding}>
-                <Text dark bold transform="uppercase" marginRight={sizes.sm}>
-                  {age} Age in years
-                </Text>
-                <Image
-                  source={assets.arrow}
-                  color={colors.white}
-                  transform={[{rotate: '90deg'}]}
-                />
-              </Block>
-            </Button>
-          </Block>
-          {/* <Block row justify="space-between" marginBottom={sizes.base} marginTop={sizes.sm}>
+                gradient={gradients.light}
+                onPress={() => setModal(true)}>
+                <Block
+                  row
+                  align="center"
+                  justify="space-between"
+                  paddingHorizontal={sizes.padding}>
+                  <Text dark bold transform="uppercase" marginRight={sizes.sm}>
+                    {age} Age in years
+                  </Text>
+                  <Image
+                    source={assets.arrow}
+                    color={colors.white}
+                    transform={[{rotate: '90deg'}]}
+                  />
+                </Block>
+              </Button>
+            </Block>
+            {/* <Block row justify="space-between" marginBottom={sizes.base} marginTop={sizes.sm}>
          
           <Button flex={2} gradient={gradients.light} marginHorizontal={sizes.s}>
             <Text black bold  marginHorizontal={sizes.s}>
@@ -790,142 +795,141 @@ const Cards = ({route, navigation}) => {
             </Text>
           </Button>
         </Block> */}
-          <Block
-            row
-            justify="space-between"
-            marginBottom={sizes.base}
-            marginTop={sizes.sm}>
-            <Button
-              flex={2}
-              gradient={gender === 'male' ? gradients.success : gradients.light}
-              marginHorizontal={sizes.s}
-              onPress={() => {
-                handleOptionSelect('male');
-              }}>
-              <Text black bold marginHorizontal={sizes.s}>
-                Male
-              </Text>
-            </Button>
-            <Button
-              flex={2}
-              gradient={
-                gender === 'female' ? gradients.success : gradients.light
-              }
-              onPress={() => {
-                handleOptionSelect('female');
-              }}>
-              <Text black bold marginHorizontal={sizes.sm}>
-                Female
-              </Text>
-            </Button>
-          </Block>
+            <Block
+              row
+              justify="space-between"
+              marginBottom={sizes.base}
+              marginTop={sizes.sm}>
+              <Button
+                flex={2}
+                gradient={
+                  gender === 'male' ? gradients.success : gradients.light
+                }
+                marginHorizontal={sizes.s}
+                onPress={() => {
+                  handleOptionSelect('male');
+                }}>
+                <Text black bold marginHorizontal={sizes.s}>
+                  Male
+                </Text>
+              </Button>
+              <Button
+                flex={2}
+                gradient={
+                  gender === 'female' ? gradients.success : gradients.light
+                }
+                onPress={() => {
+                  handleOptionSelect('female');
+                }}>
+                <Text black bold marginHorizontal={sizes.sm}>
+                  Female
+                </Text>
+              </Button>
+            </Block>
           </Image>
-        
         </Block>
         <Block marginTop={sizes.m} card padding={0}>
-        <Image
-          background
-          padding={25}
-          blurRadius={10}
-          resizeMode="cover"
-          source={require('../assets/images/bg123.jpg')}
-          radius={sizes.cardRadius}
-          >
+          <Image
+            background
+            padding={25}
+            blurRadius={10}
+            resizeMode="cover"
+            source={require('../assets/images/bg111.jpg')}
+            radius={sizes.cardRadius}>
+            <Text h5 bold marginTop={10} center>
+              Activity Level
+            </Text>
 
-          <Text h5 bold marginTop={10} center>Activity Level</Text>
+            <Block marginTop={sizes.sm}>
+              <Block row justify="space-between" marginBottom={sizes.base}>
+                <Block flex={0}>
+                  <RadioButton
+                    value="first"
+                    status={checked === 'first' ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                      setChecked('first');
+                      handleActivitySelect('sedentary');
+                    }}
+                  />
+                </Block>
 
-          <Block marginTop={sizes.sm}>
-            <Block row justify="space-between" marginBottom={sizes.base}>
-              <Block flex={0}>
-                <RadioButton
-                  value="first"
-                  status={checked === 'first' ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setChecked('first');
-                    handleActivitySelect('sedentary');
-
-                  }}
-                />
+                <Block flex={1}>
+                  <Text p semibold marginTop={sizes.s}>
+                    Sedentary
+                  </Text>
+                  <Text p marginTop={sizes.s}>
+                    (little or no excercise)
+                  </Text>
+                </Block>
               </Block>
+              <Block row justify="space-between" marginBottom={sizes.base}>
+                <Block flex={0}>
+                  <RadioButton
+                    value="second"
+                    status={checked === 'second' ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                      setChecked('second');
+                      handleActivitySelect('lightly_active');
+                    }}
+                  />
+                </Block>
 
-              <Block flex={1}>
-                <Text p semibold marginTop={sizes.s}>
-                  Sedentary
-                </Text>
-                <Text p marginTop={sizes.s}>
-                  (little or no excercise)
-                </Text>
+                <Block flex={1}>
+                  <Text p semibold marginTop={sizes.s}>
+                    Lightly Active
+                  </Text>
+                  <Text p marginTop={sizes.s}>
+                    (little or no excercise)
+                  </Text>
+                </Block>
+              </Block>
+              <Block row justify="space-between" marginBottom={sizes.base}>
+                <Block flex={0}>
+                  <RadioButton
+                    value="third"
+                    status={checked === 'third' ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                      setChecked('third');
+                      handleActivitySelect('moderately_active');
+                    }}
+                  />
+                </Block>
+
+                <Block flex={1}>
+                  <Text p semibold marginTop={sizes.s}>
+                    Active
+                  </Text>
+                  <Text p marginTop={sizes.s}>
+                    (Exercise 4-5 times/week/Standing work)
+                  </Text>
+                </Block>
+              </Block>
+              <Block row justify="space-between" marginBottom={sizes.base}>
+                <Block flex={0}>
+                  <RadioButton
+                    value="fourth"
+                    status={checked === 'fourth' ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                      setChecked('fourth');
+                      handleActivitySelect('very_active');
+                    }}
+                  />
+                </Block>
+
+                <Block flex={1}>
+                  <Text p semibold marginTop={sizes.s}>
+                    {' '}
+                    Very Active
+                  </Text>
+                  <Text p marginTop={sizes.s}>
+                    {' '}
+                    (Exercise 5-6 times a week/Strenous work/highly leisure
+                    activity)
+                  </Text>
+                </Block>
               </Block>
             </Block>
-            <Block row justify="space-between" marginBottom={sizes.base}>
-              <Block flex={0}>
-                <RadioButton
-                  value="second"
-                  status={checked === 'second' ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setChecked('second');
-                    handleActivitySelect('lightly_active');
-                  }}
-                />
-              </Block>
-
-              <Block flex={1}>
-                <Text p semibold marginTop={sizes.s}>
-                  Lightly Active
-                </Text>
-                <Text p marginTop={sizes.s}>
-                  (little or no excercise)
-                </Text>
-              </Block>
-            </Block>
-            <Block row justify="space-between" marginBottom={sizes.base}>
-              <Block flex={0}>
-                <RadioButton
-                  value="third"
-                  status={checked === 'third' ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setChecked('third');
-                    handleActivitySelect('moderately_active');
-                  }}
-                />
-              </Block>
-
-              <Block flex={1}>
-                <Text p semibold marginTop={sizes.s}>
-                  Active
-                </Text>
-                <Text p marginTop={sizes.s}>
-                  (Exercise 4-5 times/week/Standing work)
-                </Text>
-              </Block>
-            </Block>
-            <Block row justify="space-between" marginBottom={sizes.base}>
-              <Block flex={0}>
-                <RadioButton
-                  value="fourth"
-                  status={checked === 'fourth' ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setChecked('fourth');
-                    handleActivitySelect('very_active');
-                  }}
-                />
-              </Block>
-
-              <Block flex={1}>
-                <Text p semibold marginTop={sizes.s}>
-                  {' '}
-                  Very Active
-                </Text>
-                <Text p marginTop={sizes.s}>
-                  {' '}
-                  (Exercise 5-6 times a week/Strenous work/highly leisure
-                  activity)
-                </Text>
-              </Block>
-            </Block>
-          </Block>
-        
-        </Image>
+          </Image>
         </Block>
       </Block>
       <Modal visible={showModal} onRequestClose={() => setModal(false)}>
@@ -1163,7 +1167,6 @@ const Cards = ({route, navigation}) => {
                   handleUnitSelect('cm');
                   setModalCm(false);
                   console.log(formData);
-                  
                 }
               }}>
               <Text p white semibold transform="uppercase">
@@ -1497,7 +1500,7 @@ const Cards = ({route, navigation}) => {
         onPress={() => {
           checkPage();
         }}>
-        <Block row justify="flex-end">
+        <Block row justify="flex-end" paddingTop={20}>
           <Image
             source={assets.Button}
             // color={colors.white}
