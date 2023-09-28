@@ -345,10 +345,13 @@ const DietPlanData = ({route, navigation}) => {
     if (servingId !== null) {
       console.log(mealDetails.customer_id, 'demo');
 
-      navigation.navigate('tabNavigator', {
-        screen: 'pie', // Screen name within the TabNavigator
-        params: {formDataCopy}, // Pass your parameters here
-      });
+      // navigation.navigate('tabNavigator', {
+      //   screen: 'pie', // Screen name within the TabNavigator
+      //   params: {formDataCopy}, // Pass your parameters here
+      // });
+      navigation.navigate('Menu', {
+        formDataCopy, // Pass your parameters here
+        });
       
     }
   };

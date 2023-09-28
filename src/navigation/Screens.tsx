@@ -23,6 +23,12 @@ export default ({ data, formDataCopy, dietPlan  }) => {
   return (
     <Stack.Navigator screenOptions={screenOptions.stack}>
    
+   <Stack.Screen
+        name="Today's Target"
+        component={TabNavigator}
+        // options={screenOptions.components}
+        initialParams={{ data, formDataCopy, dietPlan }}
+      />
 
       <Stack.Screen
         name="Home"
@@ -30,13 +36,7 @@ export default ({ data, formDataCopy, dietPlan  }) => {
         options={{title: t('navigation.home')}}
       />
 
-      <Stack.Screen
-        name="Tab"
-        component={TabNavigator}
-        options={screenOptions.components}
-        initialParams={{ data, formDataCopy, dietPlan }}
-      />
-
+      
       <Stack.Screen
         name="Articles"
         component={SecondPage}

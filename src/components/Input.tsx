@@ -128,13 +128,14 @@ const Input = ({
       <Block row align="center" justify="flex-end" style={inputContainerStyles}>
         {search && assets.search && (
           <Image
-            source={assets.search}
+            source={assets.apple}
             style={{marginLeft: sizes.inputPadding, tintColor: colors.icon}}
           />
         )}
         {icon && (
           <Image
             source={assets?.[icon]}
+            // source={require('../assets/icons/apple.png')}
             style={{marginLeft: sizes.inputPadding, tintColor: colors.icon}}
           />
         )}

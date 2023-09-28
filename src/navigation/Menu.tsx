@@ -78,7 +78,8 @@ const ScreensStack = ({ route }) => {
 const DrawerContent = (
   props: DrawerContentComponentProps<DrawerContentOptions>,
 ) => {
-  const {navigation} = props;
+
+  const {navigation ,formDataCopy} = props;
   const {t} = useTranslation();
   const {isDark, handleIsDark} = useData();
   const [active, setActive] = useState('Home');
@@ -97,8 +98,8 @@ const DrawerContent = (
 
   // screen list for Drawer menu
   const screens = [
-    {name: t('screens.home'), to: 'Home', icon: assets.home},
-    {name: "hakllo", to: 'Tab', icon: assets.components},
+    {name: "DietPlan", to: 'Tab', icon: assets.home},
+    {name: "Home", to: 'Home', icon: assets.components},
    
     {name: t('screens.rental'), to: 'Pro', icon: assets.rental},
     {name: t('screens.profile'), to: 'Profile', icon: assets.profile},
@@ -119,17 +120,17 @@ const DrawerContent = (
           <Image
             radius={0}
             width={33}
-            height={33}
+            height={40}
             color={colors.text}
-            source={assets.logo}
+            source={require('../assets/icons/fitaraise.png')}
             marginRight={sizes.sm}
           />
           <Block>
             <Text size={12} semibold>
-              {t('app.name')}
+              Fitaraise
             </Text>
             <Text size={12} semibold>
-              {t('app.native')}
+              {formDataCopy.first_name}
             </Text>
           </Block>
         </Block>
@@ -238,7 +239,7 @@ export default function Menu({route}) {
         drawerType="slide"
         overlayColor="transparent"
         sceneContainerStyle={{backgroundColor: 'transparent'}}
-        drawerContent={(props) => <DrawerContent {...props} />}
+        drawerContent={(props) => <DrawerContent {...props} formDataCopy={formDataCopy}/>}
         drawerStyle={{
           flex: 1,
           width: '60%',

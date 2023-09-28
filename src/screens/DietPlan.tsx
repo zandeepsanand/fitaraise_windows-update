@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import {BASE_URL} from '@env';
 import {useData, useTheme, useTranslation} from '../hooks/';
-import {Block, Button, Image, Text} from '../components/';
+import {Block, Button, Image, Input, Text} from '../components/';
 import {Animated, Easing, View} from 'react-native';
 import Lottie from 'lottie-react-native';
 import {StyleSheet, Platform, TouchableOpacity} from 'react-native';
@@ -672,25 +672,13 @@ const DietPlan = ({navigation,  text, maxLines = 3}) => {
   
   
   return (
-    <Block>
+    <Block paddingTop={10}>
       {/* search input */}
-      <Block color={colors.card} flex={0}>
-        {/* <Input search placeholder={t('common.search')} /> */}
+      <Block color={colors.card} flex={0} >
+        {/* <Input icon  placeholder={t('common.search')} /> */}
         {/* <CircularProgress value={80} /> */}
-        <Block
-          row
-          flex={0}
-          align="center"
-          justify="center"
-          color={colors.card}
-          paddingBottom={sizes.sm}>
+    
 
-          </Block>
-
-        {/* <CircularProgress
-         value={60}
-         activeStrokeWidth={12}
-         progressValueColor={'#ecf0f1'} /> */}
       </Block>
       <Block safe>
         <Block
