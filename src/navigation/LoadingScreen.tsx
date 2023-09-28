@@ -20,16 +20,15 @@ const LoadingScreen = () => {
           const formDataCopy = authData.formDataCopy;
           const dietPlan = authData.dietPlan;
 
-          if (data && formDataCopy ) {
+          if (data && formDataCopy  ) {
             // Both authToken and formData exist, navigate to 'Frstpage'
-            navigation.navigate('tabNavigator', {
-              screen: 'pie', // Screen name within the TabNavigator
-              params: {data, formDataCopy, dietPlan}, // Pass your parameters here
+            navigation.navigate('Menu', {
+            data, formDataCopy, dietPlan // Pass your parameters here
             });
            
-          } else if (authToken && formData ) {
+          } else if (authToken && formData.height ) {
             // Data, formDataCopy, and dietPlan exist, navigate to 'tabNavigator'
-            navigation.navigate('Frstpage', {formData});
+            navigation.navigate('dietcalculation', {formData});
           } else {
             // Navigate to 'loginNew' if none of the required data is present
             navigation.navigate('loginNew');

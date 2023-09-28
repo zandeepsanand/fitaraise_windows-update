@@ -81,6 +81,8 @@ import LoginScreenNewRegister from './LoginPageNewRegister';
 import LoadingScreen from './LoadingScreen';
 import PhoneNumber from '../screens/phoneNumber/PhoneNumber';
 import OtpPageNew from './OtpPageNew';
+import Menu from './Menu';
+import MyDrawerNavigator from './Drawer';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
@@ -143,6 +145,7 @@ export default () => {
         <ThemeProvider theme={theme} setTheme={setTheme}>
           <NavigationContainer theme={navigationTheme}>
             <Stack.Navigator initialRouteName="Loading">
+            <Stack.Screen name="Menu" component={Menu} options={{ headerShown: false }} />
               <Stack.Screen
                 name="Loading"
                 component={LoadingScreen}
@@ -162,7 +165,7 @@ export default () => {
                   headerShown: true, // Show the header (you can omit this line if not needed)
                 }}
               />
-               <Stack.Screen
+              <Stack.Screen
                 name="PhoneNumber"
                 component={PhoneNumber}
                 options={{
@@ -171,11 +174,11 @@ export default () => {
                   headerShown: true, // Show the header (you can omit this line if not needed)
                 }}
               />
-                 <Stack.Screen
+              <Stack.Screen
                 name="OtpPage"
                 component={OtpPageNew}
                 options={{
-                  title: 'Signup' ,// Change the header title
+                  title: 'Signup', // Change the header title
                   headerBackTitle: 'Back', // Change the back button title
                   headerShown: true, // Show the header (you can omit this line if not needed)
                 }}

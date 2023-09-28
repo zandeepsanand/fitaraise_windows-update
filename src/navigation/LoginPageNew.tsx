@@ -47,6 +47,8 @@ const LoginScreenNew = ({navigation, route}) => {
           setUserId(user_id);
         }
       } else {
+        console.log(response.data.data);
+        
         const {first_name, id, last_name} = response.data.data;
 
         // Create an object that combines token and formData
@@ -59,6 +61,8 @@ const LoginScreenNew = ({navigation, route}) => {
             // Add other formData properties here
           },
         };
+        const formData = authData.formData
+// console.log(formData);
 
         // Store the authData object as a JSON string in AsyncStorage
         await AsyncStorage.setItem('authData', JSON.stringify(authData));

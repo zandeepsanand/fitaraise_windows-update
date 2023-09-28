@@ -2,6 +2,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Alert, Animated, Linking, StyleSheet} from 'react-native';
 
+
 import {
   useIsDrawerOpen,
   createDrawerNavigator,
@@ -19,7 +20,14 @@ import {useData, useTheme, useTranslation} from '../hooks';
 const Drawer = createDrawerNavigator();
 
 /* drawer menu screens navigation */
-const ScreensStack = () => {
+const ScreensStack = ({ route }) => {
+  const { data, formDataCopy, dietPlan } = route.params ?? {};
+
+  console.log('ScreensStack Component - Data:', data);
+  console.log('ScreensStack Component - FormDataCopy:', formDataCopy);
+  console.log('ScreensStack Component - DietPlan:', dietPlan);
+
+  
   const {colors} = useTheme();
   const isDrawerOpen = useIsDrawerOpen();
   const animation = useRef(new Animated.Value(0)).current;
@@ -59,7 +67,7 @@ const ScreensStack = () => {
         },
       ])}>
       {/*  */}
-      <Screens />
+      <Screens data={data} formDataCopy={formDataCopy} dietPlan={dietPlan} />
       {/* <Firstpage /> */}
     </Animated.View>
     // <Firstpage />
@@ -90,8 +98,8 @@ const DrawerContent = (
   // screen list for Drawer menu
   const screens = [
     {name: t('screens.home'), to: 'Home', icon: assets.home},
-    {name: t('screens.components'), to: 'Components', icon: assets.components},
-    {name: t('screens.articles'), to: 'Articles', icon: assets.document},
+    {name: "hakllo", to: 'Tab', icon: assets.components},
+   
     {name: t('screens.rental'), to: 'Pro', icon: assets.rental},
     {name: t('screens.profile'), to: 'Profile', icon: assets.profile},
     {name: t('screens.settings'), to: 'Pro', icon: assets.settings},
@@ -217,7 +225,11 @@ const DrawerContent = (
 };
 
 /* drawer menu navigation */
-export default () => {
+export default function Menu({route}) {
+  const { data, formDataCopy, dietPlan } = route.params ?? {};
+  console.log(formDataCopy, data, "menu drawer check");
+  
+
   const {gradients} = useTheme();
 
   return (
@@ -233,7 +245,7 @@ export default () => {
           borderRightWidth: 0,
           backgroundColor: 'transparent',
         }}>
-        <Drawer.Screen name="Screens" component={ScreensStack} />
+        <Drawer.Screen name="Screens" component={ScreensStack} initialParams={{ data, formDataCopy, dietPlan }} />
       </Drawer.Navigator>
     </Block>
   );

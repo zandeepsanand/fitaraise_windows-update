@@ -5,7 +5,7 @@ import {useData, useTheme} from '../hooks/';
 import {IArticle, ICategory} from '../constants/types';
 import {Block, Button, Article, Text} from '../components/';
 
-const Articles = () => {
+const Articles1 = () => {
   const data = useData();
   const [selected, setSelected] = useState<ICategory>();
   const [articles, setArticles] = useState<IArticle[]>([]);
@@ -78,4 +78,4 @@ const Articles = () => {
   );
 };
 
-export default Articles;
+export default Articles1;

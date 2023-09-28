@@ -1,14 +1,23 @@
-import React, {useCallback} from 'react';
+/* eslint-disable prettier/prettier */
+import React, {useCallback, useContext} from 'react';
 import {Platform, Linking} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/core';
 
 import {Block, Button, Image, Text} from '../components/';
 import {useData, useTheme, useTranslation} from '../hooks/';
+import LoginContext from '../hooks/LoginContext';
 
 const isAndroid = Platform.OS === 'android';
 
 const Profile = () => {
+  const {
+    customerId,
+    isLoggedIn,
+    token,
+    logout, // You can access the logout function
+  } = useContext(LoginContext);
+
   const {user} = useData();
   const {t} = useTranslation();
   const navigation = useNavigation();
@@ -36,6 +45,13 @@ const Profile = () => {
     },
     [user],
   );
+  const handleLogout = () => {
+    console.log('clicked');
+
+    // Call the logout function to log the user out
+    logout();
+    navigation.navigate('loginNew');
+  };
 
   return (
     <Block safe marginTop={sizes.md}>
@@ -89,7 +105,7 @@ const Profile = () => {
                   shadow={false}
                   radius={sizes.m}
                   onPress={() => {
-                    alert(`Follow ${user?.name}`);
+                    handleLogout()
                   }}>
                   <Block
                     justify="center"
@@ -97,7 +113,7 @@ const Profile = () => {
                     paddingHorizontal={sizes.m}
                     color="rgba(255,255,255,0.2)">
                     <Text white bold transform="uppercase">
-                      {t('common.follow')}
+                     Logout
                     </Text>
                   </Block>
                 </Button>
@@ -163,6 +179,7 @@ const Profile = () => {
               </Block>
             </Block>
           </Block>
+          {/* <Button onPress={handleLogout}> <Text>Logout</Text></Button> */}
 
           {/* profile: about me */}
           <Block paddingHorizontal={sizes.sm}>

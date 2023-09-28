@@ -317,9 +317,12 @@ const isAndroid = Platform.OS === 'android';
 //       ]
 //   }
 // ]
+import { useRoute } from '@react-navigation/native';
 
-const DietPlan = ({navigation, route, text, maxLines = 3}) => {
-  const {data ,formDataCopy , dietPlan} = route.params;
+
+const DietPlan = ({navigation,  text, maxLines = 3}) => {
+  const route = useRoute();
+  const { data, dietPlan, formDataCopy } = route.params;
   // console.log(data);
 
   const {

@@ -349,6 +349,7 @@ const DietPlanData = ({route, navigation}) => {
         screen: 'pie', // Screen name within the TabNavigator
         params: {formDataCopy}, // Pass your parameters here
       });
+      
     }
   };
   return (

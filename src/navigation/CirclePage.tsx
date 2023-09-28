@@ -50,35 +50,78 @@ const CirclePage = ({route, navigation}) => {
   const progress = 50;
   const progressOffset = circumference - (progress / 100) * circumference;
 
+  // async function checkPage() {
+  //   try {
+  //     // Retrieve the existing authData from AsyncStorage
+  //     const existingAuthDataString = await AsyncStorage.getItem('authData');
+  //     const existingAuthData = JSON.parse(existingAuthDataString) || {};
+  //     console.log(existingAuthData);
+      
+
+  //     // Merge the new data with the existing authData
+  //     const updatedAuthData = {
+  //       ...existingAuthData,
+  //       data, 
+  //       formDataCopy, 
+  //       dietPlan, 
+  //     };
+
+  //     // Store the updated authData object as a JSON string in AsyncStorage
+  //     await AsyncStorage.setItem('authData', JSON.stringify(updatedAuthData));
+
+  //     // Navigate to the desired screen with the parameters
+  //     // navigation.navigate('tabNavigator', {
+  //     //   screen: 'pie', // Screen name within the TabNavigator
+  //     //   params: {data, formDataCopy, dietPlan}, // Pass your parameters here
+  //     // });
+  //     navigation.navigate('Menu', {
+  //       screen: 'Screens',
+  //       params: {
+  //         data, formDataCopy, dietPlan
+  //       },
+  //     });
+  //   } catch (error) {
+  //     // Handle errors that may occur during retrieval or storage
+  //     console.error(error);
+  //   }
+  // }
   async function checkPage() {
     try {
       // Retrieve the existing authData from AsyncStorage
       const existingAuthDataString = await AsyncStorage.getItem('authData');
       const existingAuthData = JSON.parse(existingAuthDataString) || {};
-      console.log(existingAuthData);
-      
-
+  
       // Merge the new data with the existing authData
       const updatedAuthData = {
         ...existingAuthData,
-        data, 
-        formDataCopy, 
-        dietPlan, 
+        data,
+        formDataCopy,
+        dietPlan,
       };
-
+      console.log(data , "check");
+      
       // Store the updated authData object as a JSON string in AsyncStorage
       await AsyncStorage.setItem('authData', JSON.stringify(updatedAuthData));
-
+  
+      // Show a success message
+      console.log('Data saved successfully.');
+  
       // Navigate to the desired screen with the parameters
-      navigation.navigate('tabNavigator', {
-        screen: 'pie', // Screen name within the TabNavigator
-        params: {data, formDataCopy, dietPlan}, // Pass your parameters here
+      navigation.navigate('Menu', {
+       
+    
+          data,
+          formDataCopy,
+          dietPlan,
+        
       });
     } catch (error) {
       // Handle errors that may occur during retrieval or storage
-      console.error(error);
+      console.error('Error while saving data:', error);
+      // You can also show an error message to the user if needed.
     }
   }
+  
   return (
     <>
       <Block
