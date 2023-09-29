@@ -32,7 +32,7 @@ const Home = () => {
   );
 
   return (
-    <Block>
+    <Block >
       {/* search input */}
       <Block color={colors.card} flex={0} padding={sizes.padding}>
         {/* <Input search placeholder={t('common.search')} /> */}
@@ -100,7 +100,12 @@ const Home = () => {
         paddingHorizontal={sizes.padding}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: sizes.l}}>
-        <Block row wrap="wrap" justify="space-between" marginTop={sizes.sm}>
+        <Block 
+        row 
+        wrap="wrap" 
+        justify="space-between" 
+        marginTop={sizes.sm}
+        >
           {/* {products?.map((product) => (
             <Product {...product} key={`card-${product?.id}`} />
           ))} */}

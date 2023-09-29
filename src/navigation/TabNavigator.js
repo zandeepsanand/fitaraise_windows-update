@@ -25,7 +25,7 @@ const TabNavigator = ({route}) => {
   const {assets, colors, fonts, gradients, sizes} = useTheme();
   return (
     <Tab.Navigator
-      tabBarOptions={{
+    screenOptions={{
         activeTintColor: '#97b4fe', // Set the active tab color to blue
         inactiveTintColor: 'gray', // Set the inactive tab color to gray
       }}>
@@ -53,6 +53,7 @@ const TabNavigator = ({route}) => {
       <Tab.Screen
         name="workout"
         component={WorkoutFirstPage}
+        initialParams={{ data,dietPlan,formDataCopy }}
         options={{
           headerShown: false,
 

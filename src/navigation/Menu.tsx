@@ -98,8 +98,9 @@ const DrawerContent = (
 
   // screen list for Drawer menu
   const screens = [
-    {name: "DietPlan", to: 'Tab', icon: assets.home},
     {name: "Home", to: 'Home', icon: assets.components},
+    {name: "DietPlan", to: 'Tab', icon: assets.home},
+   
    
     {name: t('screens.rental'), to: 'Pro', icon: assets.rental},
     {name: t('screens.profile'), to: 'Profile', icon: assets.profile},

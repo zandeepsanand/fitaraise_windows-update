@@ -11,9 +11,7 @@ import TabNavigator from './TabNavigator';
 
 const Stack = createStackNavigator();
 
-export default ({ data, formDataCopy, dietPlan  }) => {
-  
-
+export default ({data, formDataCopy, dietPlan}) => {
   console.log('ScreensStack Component - Data:', data);
   console.log('ScreensStack Component - FormDataCopy:', formDataCopy);
   console.log('ScreensStack Component - DietPlan:', dietPlan);
@@ -22,21 +20,19 @@ export default ({ data, formDataCopy, dietPlan  }) => {
 
   return (
     <Stack.Navigator screenOptions={screenOptions.stack}>
-   
-   <Stack.Screen
-        name="Today's Target"
-        component={TabNavigator}
-        // options={screenOptions.components}
-        initialParams={{ data, formDataCopy, dietPlan }}
-      />
-
       <Stack.Screen
         name="Home"
         component={Home}
         options={{title: t('navigation.home')}}
       />
+      <Stack.Screen
+        name="Tab"
+        component={TabNavigator}
+        // options={screenOptions.components}
+        options={{title: ''}}
+        initialParams={{data, formDataCopy, dietPlan}}
+      />
 
-      
       <Stack.Screen
         name="Articles"
         component={SecondPage}

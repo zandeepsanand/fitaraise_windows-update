@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import {
@@ -44,7 +45,7 @@ export default () => {
           style={{marginRight: sizes.sm}}
           onPress={() =>
             navigation.navigate('Screens', {
-              screen: 'Pro',
+              screen: 'Register',
             })
           }>
           <Image source={icons.bell} radius={0} color={colors.icon} />
@@ -61,11 +62,11 @@ export default () => {
         <TouchableOpacity
           onPress={() =>
             navigation.navigate('Screens', {
-              screen: 'pie',
+              screen: 'Tab',
             })
           }>
           <Image source={icons.kcal} radius={0} color={colors.icon} style={{width:20,height:20}}/>
-          {/* <Block
+          <Block
             flex={0}
             padding={0}
             justify="center"
@@ -79,7 +80,7 @@ export default () => {
             <Text white center bold size={10} lineHeight={10} paddingTop={3}>
               3
             </Text>
-          </Block> */}
+          </Block>
         </TouchableOpacity>
       </Block>
     ),

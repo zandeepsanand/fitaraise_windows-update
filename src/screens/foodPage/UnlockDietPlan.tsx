@@ -12,7 +12,7 @@ import React, {
 import {useData, useTheme, useTranslation} from '../../hooks/';
 import {Block, Button, Image, Input, Product, Text} from '../../components/';
 import {StatusBar as ExpoStatusBar} from 'expo-status-bar';
-import {Animated, Easing, FlatList} from 'react-native';
+import {Animated, Easing, FlatList, ScrollView} from 'react-native';
 import Lottie from 'lottie-react-native';
 
 import {
@@ -356,188 +356,212 @@ export default function UnlockDietPlan({navigation, route}) {
       item.food_image ===
       'http://admin.fitaraise.com/storage/uploads/app_images/no_image.png';
 
-    return (
-      <>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingVertical: 5,
-          }}>
-          {isNoImage ? (
-            <>
-              <Block>
-                <Block paddingTop={5}>
-                  <Block card row marginLeft={5} marginLeft={5}>
-                    <View
-                      style={{
-                        width: sizes.xxl,
-                        backgroundColor: 'rgb(245,232,250)',
-                        borderRadius: sizes.s,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <Text style={{fontSize: 50, color: '#fff'}} bold primary>
-                        {item.food_name.charAt(0).toUpperCase()}
-                      </Text>
-                    </View>
-
-                    <Block padding={sizes.s} justify="space-between">
-                      <Block row style={{justifyContent: 'space-around'}}>
-                        <Block paddingBottom={10} paddingLeft={10}>
-                          <Text p bold color={colors.primary}>
-                            {item.food_name}
-                          </Text>
-                        </Block>
-                      </Block>
-
-                      <TouchableOpacity>
-                        <Block row paddingBottom={10} paddingLeft={10}>
-                          <Text
-                            p
-                            semibold
-                            marginRight={sizes.s}
-                            color={colors.secondary}>
-                            {item.serving_desc}
-                          </Text>
-                        </Block>
-                      </TouchableOpacity>
-                    </Block>
-                  </Block>
-                  <Block></Block>
-                </Block>
-              </Block>
-
-            
-            </>
-          ) : (
-            <Block>
-              <Block paddingTop={5}>
-                <Block card row marginLeft={5} marginLeft={5}>
-                  <View
-                    style={{
-                      width: sizes.xxl,
-                      // backgroundColor: 'rgb(245,232,250)',
-                      borderRadius: sizes.s,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Image
-                      source={{uri: item.food_image}}
-                      style={{width: sizes.xxl, height:sizes.xxl, marginRight: 0}}
-                    />
-                  </View>
-
-                  <Block padding={sizes.s} justify="space-between">
-                    <Block row style={{justifyContent: 'space-around'}}>
-                      <Block paddingBottom={10} paddingLeft={10}>
-                        <Text p bold color={colors.primary}>
-                          {item.food_name}
-                        </Text>
-                      </Block>
-                    </Block>
-
-                    <TouchableOpacity>
-                      <Block row paddingBottom={10} paddingLeft={10}>
-                        <Text
-                          p
-                          semibold
-                          marginRight={sizes.s}
-                          color={colors.secondary}>
-                          {item.serving_desc}
-                        </Text>
-                      </Block>
-                    </TouchableOpacity>
-                  </Block>
-                </Block>
-                <Block></Block>
-              </Block>
-            </Block>
-          )}
-          {/* <Text>{item.food_name}</Text> */}
-          {/* You can include more information about the food here */}
-        </View>
-      </>
-    );
+    return <></>;
   };
- 
-
+  const [expandedMealTypeId, setExpandedMealTypeId] = useState(null);
   return (
     <Block safe>
       <Block
         scroll
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingVertical: sizes.padding}}>
-        <Block style={styles.container1}>
-          <Block card>
-            <Text
-              numberOfLines={showFullText ? undefined : initialLinesToShow}
-              align="auto"
-              padding={10}>
-              {dummyText}
-            </Text>
-            {!showFullText ? (
-              <TouchableOpacity onPress={toggleReadMore}>
-                <Text primary align="right">
-                  Read more
-                </Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={toggleReadMore}>
-                <Text color={'blue'} align="right">
-                  Show less
-                </Text>
-              </TouchableOpacity>
-            )}
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{paddingVertical: sizes.padding}}>
+          <Block style={styles.container1}>
+            <Block card marginHorizontal={10}>
+              <Text
+                numberOfLines={showFullText ? undefined : initialLinesToShow}
+                align="auto"
+                padding={10}>
+                {dummyText}
+              </Text>
+              {!showFullText ? (
+                <TouchableOpacity onPress={toggleReadMore}>
+                  <Text primary align="right">
+                    Read more
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={toggleReadMore}>
+                  <Text color={'blue'} align="right">
+                    Show less
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </Block>
           </Block>
-        </Block>
 
-       
-
-        <FlatList
-          data={dietPlan}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({item}) => (
+          {dietPlan.map((item) => (
             <Block
-              radius={sizes.sm}
-              // shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
-              marginTop={sizes.s}
+              key={item.id}
               card
-              color="#f5e8fa">
-              <Block
-                style={styles.container5}
-                paddingTop={15}
-                paddingBottom={15}>
-                <Block style={styles.breakfast}>
-                  <Text bold paddingLeft={10} size={sizes.sm}>
-                    {item.meal_type_name}
-                  </Text>
+              padding={0}
+              marginTop={10}
+              marginHorizontal={10}>
+              <Image
+                background
+                padding={15}
+                blurRadius={10}
+                resizeMode="cover"
+                source={require('../../assets/images/bgcard.jpg')}
+                radius={sizes.cardRadius}>
+                <Block
+                  style={styles.container5}
+                  paddingTop={15}
+                  paddingBottom={15}>
+                  <Block style={styles.breakfast}>
+                    <Text bold paddingLeft={10} size={sizes.sm}>
+                      {item.meal_type_name}
+                    </Text>
+                  </Block>
+                  <Block style={styles.kalorie}>
+                    <Text
+                      paddingRight={10}
+                      size={sizes.sm}
+                      primary
+                      semibold></Text>
+                  </Block>
                 </Block>
-                <Block style={styles.kalorie}>
-                  <Text paddingRight={10} size={sizes.sm} primary semibold>
-                    {/* 708 kcal */}
-                  </Text>
-                </Block>
-              </Block>
-              <FlatList
-            data={showFullList ? item.diet_list : item.diet_list.slice(0, 2)}
-            keyExtractor={(foodItem) => foodItem.id.toString()}
-            renderItem={renderItem}
-          />
-          <Block paddingTop={10} center style={{borderColor:'black'}}>
-          {!showFullList && item.diet_list.length > 2 && (
-            <TouchableOpacity onPress={toggleFullList}>
-              <Text style={{ color: 'blue', marginTop: 5 }} align='center' bold color={'green'}>Show More Option</Text>
-            </TouchableOpacity>
-          )}
-            </Block>
-         
-            </Block>
-          )}
-        />
-      </Block>
+                {item.diet_list.slice(0, 2).map((foodItem) => (
+                  <View key={foodItem.id}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingVertical: 5,
+                      }}>
+                      {foodItem.food_image ===
+                      'https://admin.fitaraise.com/storage/uploads/app_images/no_image.png' ? (
+                        <>
+                          <Block>
+                            <Block paddingTop={5}>
+                              <Block card row marginLeft={5} marginLeft={5}>
+                                <View
+                                  style={{
+                                    width: sizes.xxl,
+                                    height: sizes.xxl,
+                                    backgroundColor: 'rgb(245,232,250)',
+                                    borderRadius: sizes.s,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                  }}>
+                                  <Text
+                                    style={{fontSize: 50, color: '#fff'}}
+                                    bold
+                                    primary>
+                                    {foodItem.food_name.charAt(0).toUpperCase()}
+                                  </Text>
+                                </View>
 
-     
+                                <Block
+                                  padding={sizes.s}
+                                  justify="space-between">
+                                  <Block
+                                    row
+                                    style={{justifyContent: 'space-around'}}>
+                                    <Block paddingBottom={10} paddingLeft={10}>
+                                      <Text p bold color={colors.primary}>
+                                        {foodItem.food_name}
+                                      </Text>
+                                    </Block>
+                                  </Block>
+
+                                  <TouchableOpacity>
+                                    <Block
+                                      row
+                                      paddingBottom={10}
+                                      paddingLeft={10}>
+                                      <Text
+                                        p
+                                        semibold
+                                        marginRight={sizes.s}
+                                        color={colors.secondary}>
+                                        {foodItem.serving_desc}
+                                      </Text>
+                                    </Block>
+                                  </TouchableOpacity>
+                                </Block>
+                              </Block>
+                            </Block>
+                          </Block>
+                        </>
+                      ) : (
+                        <Block>
+                          <Block paddingTop={5}>
+                            <Block card row marginLeft={5} marginLeft={5}>
+                              <View
+                                style={{
+                                  width: sizes.xxl,
+                                  borderRadius: sizes.s,
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                }}>
+                                <Image
+                                  source={{uri: foodItem.food_image}}
+                                  style={{
+                                    width: sizes.xxl,
+                                    height: sizes.xxl,
+                                    marginRight: 0,
+                                  }}
+                                  radius={10}
+                                />
+                              </View>
+
+                              <Block padding={sizes.s} justify="space-between">
+                                <Block
+                                  row
+                                  style={{justifyContent: 'space-around'}}>
+                                  <Block paddingBottom={10} paddingLeft={10}>
+                                    <Text p bold color={colors.primary}>
+                                      {foodItem.food_name}
+                                    </Text>
+                                  </Block>
+                                </Block>
+
+                                <TouchableOpacity>
+                                  <Block
+                                    row
+                                    paddingBottom={10}
+                                    paddingLeft={10}>
+                                    <Text
+                                      p
+                                      semibold
+                                      marginRight={sizes.s}
+                                      color={colors.secondary}>
+                                      {foodItem.serving_desc}
+                                    </Text>
+                                  </Block>
+                                </TouchableOpacity>
+                              </Block>
+                            </Block>
+                            <Block></Block>
+                          </Block>
+                        </Block>
+                      )}
+
+                      {/* <Text>{item.food_name}</Text> */}
+                      {/* You can include more information about the food here */}
+                    </View>
+                  </View>
+                ))}
+                {!expandedMealTypeId && item.diet_list.length > 2 && (
+                  <TouchableOpacity
+                    onPress={() => setExpandedMealTypeId(item.id)}>
+                    <Text
+                      style={{color: 'blue', marginTop: 5}}
+                      align="center"
+                      bold
+                      color={'green'}>
+                      Show More Option
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </Image>
+            </Block>
+          ))}
+        </ScrollView>
+      </Block>
     </Block>
   );
 }

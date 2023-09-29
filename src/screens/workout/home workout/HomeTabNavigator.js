@@ -24,7 +24,7 @@ const HomeTabNavigator = () => {
   const {assets, colors, fonts, gradients, sizes} = useTheme();
   return (
     <Tab.Navigator
-      tabBarOptions={{
+    screenOptions={{
         activeTintColor: '#97b4fe', // Set the active tab color to blue
         inactiveTintColor: 'gray', // Set the inactive tab color to gray
       }}>

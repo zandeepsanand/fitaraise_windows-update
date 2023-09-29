@@ -40,9 +40,7 @@ import api from '../../api';
 
     const animationProgress = useRef(new Animated.Value(0));
   
-    useEffect(() => {
-  
-    }, []);
+ 
     useEffect(() => {
       // Start the animation
       api
