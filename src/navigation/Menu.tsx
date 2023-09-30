@@ -98,15 +98,15 @@ const DrawerContent = (
 
   // screen list for Drawer menu
   const screens = [
-    {name: "DietPlan", to: 'Tab', icon: assets.components},
-    {name: "Home", to: 'Home', icon: assets.home},
+    {name: "Home", to: 'Tab', icon: assets.home},
+    {name: "Edit Goal", to: 'Details', icon: assets.rental},
    
    
-    {name: t('screens.rental'), to: 'Pro', icon: assets.rental},
-    {name: t('screens.profile'), to: 'Profile', icon: assets.profile},
-    {name: t('screens.settings'), to: 'Pro', icon: assets.settings},
-    {name: t('screens.register'), to: 'Register', icon: assets.register},
-    {name: t('screens.extra'), to: 'Pro', icon: assets.extras},
+    {name: 'Water Tracker', to: 'Pro', icon: assets.kcal},
+    {name: 'Track Progress', to: 'Profile', icon: assets.office},
+   
+    {name:'Share App', to: 'Register', icon: assets.profile}
+   
   ];
 
   return (
@@ -122,7 +122,7 @@ const DrawerContent = (
             radius={0}
             width={33}
             height={40}
-            color={colors.text}
+            color={colors.primary}
             source={require('../assets/icons/fitaraise.png')}
             marginRight={sizes.sm}
           />
@@ -162,7 +162,7 @@ const DrawerContent = (
                   color={colors[isActive ? 'white' : 'black']}
                 />
               </Block>
-              <Text p semibold={isActive} color={labelColor}>
+              <Text p bold={isActive} color={colors[isActive ? 'primary' : 'black']}>
                 {screen.name}
               </Text>
             </Button>
@@ -178,18 +178,22 @@ const DrawerContent = (
         />
 
         <Text semibold transform="uppercase" opacity={0.5}>
-          {t('menu.documentation')}
+          FITARAISE
         </Text>
 
         <Button
+      //  color={colors.info}
+      
           row
           justify="flex-start"
           marginTop={sizes.sm}
           marginBottom={sizes.s}
-          onPress={() =>
-            handleWebLink('https://github.com/creativetimofficial')
-          }>
+          // onPress={() =>
+          //   handleWebLink('https://github.com/creativetimofficial')
+          // }
+          >
           <Block
+          
             flex={0}
             radius={6}
             align="center"
@@ -203,24 +207,24 @@ const DrawerContent = (
               width={14}
               height={14}
               color={colors.black}
-              source={assets.documentation}
+              source={require('../assets/icons/logout.png')}
             />
           </Block>
-          <Text p color={labelColor}>
-            {t('menu.started')}
+          <Text p color={labelColor} center>
+           Logout
           </Text>
         </Button>
 
-        <Block row justify="space-between" marginTop={sizes.sm}>
+        {/* <Block row justify="space-between" marginTop={sizes.sm}>
           <Text color={labelColor}>{t('darkMode')}</Text>
           <Switch
             checked={isDark}
             onPress={(checked) => {
               handleIsDark(checked);
-              Alert.alert(t('pro.title'), t('pro.alert'));
+              Alert.alert('hei');
             }}
           />
-        </Block>
+        </Block> */}
       </Block>
     </DrawerContentScrollView>
   );

@@ -2,6 +2,7 @@
 import React, {createContext, useState} from 'react';
 import axios from 'axios';
 import {BASE_URL} from '@env';
+import api from '../../api';
 
 interface FoodItem {
   name: string;
@@ -164,9 +165,9 @@ const MealContextProvider: React.FC = ({children}) => {
       bodyFormData.append('quantity', details.quantity);
       bodyFormData.append('serving_desc_id', details.serving_desc_id);
       bodyFormData.append('desc_num_food_tbl', details.desc_num_food_tbl);
-      axios({
+      api({
         method: 'post',
-        url: `${BASE_URL}update_diet_data`,
+        url: `update_diet_data`,
         data: bodyFormData,
         headers: {'Content-Type': 'multipart/form-data'},
       })
@@ -189,9 +190,9 @@ const MealContextProvider: React.FC = ({children}) => {
       bodyFormData.append('serving_desc_id', details.serving_desc_id);
       bodyFormData.append('desc', details.desc);
       bodyFormData.append('added_date', details.added_date);
-      axios({
+      api({
         method: 'post',
-        url: `${BASE_URL}add_diet_data`,
+        url: `add_diet_data`,
         data: bodyFormData,
         headers: {'Content-Type': 'multipart/form-data'},
       })
@@ -217,14 +218,14 @@ const MealContextProvider: React.FC = ({children}) => {
       const updatedItems = [...eveningSnackItems];
       updatedItems[existingIndex] = {...food, details};
       setEveningSnackItems(updatedItems);
-      axios
-        .post(`${BASE_URL}update_diet_data`, {formData})
+      api
+        .post(`update_diet_data`, {formData})
         .then((response) => {})
         .catch((error) => {});
     } else {
       setEveningSnackItems([...eveningSnackItems, {...food, details}]);
-      axios
-        .post(`${BASE_URL}update_diet_data`, {details})
+      api
+        .post(`update_diet_data`, {details})
         .then((response) => {})
         .catch((error) => {});
     }
@@ -246,9 +247,9 @@ const MealContextProvider: React.FC = ({children}) => {
       bodyFormData.append('quantity', details.quantity);
       bodyFormData.append('serving_desc_id', details.serving_desc_id);
       bodyFormData.append('desc_num_food_tbl', details.desc_num_food_tbl);
-      axios({
+      api({
         method: 'post',
-        url: `${BASE_URL}update_diet_data`,
+        url: `update_diet_data`,
         data: bodyFormData,
         headers: {'Content-Type': 'multipart/form-data'},
       })
@@ -271,9 +272,9 @@ const MealContextProvider: React.FC = ({children}) => {
       bodyFormData.append('serving_desc_id', details.serving_desc_id);
       bodyFormData.append('desc', details.desc);
       bodyFormData.append('added_date', details.added_date);
-      axios({
+      api({
         method: 'post',
-        url: `${BASE_URL}add_diet_data`,
+        url: `add_diet_data`,
         data: bodyFormData,
         headers: {'Content-Type': 'multipart/form-data'},
       })
@@ -304,9 +305,9 @@ const MealContextProvider: React.FC = ({children}) => {
       bodyFormData.append('quantity', details.quantity);
       bodyFormData.append('serving_desc_id', details.serving_desc_id);
       bodyFormData.append('desc_num_food_tbl', details.desc_num_food_tbl);
-      axios({
+      api({
         method: 'post',
-        url: `${BASE_URL}update_diet_data`,
+        url: `update_diet_data`,
         data: bodyFormData,
         headers: {'Content-Type': 'multipart/form-data'},
       })
@@ -329,9 +330,9 @@ const MealContextProvider: React.FC = ({children}) => {
       bodyFormData.append('serving_desc_id', details.serving_desc_id);
       bodyFormData.append('desc', details.desc);
       bodyFormData.append('added_date', details.added_date);
-      axios({
+      api({
         method: 'post',
-        url: `${BASE_URL}add_diet_data`,
+        url: `add_diet_data`,
         data: bodyFormData,
         headers: {'Content-Type': 'multipart/form-data'},
       })
@@ -361,9 +362,9 @@ const MealContextProvider: React.FC = ({children}) => {
       bodyFormData.append('quantity', details.quantity);
       bodyFormData.append('serving_desc_id', details.serving_desc_id);
       bodyFormData.append('desc_num_food_tbl', details.desc_num_food_tbl);
-      axios({
+      api({
         method: 'post',
-        url: `${BASE_URL}update_diet_data`,
+        url: `update_diet_data`,
         data: bodyFormData,
         headers: {'Content-Type': 'multipart/form-data'},
       })
@@ -387,9 +388,9 @@ const MealContextProvider: React.FC = ({children}) => {
       bodyFormData.append('serving_desc_id', details.serving_desc_id);
       bodyFormData.append('desc', details.desc);
       bodyFormData.append('added_date', details.added_date);
-      axios({
+      api({
         method: 'post',
-        url: `${BASE_URL}add_diet_data`,
+        url: `add_diet_data`,
         data: bodyFormData,
         headers: {'Content-Type': 'multipart/form-data'},
       })
@@ -419,9 +420,9 @@ const MealContextProvider: React.FC = ({children}) => {
       bodyFormData.append('quantity', details.quantity);
       bodyFormData.append('serving_desc_id', details.serving_desc_id);
       bodyFormData.append('desc_num_food_tbl', details.desc_num_food_tbl);
-      axios({
+      api({
         method: 'post',
-        url: `${BASE_URL}update_diet_data`,
+        url: `update_diet_data`,
         data: bodyFormData,
         headers: {'Content-Type': 'multipart/form-data'},
       })
@@ -445,9 +446,9 @@ const MealContextProvider: React.FC = ({children}) => {
       bodyFormData.append('serving_desc_id', details.serving_desc_id);
       bodyFormData.append('desc', details.desc);
       bodyFormData.append('added_date', details.added_date);
-      axios({
+      api({
         method: 'post',
-        url: `${BASE_URL}add_diet_data`,
+        url: `add_diet_data`,
         data: bodyFormData,
         headers: {'Content-Type': 'multipart/form-data'},
       })

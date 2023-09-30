@@ -22,6 +22,8 @@ const DietPlanData = ({route, navigation}) => {
 
   const [initialGram, setInitialGram] = useState(null);
   const [selectedWeight, setSelectedWeight] = useState(initialGram);
+  console.log(selectedWeight, 'selected');
+
   useEffect(() => {
     setSelectedWeight(initialGram);
   }, [initialGram]);
@@ -33,6 +35,8 @@ const DietPlanData = ({route, navigation}) => {
 
   // new items for adding food to db
   const [servingId, setServingId] = useState('');
+  console.log(servingId);
+  
   const [servingDesc, setServingDesc] = useState('');
 
   const [selectedDropDown, setSelectedDropDown] = useState('');
@@ -129,14 +133,18 @@ const DietPlanData = ({route, navigation}) => {
         const servingId = response.data.data.serving_desc.map(
           (serving) => serving.id,
         );
+        servingId.unshift(4792);
         const servingInitialGram = response.data.data.serving_desc.map(
           (serving) => serving.weight,
         );
+        servingInitialGram.unshift(100);
         const servingGrams = response.data.data.serving_desc.map(
           (serving) => `${serving.name} (${serving.weight} g)`,
         );
         setServingId(servingId[0]);
+
         setServingDesc(servingDesc[0]);
+        servingGrams.unshift('100 g');
         // console.log(servingDesc , "servingDesc");
 
         // console.log(servingId[0] , "without touch");
@@ -214,8 +222,20 @@ const DietPlanData = ({route, navigation}) => {
     setCalciumAmount(new_calcium);
   }
   const handleGramChange = (value) => {
-    setMultiplication(value);
+    // Parse the input value as an integer
+    const parsedValue = parseInt(value, 10);
+  
+    if (!isNaN(parsedValue) && parsedValue > 0) {
+      // Set the valid value
+      setMultiplication(parsedValue);
+    } else {
+      // Handle invalid input (e.g., set it to 1 or show an error message)
+      // For example, setting it to 1:
+      setMultiplication(1);
+    }
   };
+  console.log(multiplication,"count");
+  
   useEffect(() => {
     if (multiplication) {
       setTotalCalorie((multiplication * calorieAmount).toFixed(2));
@@ -342,7 +362,11 @@ const DietPlanData = ({route, navigation}) => {
       default:
         break;
     }
+    console.log("hai");
+    
     if (servingId !== null) {
+      console.log(servingId);
+      
       console.log(mealDetails.customer_id, 'demo');
 
       // navigation.navigate('tabNavigator', {
@@ -351,8 +375,7 @@ const DietPlanData = ({route, navigation}) => {
       // });
       navigation.navigate('Menu', {
         formDataCopy, // Pass your parameters here
-        });
-      
+      });
     }
   };
   return (
@@ -369,9 +392,21 @@ const DietPlanData = ({route, navigation}) => {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{paddingBottom: sizes.padding}}>
             <Block marginTop={20}>
-              <Block card row>
+              <Block card  padding={0}>
+                
+                <Image 
+                  background
+                  padding={15}
+                  blurRadius={10}
+                  resizeMode="cover"
+                  source={require('../assets/images/bg111.jpg')}
+                  radius={sizes.cardRadius}
+                >
+                  <Block row>
+
+                
                 {responseData.image ===
-                'http://admin.fitaraise.com/storage/uploads/app_images/no_image.png' ? (
+                'https://admin.fitaraise.com/storage/uploads/app_images/no_image.png' ? (
                   // <Image
                   //   resizeMode="contain"
                   //   source={assets.dosa}
@@ -423,13 +458,18 @@ const DietPlanData = ({route, navigation}) => {
                         semibold
                         marginRight={sizes.s}
                         color={colors.secondary}>
-                        Description
+                         Selected Gram : {multiplication * selectedWeight}g
                       </Text>
 
                       {/* <Image source={assets.arrow} color={colors.link} /> */}
                     </Block>
                   </TouchableOpacity>
                 </Block>
+              
+             
+             
+             </Block>
+              </Image>
               </Block>
             </Block>
             {/* <Block card style={{alignSelf:'center' , width:400 , justifyContent:'space-around'}} row marginTop={10} paddingHorizontal={sizes.s}>
@@ -489,7 +529,7 @@ const DietPlanData = ({route, navigation}) => {
                   }}
                   data={servingGrams}
                   onSelect={(selectedItem, index) => {
-                    // console.log(servingGrams, 'ok bie ');
+                    console.log(servingGrams, 'ok bie ');
                     const item = servingGrams.find((item) =>
                       item.includes(selectedItem),
                     );
@@ -563,7 +603,7 @@ const DietPlanData = ({route, navigation}) => {
                     align="center"
                     paddingTop={sizes.m}>
                     {responseData.food_name} - Nutrition Facts of{' '}
-                    {selectedWeight}g
+                   {multiplication * selectedWeight} g
                   </Text>
                   <Block
                     row

@@ -15,6 +15,7 @@ export default ({data, formDataCopy, dietPlan}) => {
   console.log('ScreensStack Component - Data:', data);
   console.log('ScreensStack Component - FormDataCopy:', formDataCopy);
   console.log('ScreensStack Component - DietPlan:', dietPlan);
+  const formData = formDataCopy;
   const {t} = useTranslation();
   const screenOptions = useScreenOptions();
 
@@ -29,9 +30,10 @@ export default ({data, formDataCopy, dietPlan}) => {
         initialParams={{data, formDataCopy, dietPlan}}
       />
     <Stack.Screen
-        name="Home"
-        component={Home}
+        name="Details"
+        component={SecondPage}
         options={{title: t('navigation.home')}}
+        initialParams={{ formData }}
       />
       <Stack.Screen
         name="Articles"

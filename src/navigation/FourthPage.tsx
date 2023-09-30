@@ -538,7 +538,8 @@ const Cards = ({route, navigation}) => {
             blurRadius={10}
             resizeMode="cover"
             source={require('../assets/images/bg111.jpg')}
-            radius={sizes.cardRadius}>
+            radius={sizes.cardRadius}
+            >
             <Block flex={1} center>
               <Text center h5 bold paddingTop={10}>
                 Height & Weight

@@ -3,9 +3,10 @@ import React, {useState} from 'react';
 import {BASE_URL} from '@env';
 import {useTheme, useTranslation} from '../hooks/';
 import {Block, Image, Input, Text} from '../components/';
-import {Platform, TouchableOpacity, SectionList} from 'react-native';
+import {Platform, TouchableOpacity, SectionList ,TouchableWithoutFeedback} from 'react-native';
 import Axios from 'axios';
 import {FlatList} from 'react-native';
+import api from '../../api';
 type Movie = {
   id: string;
   title: string;
@@ -19,13 +20,15 @@ const DietPlanDynamic = ({route, navigation}) => {
   const {t} = useTranslation();
   const {assets, colors, fonts, gradients, sizes} = useTheme();
   const [searchResults, setSearchResults] = useState([]);
+  console.log(searchResults);
+  
   const [error, setError] = useState(null);
   // console.log(meal_type);
 
   const fetchResults = (search_word: any) => {
     if (search_word.length >= 3) {
       try {
-        Axios.get(`${BASE_URL}get_food_items/${search_word}`).then(
+        api.get(`get_food_items/${search_word}`).then(
           (response) => {
             setSearchResults(response.data.data.data);
           },
@@ -44,7 +47,7 @@ const DietPlanDynamic = ({route, navigation}) => {
       console.log(food, "food data");
       
       try {
-        Axios.get(`${BASE_URL}get_food_item_datas_with_id/${food.id}`).then(
+        api.get(`get_food_item_datas_with_id/${food.id}`).then(
           (response) => {
             const responseData = response.data.data;
             navigation.navigate('searchfoodData', {
@@ -85,7 +88,7 @@ const DietPlanDynamic = ({route, navigation}) => {
         data={searchResults}
         keyExtractor={(item) => item.id}
         renderItem={({item}) => (
-          <TouchableOpacity onPress={() => handlePress(item)}>
+          <TouchableWithoutFeedback onPress={() => handlePress(item)}>
             <Block
               flex={0}
               radius={sizes.sm}
@@ -98,7 +101,7 @@ const DietPlanDynamic = ({route, navigation}) => {
               <Block row align="center">
                 <Block flex={0}>
                   {item.image ===
-                  'http://admin.fitaraise.com/storage/uploads/app_images/no_image.png' ? (
+                  'https://admin.fitaraise.com/storage/uploads/app_images/no_image.png' ? (
                     // <Image
                     //   source={require('../assets/icons/img.png')}
                     //   style={{
@@ -152,7 +155,7 @@ const DietPlanDynamic = ({route, navigation}) => {
                 </TouchableOpacity>
               </Block>
             </Block>
-          </TouchableOpacity>
+          </TouchableWithoutFeedback>
         )}
       />
     </Block>

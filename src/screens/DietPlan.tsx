@@ -1020,59 +1020,47 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                         </Block>
                       </TouchableOpacity>
                     </Block>
-                    <Block margin={0}>
+                    <Block margin={0} flex={1} centerContent>
                       <Block style={styles.container} margin={0}>
                         {/* Header */}
-                        <Block style={styles.row} flex={0}>
-                          <Text
-                            style={(styles.header, {width: 70})}
-                            center></Text>
-                          <Text style={styles.header} center semibold>
+                        <Block style={styles.row} flex={1}>
+                          <Text style={styles.header2} 
+                           size={12}
+                            > Name</Text>
+                          <Text style={styles.header}  semibold size={12}>
                             Protein
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header}  semibold size={12}>
                             Carbs
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header}  semibold size={12}>
                             Fat
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header}  semibold size={12}>
                             KCAL
                           </Text>
                           <Text style={styles.header}></Text>
                         </Block>
-
-                        {/* Data Rows */}
-
-                        <Block margin={0}>
-                          {breakfastItems.map((item, index) => (
-                            <View key={index} style={styles.item}>
-                              <Text
-                                style={
-                                  (styles.data,
-                                  {
-                                    width: 70,
-                                    padding: 5,
-                                    alignSelf: 'center',
-                                    alignContent: 'center',
-                                  })
-                                }
-                                semibold>
-                                {item.food_name}
-                              </Text>
-                              <Text style={styles.data} center>
-                                {item.details.totalProtein}
-                              </Text>
-                              <Text style={styles.data} center>
-                                {item.details.totalCarb}
-                              </Text>
-                              <Text style={styles.data} center>
-                                {item.details.totalFat}
-                              </Text>
-                              <Text style={styles.data} center>
-                                {item.details.totalCalorie}
-                              </Text>
-                              <TouchableOpacity
+                        <Block style={styles.row} flex={1}>
+                        {breakfastItems.map((item, index) => (
+                          <>
+                          <Text style={styles.header2} 
+                           size={12}
+                            > {item.food_name}</Text>
+                          <Text style={styles.header}  semibold size={12}>
+                          {item.details.totalProtein}
+                          </Text>
+                          <Text style={styles.header}  semibold size={12}>
+                          {item.details.totalCarb}
+                          </Text>
+                          <Text style={styles.header}  semibold size={12}>
+                          {item.details.totalFat}
+                          </Text>
+                          <Text style={styles.header}  semibold size={12}>
+                          {item.details.totalCalorie}
+                          </Text>
+                          <Text style={styles.header}  semibold size={12}>
+                          <TouchableOpacity
                                 onPress={() =>
                                   handleDelete(index, 'breakfast')
                                 }>
@@ -1084,15 +1072,22 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                     {
                                       width: 20,
                                       height: 20,
-                                      alignContent: 'center',
+                                      // alignContent: 'center',
+                                    justifyContent:'center'
                                     })
                                   }
                                   marginTop={sizes.s}
                                 />
                               </TouchableOpacity>
-                            </View>
-                          ))}
+                          </Text>
+                          <Text style={styles.header}></Text>
+                          </>
+                        ))}
                         </Block>
+
+                        {/* Data Rows */}
+
+                      
                       </Block>
                     </Block>
                   </Block>
@@ -2647,21 +2642,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // set elements horizontally, try column.
     padding: 10,
   },
-  powderblue: {
-    width: 60,
-    height: 60,
-    backgroundColor: 'powderblue',
-  },
-  skyblue: {
-    width: 60,
-    height: 60,
-    backgroundColor: 'skyblue',
-  },
-  steelblue: {
-    width: 60,
-    height: 60,
-    backgroundColor: 'steelblue',
-  },
   container: {
     flex: 3,
     // backgroundColor: '#f9f6ee',
@@ -2707,8 +2687,24 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     padding: 5,
-    alignSelf: 'center',
+    // alignSelf: 'center',
     minWidth: 60,
+  },
+  header2: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: 'bold',
+    padding: 5,
+    // alignSelf: 'center',
+    minWidth: 70,
+  },
+  header3: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: 'bold',
+    padding: 5,
+    // alignSelf: 'center',
+    minWidth: 50,
   },
   data: {
     flex: 2,
