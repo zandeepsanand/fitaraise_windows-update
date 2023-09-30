@@ -23,9 +23,9 @@ const Drawer = createDrawerNavigator();
 const ScreensStack = ({ route }) => {
   const { data, formDataCopy, dietPlan } = route.params ?? {};
 
-  console.log('ScreensStack Component - Data:', data);
-  console.log('ScreensStack Component - FormDataCopy:', formDataCopy);
-  console.log('ScreensStack Component - DietPlan:', dietPlan);
+  // console.log('ScreensStack Component - Data:', data);
+  // console.log('ScreensStack Component - FormDataCopy:', formDataCopy);
+  // console.log('ScreensStack Component - DietPlan:', dietPlan);
 
   
   const {colors} = useTheme();
@@ -82,7 +82,7 @@ const DrawerContent = (
   const {navigation ,formDataCopy} = props;
   const {t} = useTranslation();
   const {isDark, handleIsDark} = useData();
-  const [active, setActive] = useState('Home');
+  const [active, setActive] = useState('Tab');
   const {assets, colors, gradients, sizes} = useTheme();
   const labelColor = colors.text;
 
@@ -98,8 +98,8 @@ const DrawerContent = (
 
   // screen list for Drawer menu
   const screens = [
-    {name: "Home", to: 'Home', icon: assets.components},
-    {name: "DietPlan", to: 'Tab', icon: assets.home},
+    {name: "DietPlan", to: 'Tab', icon: assets.components},
+    {name: "Home", to: 'Home', icon: assets.home},
    
    
     {name: t('screens.rental'), to: 'Pro', icon: assets.rental},

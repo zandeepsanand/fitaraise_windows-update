@@ -175,10 +175,11 @@ const LoginPage = ({route}) => {
 
           // Handle response from server
           setCustomerId(response.data.data.customer_id);
+          const id = response.data.data.customer_id;
 
           const updatedFormData = {
             ...formData,
-            customer_id: response.data.data.customer_id,
+            customer_id: id,
             mobile_number: phoneNumber,
           };
           navigation.setParams({ formData: updatedFormData });
@@ -289,7 +290,9 @@ const LoginPage = ({route}) => {
             shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
           >
             <Block
-              blur
+            card
+              // blur
+              padding={0}
               flex={0}
               intensity={90}
               radius={sizes.sm}

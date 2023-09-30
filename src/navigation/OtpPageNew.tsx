@@ -27,13 +27,11 @@ const isAndroid = Platform.OS === 'android';
 //   mobile_number: 8606783324,
 //   customer_id: 15,
 // };
-const OtpPageNew = (
-  {
-    route: {
-      params: {formData},
-    },
+const OtpPageNew = ({
+  route: {
+    params: {formData},
   },
-) => {
+}) => {
   const {loginSuccess} = useContext(LoginContext);
   // const parsedData = JSON.parse(data);
   // console.log(parsedData, 'checkgfhfh');
@@ -81,7 +79,7 @@ const OtpPageNew = (
 
   const otpCheck = async () => {
     // Mark the function as async
-  
+
     setIsLoadingVerify(true); // Start loading
 
     try {
@@ -101,24 +99,20 @@ const OtpPageNew = (
         //   customer_id: customerId,
         // };
         const authData = {
-            token: response.data.data.token,
-            formData: {
-              ...formData, // Spread the existing formData
-             
-              
-              customer_id: customerId,
-              // Add other new properties here
-            },
-          };
+          token: response.data.data.token,
+          formData: {
+            ...formData, // Spread the existing formData
+            customer_id: customerId,
+            // Add other new properties here
+          },
+        };
         await AsyncStorage.setItem('authData', JSON.stringify(authData));
 
         // Use the loginSuccess method from LoginContext
         setAuthToken(authData.token);
-        navigation.navigate('Frstpage', {
-            formData: authData.formData,
-          });
-
-
+        navigation.navigate('Loading', {
+          formData: authData.formData,
+        });
       } else {
         // Handle the case where the response is not successful
         alert(response.data.message);
@@ -165,7 +159,6 @@ const OtpPageNew = (
         // Handle response from server
       })
       .catch((error) => {
-
         console.log(error);
         // Handle error from server
       });
@@ -309,7 +302,7 @@ const OtpPageNew = (
               ) : (
                 <Text center>
                   Didn't receive the OTP?{' '}
-                  <Text bold primary onPress={(handleSignUp)}>
+                  <Text bold primary onPress={handleSignUp}>
                     RESEND
                   </Text>
                 </Text>

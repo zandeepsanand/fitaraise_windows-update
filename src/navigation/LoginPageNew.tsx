@@ -71,7 +71,7 @@ const LoginScreenNew = ({navigation, route}) => {
         setAuthToken(authData.token); // Set the token for future requests
 
         // You can navigate to another screen or perform other actions here
-        navigation.dispatch(StackActions.replace('Frstpage', { formData }));
+        navigation.dispatch(StackActions.replace('Loading', { formData }));
       }
     } catch (error) {
       // Handle login errors here

@@ -1,88 +1,33 @@
+/* eslint-disable prettier/prettier */
 import React, {useEffect, useRef, useState} from 'react';
-import api, {setAuthToken} from '../../api';
 import RNPickerSelect from 'react-native-picker-select';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Platform,
-  PixelRatio,
-  Switch,
-} from 'react-native';
+import api, {setAuthToken} from '../../api';
+import SelectDropdown from 'react-native-select-dropdown';
+
+import { View, Platform, Image, StyleSheet} from 'react-native';
 import {Animated, Easing} from 'react-native';
 import Lottie from 'lottie-react-native';
-
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-
-import LoginSVG from '../assets/images/svg/login.svg';
-import {Block, Button, Image, Input} from '../components';
+import {Text,Block, Button, Input} from '../components';
 import {useTheme} from '../hooks';
-import CountryPicker from 'react-native-country-picker-modal';
-// import { CountryCode, Country } from './';
+import {Picker} from '@react-native-picker/picker';
 
-import InputField from '../components/inputField';
 const isAndroid = Platform.OS === 'android';
+
+
 
 const CountrySelect = ({navigation}) => {
   const {assets, colors, gradients, sizes} = useTheme();
-  const [countryCode, setCountryCode] = useState<CountryCode>('FR');
-  const [country, setCountry] = useState<Country>(null);
-  const [withCountryNameButton, setWithCountryNameButton] =
-    useState<boolean>(true);
-  const [withFlag, setWithFlag] = useState<boolean>(true);
-  const [withEmoji, setWithEmoji] = useState<boolean>(true);
-  const [withFilter, setWithFilter] = useState<boolean>(true);
-  const [withAlphaFilter, setWithAlphaFilter] = useState<boolean>(false);
-  const [withCallingCode, setWithCallingCode] = useState<boolean>(false);
-  const [selectedCountry, setSelectedCountry] = useState(null);
 
-  const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    mobile_number: '',
-    height: '',
-    height_unit: '',
-    weight: '',
-    weight_unit: '',
-    acitivity_level: '',
-    weekly_goal: '',
-    is_vegetarian: '',
-    age: '',
-    dob: '',
-    gender: '',
-    device_token: '',
-    image: '',
-    customer_id: '',
-    weight_want_to: '',
-    country: null,
-  });
-
-  // const onSelect = (country: Country) => {
-  //   setCountryCode(country.code);
-  //   setCountry(country);
-  //   setSelectedCountry(country);
-  //   console.log(country.code);
-  // };
-  // useEffect(() => {
-  //   if (selectedCountry) {
-  //     setFormData((prevFormData) => ({
-  //       ...prevFormData,
-  //       country: selectedCountry,
-  //     }));
-  //   }
-  // }, [selectedCountry]);
   const [countryList, setCountryList] = useState([]);
-  // const [selectedCountry, setSelectedCountry] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState(null);
 
   useEffect(() => {
     const fetchCountryList = async () => {
       try {
         const response = await api.get('get_country_list');
         const countries = response.data.data;
+        // console.log(countries);
+        
         setCountryList(countries);
       } catch (error) {
         console.error('Error fetching country list:', error);
@@ -93,27 +38,17 @@ const CountrySelect = ({navigation}) => {
   }, []);
 
   // Handle country selection
-
-  const handleCountrySelect = (value) => {
-    setSelectedCountry(value);
-  };
-  const onSelect = (country) => {
-    setCountryCode(country);
-    setCountry(country);
-    setSelectedCountry(country);
-    console.log(country);
-  };
-
-  useEffect(() => {
-    if (selectedCountry) {
-      // Update the formData with the selected country
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        country: selectedCountry,
-      }));
+  const handleCountryChange = (index) => {
+    if (countryList[index]) {
+      setSelectedCountry(countryList[index].code);
     }
-  }, [selectedCountry]);
-  // console.log(countryList);
+  };
+
+  console.log(selectedCountry);
+  
+
+
+
 
   const animationProgress = useRef(new Animated.Value(0));
 
@@ -125,15 +60,17 @@ const CountrySelect = ({navigation}) => {
       useNativeDriver: false,
     }).start();
   }, []);
+
   return (
     <Block safe marginTop={sizes.xl} style={{backgroundColor: '#ffff'}}>
       <Block scrollEnabled>
         <Block>
           <Image
-            source={require('../assets/images/country.png')}
-            height={300}
-            width={300}
-            style={{alignSelf: 'center', zIndex: 10}}
+          resizeMode='cover'
+            source={require('../assets/images/country.jpg')}
+
+       
+            style={{alignSelf: 'flex-start', zIndex: 10}}
           />
           <Lottie
             style={{position: 'absolute'}}
@@ -144,34 +81,23 @@ const CountrySelect = ({navigation}) => {
         </Block>
         <Block paddingHorizontal={sizes.sm}>
           <Block align="center" flex={0} center>
-            {/* <CountryPicker
-              {...{
-                countryCode,
-                withFilter,
-                withFlag,
-                withCountryNameButton,
-                withAlphaFilter,
-                withCallingCode,
-                withEmoji,
-                onSelect,
+       
+       <SelectDropdown
+              // defaultValue={selectedCountry}
+              defaultButtonText='Please Select country'
+              dropdownStyle={{ borderRadius: 20, height: 400, width: 350, }}
+              buttonStyle={{
+                // height: 400,
+                width: 350,
+                backgroundColor: 'white',
+                borderRadius: 20,
+                marginLeft: 10,
               }}
-              visible
-            /> */}
-            <RNPickerSelect
-              placeholder={{label: 'Select a country', value: null}}
-              onValueChange={onSelect}
-              items={countryList.map((country) => ({
-                label: country.country_name,
-                value: country.code,
-                Icon: (
-                  <Image
-                    source={{uri: country.image_sm}}
-                    style={{width: 30, height: 20}}
-                  />
-                ),
-              }))}
-              value={selectedCountry}
-              useNativeAndroidPickerStyle={false}
+              data={countryList.map((country) => country.country_name)} // Use the list of country labels as data
+              onSelect={(selectedItem, index) => {
+                handleCountryChange(index)
+
+              }} // Call handleCountryChange when a country is selected
             />
           </Block>
 
@@ -181,8 +107,9 @@ const CountrySelect = ({navigation}) => {
               shadow={!isAndroid}
               marginVertical={sizes.s}
               marginHorizontal={sizes.sm}
-              onPress={() => navigation.navigate('login', {country: country})}>
-              <Text bold white style={{color: 'white'}}>
+              disabled={!selectedCountry}
+              onPress={() => navigation.navigate('login', {country: selectedCountry})}>
+              <Text bold h5 white >
                 Next
               </Text>
             </Button>
@@ -203,5 +130,15 @@ const CountrySelect = ({navigation}) => {
     </Block>
   );
 };
-
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    width: 30,
+    height: 20,
+    marginRight: 10,
+  },
+});
 export default CountrySelect;
