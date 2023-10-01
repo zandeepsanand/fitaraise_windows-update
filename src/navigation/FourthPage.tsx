@@ -132,76 +132,14 @@ const Buttons = () => {
 };
 
 // texts example
-const Typography = () => {
-  const {sizes} = useTheme();
-
-  return (
-    <Block marginTop={sizes.m} paddingHorizontal={sizes.padding}>
-      <Text p semibold marginBottom={sizes.s}>
-        Typography
-      </Text>
-      <Block>
-        <Text h1>Heading 1</Text>
-        <Text h2>Heading 2</Text>
-        <Text h3>Heading 3</Text>
-        <Text h4>Heading 4</Text>
-        <Text h5>Heading 5</Text>
-        <Text p>Paragraph</Text>
-        <Text marginBottom={sizes.xs}>Text</Text>
-      </Block>
-    </Block>
-  );
-};
 
 // inputs example
-const Inputs = () => {
-  const {colors, sizes} = useTheme();
 
-  return (
-    <Block
-      color={colors.card}
-      marginTop={sizes.m}
-      paddingTop={sizes.m}
-      paddingHorizontal={sizes.padding}>
-      <Text p semibold marginBottom={sizes.s}>
-        Inputs
-      </Text>
-      <Block>
-        <Input placeholder="Regular" marginBottom={sizes.sm} />
-        <Input placeholder="Search" marginBottom={sizes.sm} />
-        <Input
-          search
-          label="Search"
-          marginBottom={sizes.sm}
-          placeholder="Search with label"
-        />
-        <Input success placeholder="Success" marginBottom={sizes.sm} />
-        <Input danger placeholder="Error" marginBottom={sizes.sm} />
-        <Input disabled placeholder="Disabled" marginBottom={sizes.sm} />
-      </Block>
-    </Block>
-  );
-};
 
 // switch example
 
 // social example
-const Social = () => {
-  const {sizes} = useTheme();
 
-  return (
-    <Block paddingVertical={sizes.m} paddingHorizontal={sizes.padding}>
-      <Text p semibold marginBottom={sizes.s}>
-        Social
-      </Text>
-      <Block row justify="space-evenly">
-        <Button social="facebook" />
-        <Button social="twitter" />
-        <Button social="dribbble" />
-      </Block>
-    </Block>
-  );
-};
 
 // cards example
 const Cards = ({route, navigation}) => {
@@ -261,13 +199,7 @@ const Cards = ({route, navigation}) => {
       showButton2: !this.state.showButton2,
     });
   };
-  // const handleInputChange = (value) => {
-  //   if (isKg && value <= 200) {
-  //     setInputValue(value);
-  //   } else if (!isKg && value <= 440) {
-  //     setInputValue(value);
-  //   }
-  // };
+
   const handleInputChange = (value) => {
     if (isKg && value <= 200) {
       setInputValue(value);
@@ -333,17 +265,7 @@ const Cards = ({route, navigation}) => {
     console.log(updatedFormData, 'height unit check');
   };
 
-  // const handleGenderSelection = (selectedGender) => {
-  //   setGender(selectedGender);
-  // };
 
-  // const handleFormSubmit = () => {
-  //   const formData = new FormData();
-  //   formData.append('gender', gender);
-  //   console.log(formData);
-
-  //   // submit the form data to the server or do something else with it
-  // };
   const handleOptionSelect = (option) => {
     const updatedFormData = {
       ...formData,
@@ -399,15 +321,7 @@ const Cards = ({route, navigation}) => {
     // navigation.setParams({formData: updatedFormData})
   };
 
-  // const handleHeightFeetSelect = (item) => {
-  //   const updatedFormData = {
-  //     ...formData,
-  //     height: item,
-  //   };
-  //   setFeet(item);
-  //   navigation.setParams({formData: updatedFormData});
-  //   // navigation.navigate('Demo1', {formData: updatedFormData});
-  // };
+
   const handleKgSelect = (item) => {
     const updatedFormData = {
       ...formData,
@@ -418,44 +332,7 @@ const Cards = ({route, navigation}) => {
 
     // navigation.navigate('Demo1', {formData: updatedFormData});
   };
-  // function checkPage() {
-
-  // }
-  // function checkPage(){
-
-  //   if ( formData.gender ){
-  //     console.log(formData);
-
-  //       const fetchData = async () => {
-  //         try {
-  //           const response = await axios.post(`${BASE_URL}set_personal_datas`, formData);
-
-  //           if (response.data.success) {
-  //             // Call the second API
-  //             const secondApiResponse = await axios.get(`${BASE_URL}get_daily_required_calories/${formData.customer_id}`);
-
-  //             // Do something with the second API response
-  //             // console.log(secondApiResponse.data);
-  //             setData(secondApiResponse.data.data);
-  //             console.log(data);
-  //             // navigation.navigate('Progress', { data });
-
-  //           }
-
-  //           // Do something with the first API response
-  //           // console.log(response.data);
-  //         } catch (error) {
-  //           console.error(error);
-  //         }
-  //       };
-  //       fetchData();
-
-  //      }
-  //      else {
-  //       alert('Please enter all details')
-  //      }
-
-  // }
+ 
   async function checkPage() {
     if (
       formData.gender &&
@@ -557,9 +434,7 @@ const Cards = ({route, navigation}) => {
                   onPress={() => setModalKg(true)}
                   marginRight={sizes.base}>
                   <Block row align="center" justify="space-around">
-                    {/* <Text dark bold transform="uppercase" marginRight={sizes.sm}>
-        {kg} Kg
-      </Text> */}
+                
                     <Input
                       placeholder={'Foot'}
                       keyboardType="numeric"

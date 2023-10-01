@@ -8,6 +8,7 @@ import SecondPage from './SecondPage';
 import DietPlan from '../screens/DietPlan';
 import LoginScreenNew from './LoginPageNew';
 import TabNavigator from './TabNavigator';
+import DemoAlert from '../screens/alert/DemoAlert';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,12 @@ export default ({data, formDataCopy, dietPlan}) => {
         // options={screenOptions.components}
         options={{title: ''}}
         initialParams={{data, formDataCopy, dietPlan}}
+      />
+       <Stack.Screen
+        name="DemoAlert"
+        component={DemoAlert}
+        options={{title: t('navigation.home')}}
+        initialParams={{ formData }}
       />
     <Stack.Screen
         name="Details"

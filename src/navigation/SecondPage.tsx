@@ -20,8 +20,9 @@ import {
   View,
   SafeAreaView,
   Platform,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
   TouchableHighlight,
+  
 } from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 import {useHeaderHeight} from '@react-navigation/stack';
@@ -113,7 +114,7 @@ export default function SecondPage({navigation, route}) {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{paddingVertical: sizes.padding}}>
       <Block paddingHorizontal={sizes.padding} style={styles.container1}>
-      <TouchableOpacity
+      <TouchableWithoutFeedback
           onPress={() => {
             {handleOptionSelect('lose'); };
           }}>
@@ -148,8 +149,8 @@ export default function SecondPage({navigation, route}) {
               </Block>
             </View>
           </Block>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
           onPress={() => {
            { handleOptionSelect('gain'); };
           }}>
@@ -183,8 +184,8 @@ export default function SecondPage({navigation, route}) {
               </View>
             </View>
           </Block>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
           onPress={() => {
             {handleOptionSelect('maintain');};
           }}>
@@ -214,7 +215,7 @@ export default function SecondPage({navigation, route}) {
               </View>
             </View>
           </Block>
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
 
        
       </Block>
@@ -240,12 +241,12 @@ export default function SecondPage({navigation, route}) {
             paddingRight:10
           }}>
 
-          <TouchableOpacity >
+          <TouchableWithoutFeedback >
           <Image
             source={assets.Button}
          
           />
-          </TouchableOpacity>
+          </TouchableWithoutFeedback>
         </View>
     
   </Block>

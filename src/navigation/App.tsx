@@ -83,6 +83,8 @@ import PhoneNumber from '../screens/phoneNumber/PhoneNumber';
 import OtpPageNew from './OtpPageNew';
 import Menu from './Menu';
 import MyDrawerNavigator from './Drawer';
+import AlertCustom from '../screens/alert/AlertCustom';
+import DemoAlert from '../screens/alert/DemoAlert';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
@@ -146,6 +148,16 @@ export default () => {
           <NavigationContainer theme={navigationTheme}>
             <Stack.Navigator initialRouteName="Loading">
             <Stack.Screen name="Menu" component={Menu} options={{ headerShown: false }} />
+            <Stack.Screen
+                name="Alert"
+                component={AlertCustom}
+                options={{headerShown: false}}
+              />
+                  <Stack.Screen
+                name="DemoAlert"
+                component={DemoAlert}
+                options={{headerShown: false}}
+              />
               <Stack.Screen
                 name="Loading"
                 component={LoadingScreen}

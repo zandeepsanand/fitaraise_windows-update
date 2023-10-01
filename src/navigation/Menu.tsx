@@ -95,13 +95,39 @@ const DrawerContent = (
   );
 
   const handleWebLink = useCallback((url) => Linking.openURL(url), []);
+  
+  const handleEditGoalPress = () => {
+    Alert.alert(
+      'Edit Goal',
+      'Do you want to edit your goal?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Edit',
+          onPress: () => {
+            // Handle the logic to navigate to the "Edit Goal" screen here
+            navigation.navigate('Details'); // Replace 'Details' with the correct screen name
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+  
 
   // screen list for Drawer menu
   const screens = [
     {name: "Home", to: 'Tab', icon: assets.home},
-    {name: "Edit Goal", to: 'Details', icon: assets.rental},
-   
-   
+    {
+      name: 'Edit Goal',
+      
+      to: 'DemoAlert',
+      icon: assets.rental,
+    },
     {name: 'Water Tracker', to: 'Pro', icon: assets.kcal},
     {name: 'Track Progress', to: 'Profile', icon: assets.office},
    

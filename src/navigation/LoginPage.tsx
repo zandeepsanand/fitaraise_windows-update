@@ -522,7 +522,7 @@ const LoginPage = ({route}) => {
                     !isValid.last_name
                   }>
                   {isLoading && (
-                    <ActivityIndicator size="small" color="#0000ff" />
+                    <ActivityIndicator size="small" color="white" />
                   )}
                   {!isLoading && (
                     <Text bold white transform="uppercase">
