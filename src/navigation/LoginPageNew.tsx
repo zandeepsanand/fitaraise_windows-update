@@ -106,7 +106,7 @@ const LoginScreenNew = ({navigation, route}) => {
       <Block scrollEnabled>
         <Block>
           <Image
-            source={require('../assets/images/login.png')}
+            source={require('../assets/icons/fitaraise.png')}
             height={300}
             width={300}
             style={{alignSelf: 'center'}}

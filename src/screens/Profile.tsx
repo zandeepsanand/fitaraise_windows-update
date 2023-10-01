@@ -106,7 +106,7 @@ const Profile = () => {
                   radius={sizes.m}
                   onPress={() => {
                     handleLogout()
-                  }}>
+                  }} >
                   <Block
                     justify="center"
                     radius={sizes.m}

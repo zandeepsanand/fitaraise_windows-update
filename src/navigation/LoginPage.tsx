@@ -131,35 +131,7 @@ const LoginPage = ({route}) => {
     },
     [setRegistration, formData, registration],
   );
-  // const [isPasswordVisible, setPasswordVisible] = useState(false);
 
-
-
-  // const handleChange = useCallback(
-  //   (key, value) => {
-  //     setRegistration((state) => ({...state, [key]: value}));
-  //     if (key === 'password') {
-  //       const isPasswordEmpty = value === '';
-  //       // setIsPasswordVisible(!isPasswordEmpty);
-
-  //       // Perform any animation or other actions you need
-  //       Animated.timing(iconPosition, {
-  //         toValue: isPasswordEmpty ? 0 : 1,
-  //         duration: 200,
-  //         useNativeDriver: false,
-  //       }).start();
-  //     }
-  //     setFormData({
-  //       ...formData,
-  //       first_name: registration.name,
-  //       last_name: registration.last_name,
-  //       mobile_number: registration.number,
-  //       email: registration.email,
-  //       [key]: value,
-  //     });
-  //   },
-  //   [setRegistration, formData, registration, iconPosition],
-  // );
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
@@ -199,7 +171,7 @@ const LoginPage = ({route}) => {
     setIsValid((state) => ({
       ...state,
       name: regex.name.test(registration.name),
-      last_name: regex.name.test(registration.last_name),
+      last_name: regex.last_name.test(registration.last_name),
       email: regex.email.test(registration.email),
       number: regex.number.test(registration.number),
       password: regex.password.test(registration.password),

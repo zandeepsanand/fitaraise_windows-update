@@ -85,6 +85,7 @@ import Menu from './Menu';
 import MyDrawerNavigator from './Drawer';
 import AlertCustom from '../screens/alert/AlertCustom';
 import DemoAlert from '../screens/alert/DemoAlert';
+import Account from '../screens/account/Account';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
@@ -148,6 +149,11 @@ export default () => {
           <NavigationContainer theme={navigationTheme}>
             <Stack.Navigator initialRouteName="Loading">
             <Stack.Screen name="Menu" component={Menu} options={{ headerShown: false }} />
+            <Stack.Screen
+                name="Account"
+                component={Account}
+                options={{headerShown: false}}
+              />
             <Stack.Screen
                 name="Alert"
                 component={AlertCustom}

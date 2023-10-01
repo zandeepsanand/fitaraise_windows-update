@@ -2,7 +2,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Alert, Animated, Linking, StyleSheet} from 'react-native';
 
-
 import {
   useIsDrawerOpen,
   createDrawerNavigator,
@@ -20,14 +19,13 @@ import {useData, useTheme, useTranslation} from '../hooks';
 const Drawer = createDrawerNavigator();
 
 /* drawer menu screens navigation */
-const ScreensStack = ({ route }) => {
-  const { data, formDataCopy, dietPlan } = route.params ?? {};
+const ScreensStack = ({route}) => {
+  const {data, formDataCopy, dietPlan} = route.params ?? {};
 
   // console.log('ScreensStack Component - Data:', data);
   // console.log('ScreensStack Component - FormDataCopy:', formDataCopy);
   // console.log('ScreensStack Component - DietPlan:', dietPlan);
 
-  
   const {colors} = useTheme();
   const isDrawerOpen = useIsDrawerOpen();
   const animation = useRef(new Animated.Value(0)).current;
@@ -78,8 +76,7 @@ const ScreensStack = ({ route }) => {
 const DrawerContent = (
   props: DrawerContentComponentProps<DrawerContentOptions>,
 ) => {
-
-  const {navigation ,formDataCopy} = props;
+  const {navigation, formDataCopy} = props;
   const {t} = useTranslation();
   const {isDark, handleIsDark} = useData();
   const [active, setActive] = useState('Tab');
@@ -95,7 +92,7 @@ const DrawerContent = (
   );
 
   const handleWebLink = useCallback((url) => Linking.openURL(url), []);
-  
+
   const handleEditGoalPress = () => {
     Alert.alert(
       'Edit Goal',
@@ -114,25 +111,21 @@ const DrawerContent = (
           },
         },
       ],
-      { cancelable: false }
+      {cancelable: false},
     );
   };
-  
 
   // screen list for Drawer menu
   const screens = [
-    {name: "Home", to: 'Tab', icon: assets.home},
+    {name: 'Home', to: 'Tab', icon: assets.home},
     {
       name: 'Edit Goal',
-      
       to: 'DemoAlert',
       icon: assets.rental,
     },
     {name: 'Water Tracker', to: 'Pro', icon: assets.kcal},
     {name: 'Track Progress', to: 'Profile', icon: assets.office},
-   
-    {name:'Share App', to: 'Register', icon: assets.profile}
-   
+    {name: 'Share App', to: 'Register', icon: assets.profile},
   ];
 
   return (
@@ -188,7 +181,10 @@ const DrawerContent = (
                   color={colors[isActive ? 'white' : 'black']}
                 />
               </Block>
-              <Text p bold={isActive} color={colors[isActive ? 'primary' : 'black']}>
+              <Text
+                p
+                bold={isActive}
+                color={colors[isActive ? 'primary' : 'black']}>
                 {screen.name}
               </Text>
             </Button>
@@ -208,8 +204,8 @@ const DrawerContent = (
         </Text>
 
         <Button
-      //  color={colors.info}
-      
+          //  color={colors.info}
+
           row
           justify="flex-start"
           marginTop={sizes.sm}
@@ -217,9 +213,8 @@ const DrawerContent = (
           // onPress={() =>
           //   handleWebLink('https://github.com/creativetimofficial')
           // }
-          >
+        >
           <Block
-          
             flex={0}
             radius={6}
             align="center"
@@ -237,7 +232,7 @@ const DrawerContent = (
             />
           </Block>
           <Text p color={labelColor} center>
-           Logout
+            Logout
           </Text>
         </Button>
 
@@ -258,9 +253,8 @@ const DrawerContent = (
 
 /* drawer menu navigation */
 export default function Menu({route}) {
-  const { data, formDataCopy, dietPlan } = route.params ?? {};
-  console.log(formDataCopy, data, "menu drawer check");
-  
+  const {data, formDataCopy, dietPlan} = route.params ?? {};
+  console.log(formDataCopy, data, 'menu drawer check');
 
   const {gradients} = useTheme();
 
@@ -270,15 +264,21 @@ export default function Menu({route}) {
         drawerType="slide"
         overlayColor="transparent"
         sceneContainerStyle={{backgroundColor: 'transparent'}}
-        drawerContent={(props) => <DrawerContent {...props} formDataCopy={formDataCopy}/>}
+        drawerContent={(props) => (
+          <DrawerContent {...props} formDataCopy={formDataCopy} />
+        )}
         drawerStyle={{
           flex: 1,
           width: '60%',
           borderRightWidth: 0,
           backgroundColor: 'transparent',
         }}>
-        <Drawer.Screen name="Screens" component={ScreensStack} initialParams={{ data, formDataCopy, dietPlan }} />
+        <Drawer.Screen
+          name="Screens"
+          component={ScreensStack}
+          initialParams={{data, formDataCopy, dietPlan}}
+        />
       </Drawer.Navigator>
     </Block>
   );
-};
+}

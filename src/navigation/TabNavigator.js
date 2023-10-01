@@ -9,6 +9,7 @@ import WorkoutFirstPage from '../screens/workout/WorkoutFirstPage';
 import {Image} from '../components';
 import {SvgXml} from 'react-native-svg';
 import {Profile} from '../screens';
+import Account from '../screens/account/Account';
 
 
 
@@ -39,7 +40,7 @@ const TabNavigator = ({route}) => {
           tabBarLabel: 'Home', // Custom tab label
           tabBarIcon: ({color, size}) => (
             <Image
-              source={require('../assets/icons/home2.png')} // Replace with your image source
+              source={require('../assets/icons/house.png')} // Replace with your image source
               style={{
                 tintColor: color,
                 width: size,
@@ -60,7 +61,7 @@ const TabNavigator = ({route}) => {
           tabBarLabel: 'Workout', // Custom tab label
           tabBarIcon: ({color, size}) => (
             <Image
-              source={require('../assets/icons/workout.png')} // Replace with your image source
+              source={require('../assets/icons/gym.png')} // Replace with your image source
               style={{tintColor: color, width: size, height: size}}
             />
           ),
@@ -75,7 +76,7 @@ const TabNavigator = ({route}) => {
           tabBarLabel: 'Nutrition Facts', // Custom tab label
           tabBarIcon: ({color, size}) => (
             <Image
-              source={require('../assets/icons/read.png')} // Replace with your image source
+              source={require('../assets/icons/book.png')} // Replace with your image source
               style={{tintColor: color, width: size, height: size}}
             />
           ),
@@ -83,7 +84,8 @@ const TabNavigator = ({route}) => {
       />
       <Tab.Screen
         name="profile"
-        component={Profile}
+        component={Account}
+        initialParams={{ formData:formDataCopy }}
         options={{
           headerShown: false,
 

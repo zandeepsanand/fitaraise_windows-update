@@ -10,7 +10,7 @@ import {
 import ConfirmationDialog from './ConfirmationDialog'; // Import the ConfirmationDialog component
 import { Block } from '../../components';
 
-export default function DemoAlert({ route }) {
+export default function DemoAlert({ route,navigation }) {
   const { formData } = route.params ?? {};
 
   const [isConfirmationVisible, setConfirmationVisible] = useState(true);
@@ -26,9 +26,9 @@ export default function DemoAlert({ route }) {
       type: ALERT_TYPE.SUCCESS,
       title: 'Success',
       textBody: 'Action confirmed!',
-      button: 'Close',
+      // button: 'Close',
     });
-    
+    navigation.replace('Details');
 
     // Close the confirmation dialog
     setConfirmationVisible(false);
@@ -37,12 +37,13 @@ export default function DemoAlert({ route }) {
   const handleCancel = () => {
     // Handle cancellation logic here, if needed
     // For example, show a message
-    Toast.show({
-      type: ALERT_TYPE.WARNING,
-      title: 'Warning',
-      textBody: 'Action canceled!',
-    });
-
+    // Toast.show({
+    //   type: ALERT_TYPE.WARNING,
+    //   title: 'Warning',
+    //   textBody: 'Action canceled!',
+    // });
+   
+    navigation.goBack();
     // Close the confirmation dialog
     setConfirmationVisible(false);
   };
@@ -95,7 +96,7 @@ export default function DemoAlert({ route }) {
         {/* Render the ConfirmationDialog component */}
         <ConfirmationDialog
           isVisible={isConfirmationVisible}
-          message="Are you sure want to edit goal"
+          message="Are you sure want to edit goal?"
           onConfirm={handleConfirm}
           onCancel={handleCancel}
         />

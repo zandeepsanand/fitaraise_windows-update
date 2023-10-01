@@ -10,7 +10,7 @@ const ConfirmationDialog = ({isVisible, message, onConfirm, onCancel}) => {
     <Modal isVisible={isVisible}>
       <Block card center height={170} flex={0}>
         <Block flex={1} center marginHorizontal={40} >
-          <Text center bold>{message}</Text>
+          <Text center bold h5>{message}</Text>
         </Block>
         <Block row center flex={0} height={50} marginHorizontal={40} marginBottom={10}>
           <TouchableWithoutFeedback onPress={onConfirm}>
@@ -23,7 +23,7 @@ const ConfirmationDialog = ({isVisible, message, onConfirm, onCancel}) => {
 
           <TouchableWithoutFeedback onPress={onCancel}>
             <Block card center  flex={1}>
-              <Text center bold>No</Text>
+              <Text center bold secondary>No</Text>
             </Block>
           </TouchableWithoutFeedback>
         </Block>
