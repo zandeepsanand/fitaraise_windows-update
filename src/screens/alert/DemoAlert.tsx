@@ -12,6 +12,8 @@ import { Block } from '../../components';
 
 export default function DemoAlert({ route,navigation }) {
   const { formData } = route.params ?? {};
+  console.log(formData ,"alert");
+  
 
   const [isConfirmationVisible, setConfirmationVisible] = useState(true);
 
@@ -28,7 +30,7 @@ export default function DemoAlert({ route,navigation }) {
       textBody: 'Action confirmed!',
       // button: 'Close',
     });
-    navigation.replace('Details');
+    navigation.replace('Details',{formData});
 
     // Close the confirmation dialog
     setConfirmationVisible(false);

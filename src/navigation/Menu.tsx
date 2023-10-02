@@ -120,7 +120,7 @@ const DrawerContent = (
     {name: 'Home', to: 'Tab', icon: assets.home},
     {
       name: 'Edit Goal',
-      to: 'DemoAlert',
+      to: 'Demo',
       icon: assets.rental,
     },
     {name: 'Water Tracker', to: 'Pro', icon: assets.kcal},

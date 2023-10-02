@@ -441,20 +441,6 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                   titleStyle={{fontWeight: 'bold', fontSize: 20}}
                 />
 
-                {/* <Image
-                width={64}
-                height={64}
-                marginBottom={sizes.sm}
-                source={{uri: user?.avatar}}
-                {totalCalories >= data.calories ? 'CALORIES REACHED 🔥' : 'KCAL LEFT 🔥'}
-                 const totalCalories = 1125 ;
-              /> */}
-                {/* <Text h5 center white>
-                {user?.name}
-              </Text> */}
-                {/* <Text p center white>
-                  {user?.department}
-                </Text> */}
                 <Block row marginVertical={sizes.m}>
                   <Button
                     white
@@ -577,31 +563,6 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                       </Text>
                     </Block>
                   </Button>
-                  {/* <Button
-                  shadow={false}
-                  radius={sizes.m}
-                  marginHorizontal={sizes.sm}
-                  color="rgba(255,255,255,0.2)"
-                  outlined={String(colors.white)}
-                  onPress={() => handleSocialLink('twitter')}>
-                  <Ionicons
-                    size={18}
-                    name="logo-twitter"
-                    color={colors.white}
-                  />
-                </Button>
-                <Button
-                  shadow={false}
-                  radius={sizes.m}
-                  color="rgba(255,255,255,0.2)"
-                  outlined={String(colors.white)}
-                  onPress={() => handleSocialLink('dribbble')}>
-                  <Ionicons
-                    size={18}
-                    name="logo-dribbble"
-                    color={colors.white}
-                  />
-                </Button> */}
                 </Block>
               </Block>
             </Image>
@@ -852,7 +813,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                               meal_type: 1,
                               formDataCopy,
                             })
-                          }>
+                          }
+                          >
                           Add Breakfast
                         </Text>
                         <Text
@@ -1594,6 +1556,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                           onPress={() =>
                             navigation.navigate('searchfood', {
                               mealType: 'evening',
+                              meal_type: 5,
+                              formDataCopy,
                             })
                           }>
                           (Recommended {Math.floor(data.calories * 0.05)} -{' '}
@@ -1835,6 +1799,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                           onPress={() =>
                             navigation.navigate('searchfood', {
                               mealType: 'evening',
+                              meal_type: 5,
+                              formDataCopy,
                             })
                           }>
                           (Recommended {Math.floor(data.calories * 0.27)} -{' '}

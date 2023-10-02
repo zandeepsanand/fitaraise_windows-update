@@ -489,6 +489,7 @@ const EveningSingle = ({route, navigation}) => {
               navigation.navigate('searchfood', {
                 mealType: 'evening',
                 meal_type,
+                formDataCopy
               })
             }>
             <Block

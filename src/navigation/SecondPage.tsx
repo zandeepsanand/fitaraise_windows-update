@@ -51,7 +51,7 @@ import {useHeaderHeight} from '@react-navigation/stack';
 export default function SecondPage({navigation, route}) {
   const { formData } = route.params ?? {};
   
-  // console.log(formData);
+  console.log(formData ,"formData");
   const [weightWantTo, setSelectedOption] = useState('');
   const {assets, fonts, sizes, gradients, colors} = useTheme();
 

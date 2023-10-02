@@ -14,10 +14,12 @@ import Account from '../screens/account/Account';
 const Stack = createStackNavigator();
 
 export default ({data, formDataCopy, dietPlan}) => {
-  console.log('ScreensStack Component - Data:', data);
-  console.log('ScreensStack Component - FormDataCopy:', formDataCopy);
-  console.log('ScreensStack Component - DietPlan:', dietPlan);
+  // console.log('ScreensStack Component - Data:', data);
+  // console.log('ScreensStack Component - FormDataCopy:', formDataCopy);
+  // console.log('ScreensStack Component - DietPlan:', dietPlan);
   const formData = formDataCopy;
+  console.log(formData , "check");
+  
   const {t} = useTranslation();
   const screenOptions = useScreenOptions();
 
@@ -32,7 +34,7 @@ export default ({data, formDataCopy, dietPlan}) => {
         initialParams={{data, formDataCopy, dietPlan}}
       />
        <Stack.Screen
-        name="DemoAlert"
+        name="Demo"
         component={DemoAlert}
         options={{title: t('navigation.home')}}
         initialParams={{ formData }}

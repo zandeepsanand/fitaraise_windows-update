@@ -505,8 +505,7 @@ const DinnerSingle = ({route, navigation}) => {
                 backgroundColor: '#94a9fe',
               }}>
               <Text center white semibold>
-                {' '}
-                ADD MORE FOODS{' '}
+                ADD MORE FOODS
               </Text>
             </Block>
           </TouchableOpacity>
