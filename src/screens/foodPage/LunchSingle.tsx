@@ -18,6 +18,7 @@ import axios from 'axios';
 import SelectDropdown from 'react-native-select-dropdown';
 import {log} from 'react-native-reanimated';
 import _ from 'lodash'; // Import Lodash
+import api from '../../../api';
 
 type Movie = {
   id: string;
@@ -27,7 +28,7 @@ type Movie = {
 
 const isAndroid = Platform.OS === 'android';
 const LunchSingle = ({route, navigation}) => {
-  const {data} = route.params;
+  const {data, formDataCopy} = route.params;
   // console.log(data);
   const {addBreakfastItem} = useContext(MealContext);
   const [initialGram, setInitialGram] = useState(0);
@@ -84,11 +85,11 @@ const LunchSingle = ({route, navigation}) => {
   const {mealType, meal_type} = route.params;
   const [foodItems, setFoodItems] = useState([]);
   const [editItemId, setEditItemId] = useState(null);
+  const [editItemName, setEditItemName] = useState(null);
   const handleEditButtonClick = (itemId) => {
-    // console.log(item.details.food_id);
-
-    // Set the ID of the item to be edited
-    setEditItemId(itemId);
+    console.log(itemId);
+    setEditItemId(itemId.details.id);
+    setEditItemName(itemId.id);
   };
 
   // console.log(mealType,"this is meal type id ");
@@ -144,10 +145,9 @@ const LunchSingle = ({route, navigation}) => {
   };
 
   function handleEdit(item) {
-    // console.log('dark', item);
     setIsEditMode(true);
-    axios
-      .get(`${BASE_URL}get_serving_desc_by_food_id/${item.id}`)
+    api
+      .get(`get_serving_desc_by_food_id/${item.id}`)
       .then((response) => {
         setServingDetailsFull(response.data.data.serving_desc);
         const servingNames = response.data.data.serving_desc.map(
@@ -156,17 +156,20 @@ const LunchSingle = ({route, navigation}) => {
         const servingId = response.data.data.serving_desc.map(
           (serving) => serving.id,
         );
+        servingId.unshift(4792);
         const servingInitialGram = response.data.data.serving_desc.map(
           (serving) => serving.weight,
         );
         const servingGrams = response.data.data.serving_desc.map(
           (serving) => `${serving.name} (${serving.weight} g)`,
         );
+        servingInitialGram.unshift(100);
         setServingId(servingId[0]);
         setServingDetails(servingNames);
         nutritionCalculation(item);
         setServingGrams(servingGrams);
         setInitialGram(item.details.selectedWeight);
+        servingGrams.unshift('100 g');
         setSelectedDropDown(item.details.selectedDropDown);
       })
       .catch((error) => {
@@ -250,7 +253,6 @@ const LunchSingle = ({route, navigation}) => {
       const new_calcium = selectedWeight1 * (item.calcium_in_mg / 100);
       const new_iron = selectedWeight1 * (item.iron_in_mg / 100);
 
-     
       setSelectedWeight(new_Weight);
       setProteinAmount(new_protein);
       setCalorieAmount(new_calories);
@@ -278,7 +280,6 @@ const LunchSingle = ({route, navigation}) => {
   };
 
   useEffect(() => {
-  
     if (multiplication) {
       setTotalCalorie((multiplication * calorieAmount).toFixed(2));
       setTotalProtein((multiplication * proteinAmount).toFixed(2));
@@ -488,6 +489,7 @@ const LunchSingle = ({route, navigation}) => {
               navigation.navigate('searchfood', {
                 mealType: 'lunch',
                 meal_type,
+                formDataCopy
               })
             }>
             <Block
@@ -573,7 +575,9 @@ const LunchSingle = ({route, navigation}) => {
                 </Block>
                 <Block margin={0}>
                   <Block margin={0} paddingTop={10} paddingLeft={10}>
-                    {isEditMode && editItemId === item.details.id ? (
+                    {isEditMode &&
+                    editItemId === item.details.id &&
+                    editItemName === item.id ? (
                       <Block
                         row
                         style={{alignSelf: 'center'}}
@@ -717,7 +721,7 @@ const LunchSingle = ({route, navigation}) => {
                             onPress={() => {
                               debouncedHandleEdit(item);
                               toggleEdit(item);
-                              handleEditButtonClick(item.details.id);
+                              handleEditButtonClick(item);
                             }}>
                             <Block flex={0}>
                               <Image
@@ -742,8 +746,7 @@ const LunchSingle = ({route, navigation}) => {
                           console.log(item.details, 'sandeep idd');
                         }}>
                         <Block padding={10} align="center">
-                          {expanded &&
-                          selectedItemId === item.details.id ? (
+                          {expanded && selectedItemId === item.details.id ? (
                             <Text>Hide</Text>
                           ) : (
                             <Text>Full Details </Text>

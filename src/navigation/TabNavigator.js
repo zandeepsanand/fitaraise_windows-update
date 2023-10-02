@@ -43,8 +43,8 @@ const TabNavigator = ({route}) => {
               source={require('../assets/icons/house.png')} // Replace with your image source
               style={{
                 tintColor: color,
-                width: size,
-                height: size,
+                width: 20,
+                height: 20,
                 borderRadius: 0,
               }}
             />
@@ -62,7 +62,7 @@ const TabNavigator = ({route}) => {
           tabBarIcon: ({color, size}) => (
             <Image
               source={require('../assets/icons/gym.png')} // Replace with your image source
-              style={{tintColor: color, width: size, height: size}}
+              style={{tintColor: color, width: 20, height: 20}}
             />
           ),
         }}
@@ -93,7 +93,7 @@ const TabNavigator = ({route}) => {
           tabBarIcon: ({color, size}) => (
             <Image
               source={require('../assets/icons/user.png')} // Replace with your image source
-              style={{tintColor: color, width: size, height: size}}
+              style={{tintColor: color, width: 20, height: 20}}
             />
           ),
         }}

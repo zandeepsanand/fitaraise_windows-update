@@ -744,20 +744,19 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                       <Block style={styles.container} margin={0}>
                         {/* Header */}
                         <Block style={styles.row} flex={1}>
-                          <Text style={styles.header2} size={12} semibold>
-                            {' '}
-                            Name
+                          <Text style={styles.header2} size={12} bold>
+                            
                           </Text>
-                          <Text style={styles.header} semibold size={12}>
+                         <Text style={styles.header} bold size={12}>
                             Protein
                           </Text>
-                          <Text style={styles.header} semibold size={12}>
+                          <Text style={styles.header} bold size={12}>
                             Carbs
                           </Text>
-                          <Text style={styles.header} semibold size={12}>
+                          <Text style={styles.header} bold size={12}>
                             Fat
                           </Text>
-                          <Text style={styles.header} semibold size={12}>
+                          <Text style={styles.header} bold size={12}>
                             KCAL
                           </Text>
                           <Text style={styles.header}></Text>
@@ -770,7 +769,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                 <Text
                                   style={styles.header2}
                                   size={12}
-                                  semibold
+                                  bold
                                   numberOfLines={
                                     expandedItems.includes(index) ? 0 : 1
                                   }>
@@ -995,18 +994,20 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                     <Block>
                       <Block style={styles.container}>
                         {/* Header */}
-                        <Block style={styles.row} flex={0}>
-                          <Text style={(styles.header, {width: 70})}></Text>
-                          <Text style={styles.header} center semibold>
+                        <Block style={styles.row} flex={1}>
+                          <Text style={styles.header2} size={12} bold>
+                            
+                          </Text>
+                         <Text style={styles.header} bold size={12}>
                             Protein
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             Carbs
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             Fat
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             KCAL
                           </Text>
                           <Text style={styles.header}></Text>
@@ -1016,24 +1017,31 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
                         <Block>
                           {morningSnackItems.map((item, index) => (
-                            <View key={index} style={styles.item}>
-                              <Text
-                                style={(styles.data, {width: 70, padding: 5})}
-                                bold>
-                                {item.food_name}
-                              </Text>
-                              <Text style={styles.data} center>
+                            <View key={index} style={{flexDirection: 'row'}}>
+                             
+                                <Text
+                                  style={styles.header2}
+                                  size={12}
+                                  bold
+                                  numberOfLines={
+                                    expandedItems.includes(index) ? 0 : 1
+                                  }>
+                                  {item.food_name}
+                                </Text>
+                             
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalProtein}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalCarb}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalFat}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalCalorie}
                               </Text>
+                              <Text style={styles.header} semibold size={12}>
                               <TouchableOpacity
                                 onPress={() =>
                                   handleDelete(index, 'morningSnackItems')
@@ -1052,6 +1060,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                   margin={sizes.s}
                                 />
                               </TouchableOpacity>
+                              </Text>
+                              
                             </View>
                           ))}
                         </Block>
@@ -1227,18 +1237,20 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                     <Block>
                       <Block style={styles.container}>
                         {/* Header */}
-                        <Block style={styles.row} flex={0}>
-                          <Text style={(styles.header, {width: 70})}></Text>
-                          <Text style={styles.header} center semibold>
+                        <Block style={styles.row} flex={1}>
+                          <Text style={styles.header2} size={12} bold>
+                            
+                          </Text>
+                         <Text style={styles.header} bold size={12}>
                             Protein
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             Carbs
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             Fat
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             KCAL
                           </Text>
                           <Text style={styles.header}></Text>
@@ -1248,24 +1260,31 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
                         <Block>
                           {lunchItems.map((item, index) => (
-                            <View key={index} style={styles.item}>
-                              <Text
-                                style={(styles.data, {width: 70, padding: 5})}
-                                bold>
-                                {item.food_name}
-                              </Text>
-                              <Text style={styles.data} center>
+                            <View key={index} style={{flexDirection: 'row'}}>
+                             
+                                <Text
+                                  style={styles.header2}
+                                  size={12}
+                                  bold
+                                  numberOfLines={
+                                    expandedItems.includes(index) ? 0 : 1
+                                  }>
+                                  {item.food_name}
+                                </Text>
+                             
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalProtein}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalCarb}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalFat}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalCalorie}
                               </Text>
+                              <Text style={styles.header} semibold size={12}>
                               <TouchableOpacity
                                 onPress={() => handleDelete(index, 'lunch')}>
                                 <Image
@@ -1282,6 +1301,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                   margin={sizes.s}
                                 />
                               </TouchableOpacity>
+                              </Text>
+                            
                             </View>
                           ))}
                         </Block>
@@ -1332,6 +1353,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                           onPress={() =>
                             navigation.navigate('searchfood', {
                               mealType: 'lunch',
+                              meal_type: 4,
+                              formDataCopy,
                             })
                           }>
                           (Recommended {Math.floor(data.calories * 0.27)} -{' '}
@@ -1455,18 +1478,20 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                     <Block>
                       <Block style={styles.container}>
                         {/* Header */}
-                        <Block style={styles.row} flex={0}>
-                          <Text style={(styles.header, {width: 70})}></Text>
-                          <Text style={styles.header} center semibold>
+                        <Block style={styles.row} flex={1}>
+                          <Text style={styles.header2} size={12} bold>
+                            
+                          </Text>
+                         <Text style={styles.header} bold size={12}>
                             Protein
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             Carbs
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             Fat
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             KCAL
                           </Text>
                           <Text style={styles.header}></Text>
@@ -1476,24 +1501,31 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
                         <Block>
                           {eveningSnackItems.map((item, index) => (
-                            <View key={index} style={styles.item}>
-                              <Text
-                                style={(styles.data, {width: 70, padding: 5})}
-                                bold>
-                                {item.food_name}
-                              </Text>
-                              <Text style={styles.data} center>
+                            <View key={index} style={{flexDirection: 'row'}}>
+                             
+                                <Text
+                                  style={styles.header2}
+                                  size={12}
+                                  bold
+                                  numberOfLines={
+                                    expandedItems.includes(index) ? 0 : 1
+                                  }>
+                                  {item.food_name}
+                                </Text>
+                             
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalProtein}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalCarb}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalFat}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalCalorie}
                               </Text>
+                              <Text style={styles.header} semibold size={12}>
                               <TouchableOpacity
                                 onPress={() => handleDelete(index, 'evening')}>
                                 <Image
@@ -1510,6 +1542,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                   margin={sizes.s}
                                 />
                               </TouchableOpacity>
+                              </Text>
+                              
                             </View>
                           ))}
                         </Block>
@@ -1684,18 +1718,20 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                     <Block>
                       <Block style={styles.container}>
                         {/* Header */}
-                        <Block style={styles.row} flex={0}>
-                          <Text style={(styles.header, {width: 70})}></Text>
-                          <Text style={styles.header} center semibold>
+                        <Block style={styles.row} flex={1}>
+                          <Text style={styles.header2} size={12} bold>
+                            
+                          </Text>
+                         <Text style={styles.header} bold size={12}>
                             Protein
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             Carbs
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             Fat
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             KCAL
                           </Text>
                           <Text style={styles.header}></Text>
@@ -1705,24 +1741,31 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
                         <Block>
                           {dinnerItems.map((item, index) => (
-                            <View key={index} style={styles.item}>
-                              <Text
-                                style={(styles.data, {width: 70, padding: 5})}
-                                bold>
-                                {item.food_name}
-                              </Text>
-                              <Text style={styles.data} center>
+                            <View key={index} style={{flexDirection: 'row'}}>
+                             
+                                <Text
+                                  style={styles.header2}
+                                  size={12}
+                                  bold
+                                  numberOfLines={
+                                    expandedItems.includes(index) ? 0 : 1
+                                  }>
+                                  {item.food_name}
+                                </Text>
+                             
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalProtein}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalCarb}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalFat}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalCalorie}
                               </Text>
+                              <Text style={styles.header} semibold size={12}>
                               <TouchableOpacity
                                 onPress={() => handleDelete(index, 'dinner')}>
                                 <Image
@@ -1739,6 +1782,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                   margin={sizes.s}
                                 />
                               </TouchableOpacity>
+                              </Text>
+                              
                             </View>
                           ))}
                         </Block>
@@ -1915,18 +1960,20 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                     <Block>
                       <Block style={styles.container}>
                         {/* Header */}
-                        <Block style={styles.row} flex={0}>
-                          <Text style={(styles.header, {width: 70})}></Text>
-                          <Text style={styles.header} center semibold>
+                        <Block style={styles.row} flex={1}>
+                          <Text style={styles.header2} size={12} bold>
+                            
+                          </Text>
+                         <Text style={styles.header} bold size={12}>
                             Protein
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             Carbs
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             Fat
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             KCAL
                           </Text>
                           <Text style={styles.header}></Text>
@@ -1936,24 +1983,31 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
                         <Block>
                           {mealItems1.map((item, index) => (
-                            <View key={index} style={styles.item}>
-                              <Text
-                                style={(styles.data, {width: 70, padding: 5})}
-                                bold>
-                                {item.food_name}
-                              </Text>
-                              <Text style={styles.data} center>
+                            <View key={index} style={{flexDirection: 'row'}}>
+                             
+                                <Text
+                                  style={styles.header2}
+                                  size={12}
+                                  bold
+                                  numberOfLines={
+                                    expandedItems.includes(index) ? 0 : 1
+                                  }>
+                                  {item.food_name}
+                                </Text>
+                             
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalProtein}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalCarb}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalFat}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalCalorie}
                               </Text>
+                              <Text style={styles.header} semibold size={12}>
                               <TouchableOpacity
                                 onPress={() => handleDelete(index, 'meal1')}>
                                 <Image
@@ -1970,6 +2024,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                   margin={sizes.s}
                                 />
                               </TouchableOpacity>
+                              </Text>
                             </View>
                           ))}
                         </Block>
@@ -2134,18 +2189,20 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                     <Block>
                       <Block style={styles.container}>
                         {/* Header */}
-                        <Block style={styles.row} flex={0}>
-                          <Text style={(styles.header, {width: 70})}></Text>
-                          <Text style={styles.header} center semibold>
+                        <Block style={styles.row} flex={1}>
+                          <Text style={styles.header2} size={12} bold>
+                            
+                          </Text>
+                         <Text style={styles.header} bold size={12}>
                             Protein
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             Carbs
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             Fat
                           </Text>
-                          <Text style={styles.header} center semibold>
+                          <Text style={styles.header} bold size={12}>
                             KCAL
                           </Text>
                           <Text style={styles.header}></Text>
@@ -2155,24 +2212,31 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
                         <Block>
                           {mealItems2.map((item, index) => (
-                            <View key={index} style={styles.item}>
-                              <Text
-                                style={(styles.data, {width: 70, padding: 5})}
-                                bold>
-                                {item.food_name}
-                              </Text>
-                              <Text style={styles.data} center>
+                            <View key={index} style={{flexDirection: 'row'}}>
+                             
+                                <Text
+                                  style={styles.header2}
+                                  size={12}
+                                  bold
+                                  numberOfLines={
+                                    expandedItems.includes(index) ? 0 : 1
+                                  }>
+                                  {item.food_name}
+                                </Text>
+                             
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalProtein}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalCarb}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalFat}
                               </Text>
-                              <Text style={styles.data} center>
+                              <Text style={styles.header} semibold size={12}>
                                 {item.details.totalCalorie}
                               </Text>
+                              <Text style={styles.header} semibold size={12}>
                               <TouchableOpacity
                                 onPress={() => handleDelete(index, 'meal2')}>
                                 <Image
@@ -2189,6 +2253,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                   margin={sizes.s}
                                 />
                               </TouchableOpacity>
+                              </Text>
+                              
                             </View>
                           ))}
                         </Block>
@@ -2417,6 +2483,7 @@ const styles = StyleSheet.create({
     padding: 5,
     // alignSelf: 'center',
     minWidth: 60,
+    // justifyContent:'center'
   },
   header2: {
     flex: 1,
@@ -2425,6 +2492,7 @@ const styles = StyleSheet.create({
     padding: 5,
     // alignSelf: 'center',
     minWidth: 70,
+    // justifyContent:'center'
   },
   header3: {
     flex: 1,

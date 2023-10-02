@@ -102,14 +102,7 @@ const DietPlanDynamic = ({route, navigation}) => {
                 <Block flex={0}>
                   {item.image ===
                   'https://admin.fitaraise.com/storage/uploads/app_images/no_image.png' ? (
-                    // <Image
-                    //   source={require('../assets/icons/img.png')}
-                    //   style={{
-                    //     width: sizes.xl,
-                    //     height: sizes.xl,
-                    //   }}
-                    //   marginLeft={sizes.s}
-                    // />
+                
                     <Block
                       style={{
                         width: sizes.xl,

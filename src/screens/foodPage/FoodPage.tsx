@@ -5,10 +5,11 @@ import {useTheme, useTranslation} from '../../hooks';
 import {Block, Button, Image, Input, Text} from '../../components/';
 import {
   Platform,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
   SectionList,
   StyleSheet,
   View,
+  
 } from 'react-native';
 import Axios from 'axios';
 import {FlatList} from 'react-native';
@@ -18,6 +19,7 @@ import axios from 'axios';
 import SelectDropdown from 'react-native-select-dropdown';
 import {log} from 'react-native-reanimated';
 import _ from 'lodash'; // Import Lodash
+import api from '../../../api';
 
 type Movie = {
   id: string;
@@ -27,8 +29,8 @@ type Movie = {
 
 const isAndroid = Platform.OS === 'android';
 const FoodPage = ({route, navigation}) => {
-  const {data ,formDataCopy} = route.params;
-  console.log(formDataCopy);
+  const {data, formDataCopy} = route.params;
+  // console.log(formDataCopy);
   const [initialGram, setInitialGram] = useState(0);
   const [selectedWeight, setSelectedWeight] = useState(initialGram);
   useEffect(() => {
@@ -83,13 +85,12 @@ const FoodPage = ({route, navigation}) => {
   const {mealType, meal_type} = route.params;
   const [foodItems, setFoodItems] = useState([]);
   const [editItemId, setEditItemId] = useState(null);
+  const [editItemName, setEditItemName] = useState(null);
   const handleEditButtonClick = (itemId) => {
-    // console.log(item.details.food_id);
-    // Set the ID of the item to be edited
-    setEditItemId(itemId);
+    console.log(itemId);
+    setEditItemId(itemId.details.id);
+    setEditItemName(itemId.id)
   };
-
-  // console.log(mealType,"this is meal type id ");
 
   const [isEditFormVisible, setIsEditFormVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -102,7 +103,6 @@ const FoodPage = ({route, navigation}) => {
     morningSnackItems,
     addBreakfastItem,
   } = useContext(MealContext);
-  // console.log('breakfastItems', breakfastItems);
   const {assets, colors, gradients, sizes, fonts, user} = useTheme();
   const [selectedValue, setSelectedValue] = useState(245);
   const [count, setCount] = useState(1);
@@ -135,42 +135,37 @@ const FoodPage = ({route, navigation}) => {
   const debouncedHandleEdit = _.debounce(handleEdit, 500);
 
   const toggleEdit = (item) => {
-    // This function will be called when the touch icon is pressed
     setIsEditMode(true); // Set isEditMode to true to hide the touch icon and show the block
+    debouncedHandleEdit.cancel();
     debouncedHandleEdit(item);
   };
 
   function handleEdit(item) {
-    // console.log('dark', item);
     setIsEditMode(true);
-    axios
-      .get(`${BASE_URL}get_serving_desc_by_food_id/${item.id}`)
+    api
+      .get(`get_serving_desc_by_food_id/${item.id}`)
       .then((response) => {
-        // console.log( "sandeepsanandss", response);
         setServingDetailsFull(response.data.data.serving_desc);
-        // console.log('serving detail demo', response.data.data.serving_desc);
         const servingNames = response.data.data.serving_desc.map(
           (serving) => serving.name,
         );
         const servingId = response.data.data.serving_desc.map(
           (serving) => serving.id,
         );
+        servingId.unshift(4792);
         const servingInitialGram = response.data.data.serving_desc.map(
           (serving) => serving.weight,
         );
         const servingGrams = response.data.data.serving_desc.map(
           (serving) => `${serving.name} (${serving.weight} g)`,
         );
+        servingInitialGram.unshift(100);
         setServingId(servingId[0]);
         setServingDetails(servingNames);
-        // console.log('hallo ', servingNames);
         nutritionCalculation(item);
         setServingGrams(servingGrams);
         setInitialGram(item.details.selectedWeight);
-        // console.log('thookkam', item.details.selectedWeight);
-
-        // console.log('helloooo o o o o o o  ', initialGram);
-
+        servingGrams.unshift('100 g');
         setSelectedDropDown(item.details.selectedDropDown);
       })
       .catch((error) => {
@@ -364,8 +359,7 @@ const FoodPage = ({route, navigation}) => {
     mealType,
     meal_type,
   };
-  
-  
+
   const handleAddFood = async (item) => {
     setIsEditMode(false);
     switch (mealType) {
@@ -373,7 +367,7 @@ const FoodPage = ({route, navigation}) => {
         try {
           await addBreakfastItem(item, mealDetails);
           console.log('Breakfast item added successfully');
-          console.log(mealDetails , "dark");
+          console.log(mealDetails, 'dark');
           // Handle any post-addition logic or navigation here
         } catch (error) {
           console.error('Error adding breakfast item:', error);
@@ -500,12 +494,12 @@ const FoodPage = ({route, navigation}) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: sizes.padding}}>
         <Block>
-          <TouchableOpacity
+          <TouchableWithoutFeedback
             onPress={() =>
               navigation.navigate('searchfood', {
                 mealType: 'breakfast',
                 meal_type,
-                formDataCopy
+                formDataCopy,
               })
             }>
             <Block
@@ -521,11 +515,10 @@ const FoodPage = ({route, navigation}) => {
                 backgroundColor: '#94a9fe',
               }}>
               <Text center white semibold>
-                {' '}
-                ADD MORE FOODS{' '}
+                ADD MORE FOODS
               </Text>
             </Block>
-          </TouchableOpacity>
+          </TouchableWithoutFeedback>
           {breakfastItems.map((item, index) => (
             <Block>
               <Block
@@ -537,18 +530,35 @@ const FoodPage = ({route, navigation}) => {
                 color="#eaefff"
                 flex={0.5}>
                 <Block row align="center">
-                  <Block flex={0}>
-                    <Image
-                      source={{
-                        uri: `${item.image}`,
-                      }}
+                <Block flex={0}>
+                  {item.image ===
+                  'https://admin.fitaraise.com/storage/uploads/app_images/no_image.png' ? (
+                
+                    <Block flex={0}
                       style={{
-                        width: sizes.xl,
-                        height: sizes.xl,
+                        width: 50,
+                        height: 50,
+                        backgroundColor: '#fff',
+                        borderRadius: sizes.s,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                      marginLeft={sizes.s}>
+                      <Text style={{fontSize: 50, color: '#fff'}} bold primary>
+                        {item.food_name.charAt(0)}
+                      </Text>
+                    </Block>
+                  ) : (
+                    <Image
+                      source={{uri: `${item.image}`}}
+                      style={{
+                        width: 50,
+                        height: 50,
                       }}
                       marginLeft={sizes.s}
                     />
-                  </Block>
+                  )}
+                </Block>
                   <Block flex={3} style={{alignSelf: 'center'}}>
                     <Text p black semibold center padding={10}>
                       {item.food_name} ({item.details.totalCalorie}kcal)
@@ -575,7 +585,7 @@ const FoodPage = ({route, navigation}) => {
                   </Block>
 
                   <Block flex={0}>
-                    <TouchableOpacity
+                    <TouchableWithoutFeedback
                       onPress={() => handleDelete(index, 'breakfast')}>
                       <Image
                         source={require('../../assets/icons/close1.png')}
@@ -586,12 +596,12 @@ const FoodPage = ({route, navigation}) => {
                         }
                         //  marginTop={sizes.s}
                       />
-                    </TouchableOpacity>
+                    </TouchableWithoutFeedback>
                   </Block>
                 </Block>
                 <Block margin={0}>
                   <Block margin={0} paddingTop={10} paddingLeft={10}>
-                    {isEditMode && editItemId === item.details.id ? (
+                    {isEditMode && (editItemId === item.details.id) && (editItemName === item.id) ? (
                       <Block
                         row
                         style={{alignSelf: 'center'}}
@@ -695,14 +705,14 @@ const FoodPage = ({route, navigation}) => {
                             position: 'relative',
                             top: -12,
                           }}>
-                          <TouchableOpacity
+                          <TouchableWithoutFeedback
                             onPress={() => {
                               // setSelectedFood(item.food_name);
 
                               handleAddFood(item);
                             }}>
                             <Text bold>Update</Text>
-                          </TouchableOpacity>
+                          </TouchableWithoutFeedback>
                         </Block>
                       </Block>
                     ) : (
@@ -730,12 +740,12 @@ const FoodPage = ({route, navigation}) => {
                           <Block flex={3}>
                             <Text center>{item.details.selectedDropDown}</Text>
                           </Block>
-                          <TouchableOpacity
+                          <TouchableWithoutFeedback
                             key={item.details.id}
                             onPress={() => {
                               debouncedHandleEdit(item);
                               toggleEdit(item);
-                              handleEditButtonClick(item.details.id);
+                              handleEditButtonClick(item);
                             }}>
                             <Block flex={0}>
                               <Image
@@ -748,13 +758,13 @@ const FoodPage = ({route, navigation}) => {
                                   (styles.data, {width: 25, height: 25})
                                 }></Image>
                             </Block>
-                          </TouchableOpacity>
+                          </TouchableWithoutFeedback>
                         </Block>
                       </Block>
                     )}
 
                     <Block>
-                      <TouchableOpacity
+                      <TouchableWithoutFeedback
                         onPress={() => {
                           handleToggleDetails(item.details.id);
                           console.log(item.details.id, 'sandeep idd');
@@ -766,7 +776,7 @@ const FoodPage = ({route, navigation}) => {
                             <Text>Full Details </Text>
                           )}
                         </Block>
-                      </TouchableOpacity>
+                      </TouchableWithoutFeedback>
                       {expanded && selectedItemId === item.details.id && (
                         <Block flex={2} style={{height: 1000}}>
                           <Block
