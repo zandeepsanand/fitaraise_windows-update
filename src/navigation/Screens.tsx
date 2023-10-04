@@ -18,7 +18,7 @@ export default ({data, formDataCopy, dietPlan}) => {
   // console.log('ScreensStack Component - FormDataCopy:', formDataCopy);
   // console.log('ScreensStack Component - DietPlan:', dietPlan);
   const formData = formDataCopy;
-  console.log(formData , "check");
+  // console.log(formData , "check");
   
   const {t} = useTranslation();
   const screenOptions = useScreenOptions();

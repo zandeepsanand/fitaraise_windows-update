@@ -31,6 +31,8 @@ import {useRoute} from '@react-navigation/native';
 const DietPlan = ({navigation, text, maxLines = 3}) => {
   const route = useRoute();
   const {data, dietPlan, formDataCopy} = route.params;
+  console.log(data , "check 2");
+  
 
   const [expandedItems, setExpandedItems] = useState([]); // To keep track of expanded items
 
@@ -55,7 +57,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     mealItems1,
     mealItems2,
   } = useContext(MealContext);
-  // console.log(breakfastItems);
+  console.log(dinnerItems , "dinner kindi");
 
   // Calculate total protein, carbs, fat, and kcal for breakfast items
   const calculateTotalCalories = (items) => {
@@ -734,7 +736,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                   numberOfLines={
                                     expandedItems.includes(index) ? 0 : 1
                                   }>
-                                  {item.food_name}
+                                  {item.food_name} 
                                 </Text>
                              
                               <Text style={styles.header} semibold size={12}>
@@ -1862,7 +1864,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                             }}>
                             <Text p black semibold center padding={10}>
                               {' '}
-                              Meals 1
+                              Meals 1 
                             </Text>
                           </TouchableOpacity>
                         ) : (
@@ -1876,7 +1878,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                               });
                             }}>
                             <Text p black semibold center padding={10}>
-                              Meal 1
+                              Meal 1 
                             </Text>
                           </TouchableOpacity>
                         )}
@@ -1923,7 +1925,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                         </Block>
                       </TouchableOpacity>
                     </Block>
-                    <Block>
+                    <Block  >
                       <Block style={styles.container}>
                         {/* Header */}
                         <Block style={styles.row} flex={1}>
@@ -1947,7 +1949,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
                         {/* Data Rows */}
 
-                        <Block>
+                        <Block >
                           {mealItems1.map((item, index) => (
                             <View key={index} style={{flexDirection: 'row'}}>
                              

@@ -35,7 +35,7 @@ const DietPlanData = ({route, navigation}) => {
 
   // new items for adding food to db
   const [servingId, setServingId] = useState('');
-  console.log(servingId);
+  // console.log(servingId);
   
   const [servingDesc, setServingDesc] = useState('');
 
@@ -234,7 +234,7 @@ const DietPlanData = ({route, navigation}) => {
       setMultiplication(1);
     }
   };
-  console.log(multiplication,"count");
+  // console.log(multiplication,"count");
   
   useEffect(() => {
     if (multiplication) {
@@ -362,12 +362,12 @@ const DietPlanData = ({route, navigation}) => {
       default:
         break;
     }
-    console.log("hai");
+    // console.log("hai");
     
     if (servingId !== null) {
-      console.log(servingId);
+      // console.log(servingId);
       
-      console.log(mealDetails.customer_id, 'demo');
+      // console.log(mealDetails.customer_id, 'demo');
 
       // navigation.navigate('tabNavigator', {
       //   screen: 'pie', // Screen name within the TabNavigator
@@ -529,7 +529,7 @@ const DietPlanData = ({route, navigation}) => {
                   }}
                   data={servingGrams}
                   onSelect={(selectedItem, index) => {
-                    console.log(servingGrams, 'ok bie ');
+                    // console.log(servingGrams, 'ok bie ');
                     const item = servingGrams.find((item) =>
                       item.includes(selectedItem),
                     );
@@ -565,7 +565,7 @@ const DietPlanData = ({route, navigation}) => {
 
                     if (selectedServing) {
                       setServingId(selectedServing.id);
-                      console.log(selectedServing.desc, 'testing');
+                      // console.log(selectedServing.desc, 'testing');
 
                       // You can also set the 'desc' details based on the selected item's 'id' here if needed.
                       // For example, if 'desc' is a state variable, you can set it like:

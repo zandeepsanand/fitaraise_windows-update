@@ -9,6 +9,7 @@ import {
   SectionList,
   StyleSheet,
   View,
+  TouchableWithoutFeedback
 } from 'react-native';
 import Axios from 'axios';
 import {FlatList} from 'react-native';
@@ -484,7 +485,7 @@ const DinnerSingle = ({route, navigation}) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: sizes.padding}}>
         <Block>
-          <TouchableOpacity
+          <TouchableWithoutFeedback
             onPress={() =>
               navigation.navigate('searchfood', {
                 mealType: 'dinner',
@@ -508,7 +509,7 @@ const DinnerSingle = ({route, navigation}) => {
                 ADD MORE FOODS
               </Text>
             </Block>
-          </TouchableOpacity>
+          </TouchableWithoutFeedback>
           {dinnerItems.map((item, index) => (
             <Block>
               <Block

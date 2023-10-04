@@ -19,6 +19,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 import {log} from 'react-native-reanimated';
 import _ from 'lodash'; // Import Lodash
 import api from '../../../api';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 type Movie = {
   id: string;
@@ -484,12 +485,12 @@ const EveningSingle = ({route, navigation}) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: sizes.padding}}>
         <Block>
-          <TouchableOpacity
+          <TouchableWithoutFeedback
             onPress={() =>
               navigation.navigate('searchfood', {
                 mealType: 'evening',
                 meal_type,
-                formDataCopy
+                formDataCopy,
               })
             }>
             <Block
@@ -505,11 +506,10 @@ const EveningSingle = ({route, navigation}) => {
                 backgroundColor: '#94a9fe',
               }}>
               <Text center white semibold>
-                {' '}
-                ADD MORE FOODS{' '}
+                ADD MORE FOODS
               </Text>
             </Block>
-          </TouchableOpacity>
+          </TouchableWithoutFeedback>
           {eveningSnackItems.map((item, index) => (
             <Block>
               <Block

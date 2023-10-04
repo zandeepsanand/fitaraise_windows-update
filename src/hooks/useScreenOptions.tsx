@@ -91,7 +91,7 @@ export default () => {
     components: {
       ...menu,
       headerTitle: () => (
-        <Text p white>
+        <Text p secondary>
           {t('navigation.components')}
         </Text>
       ),

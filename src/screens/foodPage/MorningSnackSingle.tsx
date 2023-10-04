@@ -19,6 +19,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 import {log} from 'react-native-reanimated';
 import _ from 'lodash'; // Import Lodash
 import api from '../../../api';
+import { TouchableWithoutFeedback } from 'react-native';
 
 type Movie = {
   id: string;
@@ -493,7 +494,7 @@ const MorningSnackSingle = ({route, navigation}) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: sizes.padding}}>
         <Block>
-          <TouchableOpacity
+          <TouchableWithoutFeedback
             onPress={() =>
               navigation.navigate('searchfood', {
                 mealType: 'morningSnackItems',
@@ -518,7 +519,7 @@ const MorningSnackSingle = ({route, navigation}) => {
                 ADD MORE FOODS{' '}
               </Text>
             </Block>
-          </TouchableOpacity>
+          </TouchableWithoutFeedback>
           {morningSnackItems.map((item, index) => (
             <Block>
               <Block

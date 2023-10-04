@@ -15,12 +15,12 @@ type Movie = {
 const isAndroid = Platform.OS === 'android';
 const DietPlanDynamic = ({route, navigation}) => {
   const {mealType, meal_type , formDataCopy} = route.params;
-  console.log(formDataCopy);
+  // console.log(formDataCopy);
   
   const {t} = useTranslation();
   const {assets, colors, fonts, gradients, sizes} = useTheme();
   const [searchResults, setSearchResults] = useState([]);
-  console.log(searchResults);
+  // console.log(searchResults);
   
   const [error, setError] = useState(null);
   // console.log(meal_type);
@@ -44,7 +44,7 @@ const DietPlanDynamic = ({route, navigation}) => {
   };
   const handlePress = (food) => {
     if (food) {
-      console.log(food, "food data");
+      // console.log(food, "food data");
       
       try {
         api.get(`get_food_item_datas_with_id/${food.id}`).then(
@@ -133,7 +133,7 @@ const DietPlanDynamic = ({route, navigation}) => {
                     {item.food_name}
                   </Text>
                 </Block>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => handlePress(item)}>
                   <Block flex={0} style={{alignSelf: 'center'}}>
                     <Image
                       radius={0}

@@ -67,38 +67,8 @@ const LoginPage = ({route}) => {
   });
   console.log(registration);
 
-  const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    mobile_number: '',
-    height: '',
-    height_unit: '',
-    weight: '',
-    weight_unit: '',
-    acitivity_level: '',
-    weekly_goal: '',
-    is_vegetarian: '',
-    age: '',
-    dob: '',
-    gender: '',
-    device_token: '',
-    image: '',
-    customer_id: '',
-    weight_want_to: '',
-    password: '',
-  });
-  // useEffect(() => {
+  const [formData, setFormData] = useState({});
 
-  //   if (isValid !== null) {
-  //     setFormData({
-  //       ...formData,
-  //       first_name: (value) ,
-  //     });
-  //     // console.log(formData);
-
-  //   }
-  // }, [isValid]);
   const {assets, colors, gradients, sizes} = useTheme();
   console.log(
     'disabled:',
@@ -137,7 +107,12 @@ const LoginPage = ({route}) => {
   };
 
   const handleSignUp = useCallback(() => {
-    if (isValid.number || isValid.password || isValid.name || isValid.last_name) {
+    if (
+      isValid.number ||
+      isValid.password ||
+      isValid.name ||
+      isValid.last_name
+    ) {
       setIsLoading(true); // Start loading
 
       axios
@@ -147,16 +122,25 @@ const LoginPage = ({route}) => {
 
           // Handle response from server
           setCustomerId(response.data.data.customer_id);
+
           const id = response.data.data.customer_id;
+          const formDataCopy = {
+            first_name :registration.name,
+            last_name: registration.last_name,
+            customer_id: id,
+            mobile_number: phoneNumber,
+          }
+          // console.log(formDataCopy ,"checking");
+          
 
           const updatedFormData = {
             ...formData,
             customer_id: id,
             mobile_number: phoneNumber,
           };
-          navigation.setParams({ formData: updatedFormData });
+          navigation.setParams({formData: formDataCopy});
           navigation.navigate('OtpPage', {
-            formData: updatedFormData,
+            formData: formDataCopy,
           });
         })
         .catch((error) => {
@@ -232,7 +216,7 @@ const LoginPage = ({route}) => {
     duration: 200, // Animation duration in milliseconds
     useNativeDriver: false, // Important for Android
   }).start();
- 
+
   return (
     <Block safe marginTop={sizes.xl}>
       <Block paddingHorizontal={sizes.s}>
@@ -262,7 +246,7 @@ const LoginPage = ({route}) => {
             shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
           >
             <Block
-            card
+              card
               // blur
               padding={0}
               flex={0}
@@ -349,7 +333,7 @@ const LoginPage = ({route}) => {
                   danger={Boolean(registration.last_name && !isValid.last_name)}
                   onChangeText={(value) => handleChange({last_name: value})}
                 />
-                {country  !== 'IN' && (
+                {country !== 'IN' && (
                   <Input
                     autoCapitalize="none"
                     marginBottom={sizes.m}
@@ -361,60 +345,60 @@ const LoginPage = ({route}) => {
                     onChangeText={(value) => handleChange({email: value})}
                   />
                 )}
-{country  !== 'IN' &&
-              ( <View style={styles.inputContainer}>
-                  <Block style={styles.input} padding={0}>
-                    <Input
-                      secureTextEntry={!isPasswordVisible}
-                      autoCapitalize="none"
-                      marginBottom={sizes.m}
-                      label={t('common.password')}
-                      placeholder={t('common.passwordPlaceholder')}
-                      // onChangeText={(value) => handleChange({password: value})}
-                      onChangeText={(value) => handleChange({password: value})}
-                      success={Boolean(
-                        registration.password && isValid.password,
-                      )}
-                      danger={Boolean(
-                        registration.password && !isValid.password,
-                      )}
-                    />
-                  </Block>
-                 <Block flex={0}>
-                 {registration.password.length > 0 && (
-                    <Animated.View
-                      style={{
-                        transform: [
-                          {
-                            translateX: iconPosition.interpolate({
-                              inputRange: [0, 1],
-                              outputRange: [-30, 0],
-                            }),
-                          },
-                        ],
-                      }}>
-                      <TouchableOpacity onPress={togglePasswordVisibility}>
-                        
-                        {!isPasswordVisible ? (
-                          <Image
-                            source={require('../assets/icons/show.png')}
-                            style={styles.toggleButton}
-                          />
-                        ) : (
-                          <Image
-                            source={require('../assets/icons/hide.png')}
-                            style={styles.toggleButton}
-                          />
+                {country !== 'IN' && (
+                  <View style={styles.inputContainer}>
+                    <Block style={styles.input} padding={0}>
+                      <Input
+                        secureTextEntry={!isPasswordVisible}
+                        autoCapitalize="none"
+                        marginBottom={sizes.m}
+                        label={t('common.password')}
+                        placeholder={t('common.passwordPlaceholder')}
+                        // onChangeText={(value) => handleChange({password: value})}
+                        onChangeText={(value) =>
+                          handleChange({password: value})
+                        }
+                        success={Boolean(
+                          registration.password && isValid.password,
                         )}
-                      </TouchableOpacity>
-                    </Animated.View>
-                  )}
-                 </Block>
-                 
-               
-                </View>)}
+                        danger={Boolean(
+                          registration.password && !isValid.password,
+                        )}
+                      />
+                    </Block>
+                    <Block flex={0}>
+                      {registration.password.length > 0 && (
+                        <Animated.View
+                          style={{
+                            transform: [
+                              {
+                                translateX: iconPosition.interpolate({
+                                  inputRange: [0, 1],
+                                  outputRange: [-30, 0],
+                                }),
+                              },
+                            ],
+                          }}>
+                          <TouchableOpacity onPress={togglePasswordVisibility}>
+                            {!isPasswordVisible ? (
+                              <Image
+                                source={require('../assets/icons/show.png')}
+                                style={styles.toggleButton}
+                              />
+                            ) : (
+                              <Image
+                                source={require('../assets/icons/hide.png')}
+                                style={styles.toggleButton}
+                              />
+                            )}
+                          </TouchableOpacity>
+                        </Animated.View>
+                      )}
+                    </Block>
+                  </View>
+                )}
 
-                {country  === 'IN' && (
+                {country === 'IN' && (
                   <Input
                     marginBottom={sizes.m}
                     label="Phone Number"
@@ -479,7 +463,7 @@ const LoginPage = ({route}) => {
                 </Text>
 
 </Button> */}
-              {country  !== 'IN' && (
+              {country !== 'IN' && (
                 <Button
                   onPress={() => {
                     handleLogin();
@@ -504,7 +488,7 @@ const LoginPage = ({route}) => {
                 </Button>
               )}
 
-              {country  === 'IN' && (
+              {country === 'IN' && (
                 <Button
                   onPress={() => {
                     handleSignUp();
@@ -513,10 +497,8 @@ const LoginPage = ({route}) => {
                   marginHorizontal={sizes.sm}
                   gradient={gradients.primary}
                   disabled={
-                    !isValid.number ||
-                    !isValid.name ||
-                    !isValid.last_name
-                  }> 
+                    !isValid.number || !isValid.name || !isValid.last_name
+                  }>
                   {isLoading && (
                     <ActivityIndicator size="small" color="white" />
                   )}

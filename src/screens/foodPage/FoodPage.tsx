@@ -103,6 +103,9 @@ const FoodPage = ({route, navigation}) => {
     morningSnackItems,
     addBreakfastItem,
   } = useContext(MealContext);
+  console.log(breakfastItems);
+  
+
   const {assets, colors, gradients, sizes, fonts, user} = useTheme();
   const [selectedValue, setSelectedValue] = useState(245);
   const [count, setCount] = useState(1);
@@ -141,6 +144,8 @@ const FoodPage = ({route, navigation}) => {
   };
 
   function handleEdit(item) {
+    // console.log(item , "check item ");
+    
     setIsEditMode(true);
     api
       .get(`get_serving_desc_by_food_id/${item.id}`)
@@ -359,6 +364,8 @@ const FoodPage = ({route, navigation}) => {
     mealType,
     meal_type,
   };
+  console.log(id , "db id ");
+  
 
   const handleAddFood = async (item) => {
     setIsEditMode(false);

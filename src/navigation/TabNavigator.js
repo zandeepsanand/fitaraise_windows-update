@@ -22,7 +22,7 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = ({route}) => {
   const { data, formDataCopy, dietPlan } = route.params ?? {};
-  console.log(formDataCopy, data, "menu drawer check");
+  // console.log(formDataCopy, data, "menu drawer check");
   const {assets, colors, fonts, gradients, sizes} = useTheme();
   return (
     <Tab.Navigator

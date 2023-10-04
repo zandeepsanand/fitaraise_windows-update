@@ -15,6 +15,7 @@ import Screens from './Screens';
 import Firstpage from './Frstpage';
 import {Block, Text, Switch, Button, Image} from '../components';
 import {useData, useTheme, useTranslation} from '../hooks';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 const Drawer = createDrawerNavigator();
 
@@ -82,6 +83,18 @@ const DrawerContent = (
   const [active, setActive] = useState('Tab');
   const {assets, colors, gradients, sizes} = useTheme();
   const labelColor = colors.text;
+  useEffect(() => {
+    setActive('Tab'); // Set it to 'Tab' when the component mounts
+  }, []); // The empty dependency array ensures this runs only once
+
+  // Use the useFocusEffect hook to set the active screen when the menu screen receives focus
+  useFocusEffect(
+    useCallback(() => {
+      setActive('Tab');
+      navigation.navigate('Tab'); // Navigate to the 'Tab' screen when the menu screen receives focus
+    }, [navigation]) // Include navigation in the dependency array
+  );
+
 
   const handleNavigation = useCallback(
     (to) => {
@@ -114,6 +127,12 @@ const DrawerContent = (
       {cancelable: false},
     );
   };
+  // const [active, setActive] = useState('Tab'); // Initialize with the default screen name
+
+  // Use the useFocusEffect hook to set the initial screen when the component receives focus
+  // useFocusEffect(() => {
+  //   setActive('Tab'); // Set it to the default screen name ('Tab' in this case)
+  // });
 
   // screen list for Drawer menu
   const screens = [
@@ -150,7 +169,7 @@ const DrawerContent = (
               Fitaraise
             </Text>
             <Text size={12} semibold>
-              {formDataCopy.first_name}
+              {formDataCopy.first_name} {formDataCopy.last_name}
             </Text>
           </Block>
         </Block>
@@ -254,9 +273,15 @@ const DrawerContent = (
 /* drawer menu navigation */
 export default function Menu({route}) {
   const {data, formDataCopy, dietPlan} = route.params ?? {};
-  console.log(formDataCopy, data, 'menu drawer check');
+  // console.log(formDataCopy, data, 'menu drawer check');
 
   const {gradients} = useTheme();
+  const navigation = useNavigation(); // Get the navigation object
+
+  useEffect(() => {
+    // Navigate to the "Screens" screen when the Menu component is first loaded
+    navigation.navigate('Screens', { data, formDataCopy, dietPlan });
+  }, []);
 
   return (
     <Block gradient={gradients.light}>
