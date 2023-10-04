@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {createContext, useEffect, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {BASE_URL} from '@env';
 import api from '../../api';
@@ -76,23 +77,12 @@ const MealContextProvider: React.FC = ({children}) => {
           calories: item.calories,
           carb_in_g: item.carb,
           cholestrol_in_mg: item.cholestrol,
-          // created_at: item.created_at,
-          // deleted_at: item.deleted_at,
           details: {
-            // added_date: item.added_date,
-            // customer_id: item.customer_id,
-            // desc: item.desc,
-            // desc_num_food_tbl: item.desc_num_food_tbl,
-            food_id: item.id,
-            // mealType: item.meal_type,
-            // meal_type: item.meal_type_id,
+            id: item.id,
+            selectedWeight: item.taken_weight,
             multiplication: item.quantity,
             quantity: item.quantity,
-            selectedDropDown: item.serving_description,
-            // selectedWeight: item.serving_weight_1, // You can choose the appropriate serving weight
-            // serving_desc_id: item.serving_description_id,
             taken_weight: item.final_weight,
-            // totalCalcium: item.calcium_in_mg,
             totalCalorie: item.calories,
             totalCarb: item.carb,
             totalCholesterol: item.cholestrol,
@@ -103,33 +93,55 @@ const MealContextProvider: React.FC = ({children}) => {
             totalPolyunsaturatedFat: item.polyunsaturated_fat,
             totalPotassium: item.potassium,
             totalProtein: item.protienes,
-            // totalSaturatedFat: item.saturated_fat_in_g,
             totalSodium: item.sodium,
-            // totalSugar: item.sugar_in_g,
             totalTransFat: item.trans_fat,
-            // totalVitaminAIU: item.vitamin_a_iu,
             totalVitaminARAE: item.vitamin_a_rae,
             totalVitaminC: item.vitamin_c,
             totalVitaminD: item.vitamin_d,
+            selectedDropDown: item.serving_description,
+            totalCalcium: item.calcium,
+            totalSaturatedFat: item.saturated_fat,
+            totalSugar: item.sugar,
+            totalVitaminAIU: item.vitamin_a,
           },
           fat_in_g: item.fat,
           fiber_in_g: item.fiber,
-          // food_group: item.food_group,
           food_name: item.food_name,
           id: item.id,
           image: item.food_image,
           iron_in_mg: item.iron,
-          // is_active: item.is_active,
           monounsaturated_fat_in_g: item.monounsaturated_fat,
           polyunsaturated_fat_in_g: item.polyunsaturated_fat,
-          // potassium_in_mg: item.potassium_in_mg,
-          protein_in_g: item.protienes,
-          potassium_in_mg:item.potassium,
-          // saturated_fat_in_g: item.saturated_fat_in_g,
           serving_desc_1: '1 oz', // You can choose an appropriate serving description
           serving_desc_2: '1 piece', // You can choose an appropriate serving description
-          serving_desc_3: '3 Piece', // You can choose an appropriate serving description
-          // ... Map other properties similarly
+          serving_desc_3: '3 Piece', // You can choose an appropriate serving description          // ... Map other properties similarly
+          protein_in_g: item.protienes,
+          potassium_in_mg: item.potassium,
+          serving_desc_4: null,
+          serving_desc_5: null,
+          serving_desc_6: null,
+          serving_desc_7: null,
+          serving_desc_8: null,
+          serving_desc_9: null,
+          serving_size: item.taken_weight,
+          serving_weight_1: 28,
+          serving_weight_2: 50,
+          serving_weight_3: 180,
+          serving_weight_4: null,
+          serving_weight_5: null,
+          serving_weight_6: null,
+          serving_weight_7: null,
+          serving_weight_8: null,
+          serving_weight_9: null,
+          sodium_in_mg: item.sodium,
+          sugar_in_g: item.sugar,
+          trans_fat_in_g: item.trans_fat,
+          vitamin_a_in_mg: item.vitamin_a,
+          vitamin_a_iu: item.vitamin_a,
+          vitamin_a_rae_mg: item.vitamin_a_rae,
+          vitamin_c_in_mg: item.vitamin_c,
+          vitamin_d_mg: item.vitamin_d,
+          weight_in_g: item.taken_weight,
         };
       });
 
@@ -145,7 +157,8 @@ const MealContextProvider: React.FC = ({children}) => {
           carb_in_g: item.carb,
           cholestrol_in_mg: item.cholestrol,
           details: {
-            food_id: item.id,
+            id: item.id,
+            selectedWeight: item.taken_weight,
             multiplication: item.quantity,
             quantity: item.quantity,
             taken_weight: item.final_weight,
@@ -165,6 +178,10 @@ const MealContextProvider: React.FC = ({children}) => {
             totalVitaminC: item.vitamin_c,
             totalVitaminD: item.vitamin_d,
             selectedDropDown: item.serving_description,
+            totalCalcium: item.calcium,
+            totalSaturatedFat: item.saturated_fat,
+            totalSugar: item.sugar,
+            totalVitaminAIU: item.vitamin_a,
           },
           fat_in_g: item.fat,
           fiber_in_g: item.fiber,
@@ -176,13 +193,34 @@ const MealContextProvider: React.FC = ({children}) => {
           polyunsaturated_fat_in_g: item.polyunsaturated_fat,
           serving_desc_1: '1 oz', // You can choose an appropriate serving description
           serving_desc_2: '1 piece', // You can choose an appropriate serving description
-          serving_desc_3: '3 Piece', // You can choose an appropriate serving description
-         
-
-          // ... Map other properties similarly
+          serving_desc_3: '3 Piece', // You can choose an appropriate serving description          // ... Map other properties similarly
           protein_in_g: item.protienes,
-          potassium_in_mg:item.potassium,
-
+          potassium_in_mg: item.potassium,
+          serving_desc_4: null,
+          serving_desc_5: null,
+          serving_desc_6: null,
+          serving_desc_7: null,
+          serving_desc_8: null,
+          serving_desc_9: null,
+          serving_size: item.taken_weight,
+          serving_weight_1: 28,
+          serving_weight_2: 50,
+          serving_weight_3: 180,
+          serving_weight_4: null,
+          serving_weight_5: null,
+          serving_weight_6: null,
+          serving_weight_7: null,
+          serving_weight_8: null,
+          serving_weight_9: null,
+          sodium_in_mg: item.sodium,
+          sugar_in_g: item.sugar,
+          trans_fat_in_g: item.trans_fat,
+          vitamin_a_in_mg: item.vitamin_a,
+          vitamin_a_iu: item.vitamin_a,
+          vitamin_a_rae_mg: item.vitamin_a_rae,
+          vitamin_c_in_mg: item.vitamin_c,
+          vitamin_d_mg: item.vitamin_d,
+          weight_in_g: item.taken_weight,
         };
       });
       result.breakfastItems = mappedBreakfastData;
@@ -192,36 +230,67 @@ const MealContextProvider: React.FC = ({children}) => {
     return result;
   }
   useEffect(() => {
+    const checkAuthenticationStatus = async () => {
+      try {
+        const authDataJSON = await AsyncStorage.getItem('authData');
+        if (authDataJSON) {
+          const authData = JSON.parse(authDataJSON);
+          const authToken = authData.token;
+
+          if (authToken) {
+            const formDataCopy = authData.formData;
+            // console.log(formDataCopy , "form1");
+
+            // const apiUrl = `get_diet_list_wrt_date/${formDataCopy.customer_id}/2023-10-04`;
+            const currentDate = new Date();
+
+            // Format the date as YYYY-MM-DD
+            const formattedDate = `${currentDate.getFullYear()}-${String(
+              currentDate.getMonth() + 1,
+            ).padStart(2, '0')}-${String(currentDate.getDate()).padStart(
+              2,
+              '0',
+            )}`;
+
+            console.log(formattedDate, 'Formatted date');
+
+            const apiUrl = `get_diet_list_wrt_date/${formDataCopy.customer_id}/${formattedDate}`;
+            // Make the API request to get data
+            api
+              .get(apiUrl)
+              .then((response) => {
+                // Handle the successful API response
+                const responseData = response.data;
+
+                // Use the mapping function to transform the data into the desired format
+                const transformedData = mapApiDataToDesiredFormat(responseData);
+
+                // Now you can use transformedData in your application
+                // console.log(transformedData, 'Transformed data');
+                if (transformedData.breakfastItems) {
+                  setBreakfastItems(transformedData.breakfastItems);
+                }
+                if (transformedData.dinnerItems) {
+                  setDinnerItems(transformedData.dinnerItems);
+                }
+
+                // Update your state with the transformed data
+                // setDinnerItems(transformedData);
+              })
+              .catch((error) => {
+                // Handle any errors that occur during the API request
+                console.error('Error fetching data:', error);
+              });
+          }
+        }
+      } catch (error) {
+        console.error('Error retrieving authData:', error);
+      }
+    };
+
+    // Call the authentication check function
+    checkAuthenticationStatus();
     // Define the URL for your API request
-    const apiUrl = `get_diet_list_wrt_date/15/2023-10-04`;
-
-    // Make the API request to get data
-    api
-      .get(apiUrl)
-      .then((response) => {
-        // Handle the successful API response
-        const responseData = response.data;
-
-        // Use the mapping function to transform the data into the desired format
-        const transformedData = mapApiDataToDesiredFormat(responseData);
-
-        // Now you can use transformedData in your application
-        // console.log(transformedData, 'Transformed data');
-        if (transformedData.breakfastItems) {
-          setBreakfastItems(transformedData.breakfastItems);
-        }
-        if (transformedData.dinnerItems) {
-          setDinnerItems(transformedData.dinnerItems);
-        }
-
-
-        // Update your state with the transformed data
-        // setDinnerItems(transformedData);
-      })
-      .catch((error) => {
-        // Handle any errors that occur during the API request
-        console.error('Error fetching data:', error);
-      });
   }, []);
 
   // Usage: Assuming you have received the API response in a variable called `apiResponse`
@@ -332,7 +401,7 @@ const MealContextProvider: React.FC = ({children}) => {
   // }, []);
 
   const addBreakfastItem = (food: any, details: any, db: any, dbs: any) => {
-    console.log(details, 'testing 123');
+    console.log(details.meal_type, 'testing 123');
     // return false;
 
     // console.log(details,'food details' );
@@ -347,15 +416,6 @@ const MealContextProvider: React.FC = ({children}) => {
       const updatedItems = [...breakfastItems];
       updatedItems[existingIndex] = {...food, details};
       setBreakfastItems(updatedItems);
-      // axios
-      //   .post(`${BASE_URL}update_diet_data`, {formData})
-      //   .then((response) => {
-      //     console.log(response.data, 'db data insert new');
-      //     // Handle the successful response from the backend if needed
-      //   })
-      //   .catch((error) => {
-      //     // Handle the error if needed
-      //   });
       var bodyFormData = new FormData();
       bodyFormData.append('id', details.id);
       bodyFormData.append('meal_type', details.meal_type);
@@ -372,26 +432,14 @@ const MealContextProvider: React.FC = ({children}) => {
       })
         .then(function (response) {
           //handle success
-          console.log(response.data, 'successfully updated');
+          console.log(response.data, 'successfully updated updated added db');
         })
         .catch(function (response) {
           //handle error
-          console.log(response, 'error');
+          console.log(response.message, 'error');
         });
     } else {
       setBreakfastItems([...breakfastItems, {...food, details}]);
-      // axios
-      //   .post(`${BASE_URL}add_diet_data`, {dbs})
-      //   .then((response) => {
-      //     console.log(response.data, 'db data insert only db ');
-      //     // console.log(breakfastItems , "breakfast Items");
-
-      //     // console.log(details , "the details of food items ");
-      //     // Handle the successful response from the backend if needed
-      //   })
-      //   .catch((error) => {
-      //     // Handle the error if error
-      //   });
       var bodyFormData = new FormData();
       bodyFormData.append('customer_id', details.customer_id);
       bodyFormData.append('meal_type', details.meal_type);
@@ -409,7 +457,7 @@ const MealContextProvider: React.FC = ({children}) => {
       })
         .then(function (response) {
           //handle success
-          console.log(response.data, 'success');
+          console.log(response.data, 'success added db');
         })
         .catch(function (response) {
           //handle error
@@ -448,7 +496,8 @@ const MealContextProvider: React.FC = ({children}) => {
         })
         .catch(function (response) {
           //handle error
-          console.log(response, 'error');
+          console.error('Error response:', response.response); // Log the error response
+          console.error('Error message:', response.message);
         });
     } else {
       setMorningSnackItems([...morningSnackItems, {...food, details}]);
@@ -473,7 +522,7 @@ const MealContextProvider: React.FC = ({children}) => {
         })
         .catch(function (response) {
           //handle error
-          console.log(response, 'error');
+          console.log(response, 'error update');
         });
     }
   };

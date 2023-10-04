@@ -106,7 +106,7 @@ const MorningSnackSingle = ({route, navigation}) => {
     morningSnackItems,
     addMorningSnackItem,
   } = useContext(MealContext);
-  // console.log('breakfastItems', breakfastItems);
+  console.log('morning snack ', morningSnackItems);
   const {assets, colors, gradients, sizes, fonts, user} = useTheme();
   const [selectedValue, setSelectedValue] = useState(245);
   const [count, setCount] = useState(1);
@@ -369,7 +369,8 @@ const MorningSnackSingle = ({route, navigation}) => {
       case 'morningSnackItems':
         try {
           await addMorningSnackItem(item, mealDetails);
-          console.log('Breakfast item added successfully');
+
+          console.log(item, mealDetails,'morng snack added successfully');
           // Handle any post-addition logic or navigation here
         } catch (error) {
           console.error('Error adding breakfast item:', error);
