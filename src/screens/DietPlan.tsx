@@ -31,8 +31,7 @@ import {useRoute} from '@react-navigation/native';
 const DietPlan = ({navigation, text, maxLines = 3}) => {
   const route = useRoute();
   const {data, dietPlan, formDataCopy} = route.params;
-  console.log(data , "check 2");
-  
+  console.log(data, 'check 2');
 
   const [expandedItems, setExpandedItems] = useState([]); // To keep track of expanded items
 
@@ -57,7 +56,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     mealItems1,
     mealItems2,
   } = useContext(MealContext);
-  console.log(dinnerItems , "dinner kindi");
+  console.log(breakfastItems, 'breakfast from device distribution');
 
   // Calculate total protein, carbs, fat, and kcal for breakfast items
   const calculateTotalCalories = (items) => {
@@ -422,11 +421,13 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
               <Block flex={0} align="center">
                 <CircularProgress
                   // value={(initialValueWithoutDecimals - totalCaloriesOfAllFoods) >= 0 ? (initialValueWithoutDecimals - totalCaloriesOfAllFoods) : totalCaloriesOfAllFoods}
-                  value={
-                    data.calories - totalCaloriesOfAllFoods >= data.calories
-                      ? totalCaloriesOfAllFoods
-                      : data.calories - totalCaloriesOfAllFoods
-                  }
+                  // value={
+                  //   data.calories - totalCaloriesOfAllFoods >= data.calories
+                  //     ? totalCaloriesOfAllFoods
+                  //     : data.calories - totalCaloriesOfAllFoods
+                  // }
+                  value={totalCaloriesOfAllFoods}
+                  showProgressValue={false}
                   initialValue={initialValueWithoutDecimals}
                   radius={100}
                   duration={2000}
@@ -437,10 +438,19 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                   title={
                     totalCaloriesOfAllFoods >= data.calories
                       ? 'REACHED 🔥'
-                      : ` KCAL LEFT 🔥`
+                      : `${data.calories - totalCaloriesOfAllFoods}`
                   }
                   titleColor={'white'}
-                  titleStyle={{fontWeight: 'bold', fontSize: 20}}
+                  titleStyle={{fontWeight: 'bold', fontSize: 22}}
+                  subtitle={
+                    totalCaloriesOfAllFoods >= data.calories
+                      ? `${totalCaloriesOfAllFoods} KCAL` 
+                      : `KCAL LEFT 🔥`
+                  }
+                  subtitleStyle={{fontWeight: 'bold', fontSize: 15,paddingTop:10}}
+
+                  // onAnimationComplete={()=>{alert('hai')}}
+                  // disableAnimation={totalCaloriesOfAllFoods >= data.calories}
                 />
 
                 <Block row marginVertical={sizes.m}>
@@ -707,10 +717,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                       <Block style={styles.container} margin={0}>
                         {/* Header */}
                         <Block style={styles.row} flex={1}>
-                          <Text style={styles.header2} size={12} bold>
-                            
-                          </Text>
-                         <Text style={styles.header} bold size={12}>
+                          <Text style={styles.header2} size={12} bold></Text>
+                          <Text style={styles.header} bold size={12}>
                             Protein
                           </Text>
                           <Text style={styles.header} bold size={12}>
@@ -728,17 +736,16 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                         {breakfastItems.map((item, index) => (
                           <Block style={styles.row} flex={1}>
                             <View key={index} style={{flexDirection: 'row'}}>
-                             
-                                <Text
-                                  style={styles.header2}
-                                  size={12}
-                                  bold
-                                  numberOfLines={
-                                    expandedItems.includes(index) ? 0 : 1
-                                  }>
-                                  {item.food_name} 
-                                </Text>
-                             
+                              <Text
+                                style={styles.header2}
+                                size={12}
+                                bold
+                                numberOfLines={
+                                  expandedItems.includes(index) ? 0 : 1
+                                }>
+                                {item.food_name}
+                              </Text>
+
                               <Text style={styles.header} semibold size={12}>
                                 {item.details.totalProtein}
                               </Text>
@@ -815,8 +822,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                               meal_type: 1,
                               formDataCopy,
                             })
-                          }
-                          >
+                          }>
                           Add Breakfast
                         </Text>
                         <Text
@@ -959,10 +965,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                       <Block style={styles.container}>
                         {/* Header */}
                         <Block style={styles.row} flex={1}>
-                          <Text style={styles.header2} size={12} bold>
-                            
-                          </Text>
-                         <Text style={styles.header} bold size={12}>
+                          <Text style={styles.header2} size={12} bold></Text>
+                          <Text style={styles.header} bold size={12}>
                             Protein
                           </Text>
                           <Text style={styles.header} bold size={12}>
@@ -982,17 +986,16 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                         <Block>
                           {morningSnackItems.map((item, index) => (
                             <View key={index} style={{flexDirection: 'row'}}>
-                             
-                                <Text
-                                  style={styles.header2}
-                                  size={12}
-                                  bold
-                                  numberOfLines={
-                                    expandedItems.includes(index) ? 0 : 1
-                                  }>
-                                  {item.food_name}
-                                </Text>
-                             
+                              <Text
+                                style={styles.header2}
+                                size={12}
+                                bold
+                                numberOfLines={
+                                  expandedItems.includes(index) ? 0 : 1
+                                }>
+                                {item.food_name}
+                              </Text>
+
                               <Text style={styles.header} semibold size={12}>
                                 {item.details.totalProtein}
                               </Text>
@@ -1006,26 +1009,25 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                 {item.details.totalCalorie}
                               </Text>
                               <Text style={styles.header} semibold size={12}>
-                              <TouchableOpacity
-                                onPress={() =>
-                                  handleDelete(index, 'morningSnackItems')
-                                }>
-                                <Image
-                                  source={require('../assets/icons/close1.png')}
-                                  color={'#fa9579'}
-                                  style={
-                                    (styles.data,
-                                    {
-                                      width: 20,
-                                      height: 20,
-                                      alignContent: 'center',
-                                    })
-                                  }
-                                  margin={sizes.s}
-                                />
-                              </TouchableOpacity>
+                                <TouchableOpacity
+                                  onPress={() =>
+                                    handleDelete(index, 'morningSnackItems')
+                                  }>
+                                  <Image
+                                    source={require('../assets/icons/close1.png')}
+                                    color={'#fa9579'}
+                                    style={
+                                      (styles.data,
+                                      {
+                                        width: 20,
+                                        height: 20,
+                                        alignContent: 'center',
+                                      })
+                                    }
+                                    margin={sizes.s}
+                                  />
+                                </TouchableOpacity>
                               </Text>
-                              
                             </View>
                           ))}
                         </Block>
@@ -1202,10 +1204,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                       <Block style={styles.container}>
                         {/* Header */}
                         <Block style={styles.row} flex={1}>
-                          <Text style={styles.header2} size={12} bold>
-                            
-                          </Text>
-                         <Text style={styles.header} bold size={12}>
+                          <Text style={styles.header2} size={12} bold></Text>
+                          <Text style={styles.header} bold size={12}>
                             Protein
                           </Text>
                           <Text style={styles.header} bold size={12}>
@@ -1225,17 +1225,16 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                         <Block>
                           {lunchItems.map((item, index) => (
                             <View key={index} style={{flexDirection: 'row'}}>
-                             
-                                <Text
-                                  style={styles.header2}
-                                  size={12}
-                                  bold
-                                  numberOfLines={
-                                    expandedItems.includes(index) ? 0 : 1
-                                  }>
-                                  {item.food_name}
-                                </Text>
-                             
+                              <Text
+                                style={styles.header2}
+                                size={12}
+                                bold
+                                numberOfLines={
+                                  expandedItems.includes(index) ? 0 : 1
+                                }>
+                                {item.food_name}
+                              </Text>
+
                               <Text style={styles.header} semibold size={12}>
                                 {item.details.totalProtein}
                               </Text>
@@ -1249,24 +1248,23 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                 {item.details.totalCalorie}
                               </Text>
                               <Text style={styles.header} semibold size={12}>
-                              <TouchableOpacity
-                                onPress={() => handleDelete(index, 'lunch')}>
-                                <Image
-                                  source={require('../assets/icons/close1.png')}
-                                  color={'#fa9579'}
-                                  style={
-                                    (styles.data,
-                                    {
-                                      width: 20,
-                                      height: 20,
-                                      alignContent: 'center',
-                                    })
-                                  }
-                                  margin={sizes.s}
-                                />
-                              </TouchableOpacity>
+                                <TouchableOpacity
+                                  onPress={() => handleDelete(index, 'lunch')}>
+                                  <Image
+                                    source={require('../assets/icons/close1.png')}
+                                    color={'#fa9579'}
+                                    style={
+                                      (styles.data,
+                                      {
+                                        width: 20,
+                                        height: 20,
+                                        alignContent: 'center',
+                                      })
+                                    }
+                                    margin={sizes.s}
+                                  />
+                                </TouchableOpacity>
                               </Text>
-                            
                             </View>
                           ))}
                         </Block>
@@ -1443,10 +1441,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                       <Block style={styles.container}>
                         {/* Header */}
                         <Block style={styles.row} flex={1}>
-                          <Text style={styles.header2} size={12} bold>
-                            
-                          </Text>
-                         <Text style={styles.header} bold size={12}>
+                          <Text style={styles.header2} size={12} bold></Text>
+                          <Text style={styles.header} bold size={12}>
                             Protein
                           </Text>
                           <Text style={styles.header} bold size={12}>
@@ -1466,17 +1462,16 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                         <Block>
                           {eveningSnackItems.map((item, index) => (
                             <View key={index} style={{flexDirection: 'row'}}>
-                             
-                                <Text
-                                  style={styles.header2}
-                                  size={12}
-                                  bold
-                                  numberOfLines={
-                                    expandedItems.includes(index) ? 0 : 1
-                                  }>
-                                  {item.food_name}
-                                </Text>
-                             
+                              <Text
+                                style={styles.header2}
+                                size={12}
+                                bold
+                                numberOfLines={
+                                  expandedItems.includes(index) ? 0 : 1
+                                }>
+                                {item.food_name}
+                              </Text>
+
                               <Text style={styles.header} semibold size={12}>
                                 {item.details.totalProtein}
                               </Text>
@@ -1490,24 +1485,25 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                 {item.details.totalCalorie}
                               </Text>
                               <Text style={styles.header} semibold size={12}>
-                              <TouchableOpacity
-                                onPress={() => handleDelete(index, 'evening')}>
-                                <Image
-                                  source={require('../assets/icons/close1.png')}
-                                  color={'#fa9579'}
-                                  style={
-                                    (styles.data,
-                                    {
-                                      width: 20,
-                                      height: 20,
-                                      alignContent: 'center',
-                                    })
-                                  }
-                                  margin={sizes.s}
-                                />
-                              </TouchableOpacity>
+                                <TouchableOpacity
+                                  onPress={() =>
+                                    handleDelete(index, 'evening')
+                                  }>
+                                  <Image
+                                    source={require('../assets/icons/close1.png')}
+                                    color={'#fa9579'}
+                                    style={
+                                      (styles.data,
+                                      {
+                                        width: 20,
+                                        height: 20,
+                                        alignContent: 'center',
+                                      })
+                                    }
+                                    margin={sizes.s}
+                                  />
+                                </TouchableOpacity>
                               </Text>
-                              
                             </View>
                           ))}
                         </Block>
@@ -1685,10 +1681,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                       <Block style={styles.container}>
                         {/* Header */}
                         <Block style={styles.row} flex={1}>
-                          <Text style={styles.header2} size={12} bold>
-                            
-                          </Text>
-                         <Text style={styles.header} bold size={12}>
+                          <Text style={styles.header2} size={12} bold></Text>
+                          <Text style={styles.header} bold size={12}>
                             Protein
                           </Text>
                           <Text style={styles.header} bold size={12}>
@@ -1708,17 +1702,16 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                         <Block>
                           {dinnerItems.map((item, index) => (
                             <View key={index} style={{flexDirection: 'row'}}>
-                             
-                                <Text
-                                  style={styles.header2}
-                                  size={12}
-                                  bold
-                                  numberOfLines={
-                                    expandedItems.includes(index) ? 0 : 1
-                                  }>
-                                  {item.food_name}
-                                </Text>
-                             
+                              <Text
+                                style={styles.header2}
+                                size={12}
+                                bold
+                                numberOfLines={
+                                  expandedItems.includes(index) ? 0 : 1
+                                }>
+                                {item.food_name}
+                              </Text>
+
                               <Text style={styles.header} semibold size={12}>
                                 {item.details.totalProtein}
                               </Text>
@@ -1732,24 +1725,23 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                 {item.details.totalCalorie}
                               </Text>
                               <Text style={styles.header} semibold size={12}>
-                              <TouchableOpacity
-                                onPress={() => handleDelete(index, 'dinner')}>
-                                <Image
-                                  source={require('../assets/icons/close1.png')}
-                                  color={'#fa9579'}
-                                  style={
-                                    (styles.data,
-                                    {
-                                      width: 20,
-                                      height: 20,
-                                      alignContent: 'center',
-                                    })
-                                  }
-                                  margin={sizes.s}
-                                />
-                              </TouchableOpacity>
+                                <TouchableOpacity
+                                  onPress={() => handleDelete(index, 'dinner')}>
+                                  <Image
+                                    source={require('../assets/icons/close1.png')}
+                                    color={'#fa9579'}
+                                    style={
+                                      (styles.data,
+                                      {
+                                        width: 20,
+                                        height: 20,
+                                        alignContent: 'center',
+                                      })
+                                    }
+                                    margin={sizes.s}
+                                  />
+                                </TouchableOpacity>
                               </Text>
-                              
                             </View>
                           ))}
                         </Block>
@@ -1864,7 +1856,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                             }}>
                             <Text p black semibold center padding={10}>
                               {' '}
-                              Meals 1 
+                              Meals 1
                             </Text>
                           </TouchableOpacity>
                         ) : (
@@ -1878,7 +1870,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                               });
                             }}>
                             <Text p black semibold center padding={10}>
-                              Meal 1 
+                              Meal 1
                             </Text>
                           </TouchableOpacity>
                         )}
@@ -1925,14 +1917,12 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                         </Block>
                       </TouchableOpacity>
                     </Block>
-                    <Block  >
+                    <Block>
                       <Block style={styles.container}>
                         {/* Header */}
                         <Block style={styles.row} flex={1}>
-                          <Text style={styles.header2} size={12} bold>
-                            
-                          </Text>
-                         <Text style={styles.header} bold size={12}>
+                          <Text style={styles.header2} size={12} bold></Text>
+                          <Text style={styles.header} bold size={12}>
                             Protein
                           </Text>
                           <Text style={styles.header} bold size={12}>
@@ -1949,20 +1939,19 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
                         {/* Data Rows */}
 
-                        <Block >
+                        <Block>
                           {mealItems1.map((item, index) => (
                             <View key={index} style={{flexDirection: 'row'}}>
-                             
-                                <Text
-                                  style={styles.header2}
-                                  size={12}
-                                  bold
-                                  numberOfLines={
-                                    expandedItems.includes(index) ? 0 : 1
-                                  }>
-                                  {item.food_name}
-                                </Text>
-                             
+                              <Text
+                                style={styles.header2}
+                                size={12}
+                                bold
+                                numberOfLines={
+                                  expandedItems.includes(index) ? 0 : 1
+                                }>
+                                {item.food_name}
+                              </Text>
+
                               <Text style={styles.header} semibold size={12}>
                                 {item.details.totalProtein}
                               </Text>
@@ -1976,22 +1965,22 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                 {item.details.totalCalorie}
                               </Text>
                               <Text style={styles.header} semibold size={12}>
-                              <TouchableOpacity
-                                onPress={() => handleDelete(index, 'meal1')}>
-                                <Image
-                                  source={require('../assets/icons/close1.png')}
-                                  color={'#fa9579'}
-                                  style={
-                                    (styles.data,
-                                    {
-                                      width: 20,
-                                      height: 20,
-                                      alignContent: 'center',
-                                    })
-                                  }
-                                  margin={sizes.s}
-                                />
-                              </TouchableOpacity>
+                                <TouchableOpacity
+                                  onPress={() => handleDelete(index, 'meal1')}>
+                                  <Image
+                                    source={require('../assets/icons/close1.png')}
+                                    color={'#fa9579'}
+                                    style={
+                                      (styles.data,
+                                      {
+                                        width: 20,
+                                        height: 20,
+                                        alignContent: 'center',
+                                      })
+                                    }
+                                    margin={sizes.s}
+                                  />
+                                </TouchableOpacity>
                               </Text>
                             </View>
                           ))}
@@ -2158,10 +2147,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                       <Block style={styles.container}>
                         {/* Header */}
                         <Block style={styles.row} flex={1}>
-                          <Text style={styles.header2} size={12} bold>
-                            
-                          </Text>
-                         <Text style={styles.header} bold size={12}>
+                          <Text style={styles.header2} size={12} bold></Text>
+                          <Text style={styles.header} bold size={12}>
                             Protein
                           </Text>
                           <Text style={styles.header} bold size={12}>
@@ -2181,17 +2168,16 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                         <Block>
                           {mealItems2.map((item, index) => (
                             <View key={index} style={{flexDirection: 'row'}}>
-                             
-                                <Text
-                                  style={styles.header2}
-                                  size={12}
-                                  bold
-                                  numberOfLines={
-                                    expandedItems.includes(index) ? 0 : 1
-                                  }>
-                                  {item.food_name}
-                                </Text>
-                             
+                              <Text
+                                style={styles.header2}
+                                size={12}
+                                bold
+                                numberOfLines={
+                                  expandedItems.includes(index) ? 0 : 1
+                                }>
+                                {item.food_name}
+                              </Text>
+
                               <Text style={styles.header} semibold size={12}>
                                 {item.details.totalProtein}
                               </Text>
@@ -2205,24 +2191,23 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                 {item.details.totalCalorie}
                               </Text>
                               <Text style={styles.header} semibold size={12}>
-                              <TouchableOpacity
-                                onPress={() => handleDelete(index, 'meal2')}>
-                                <Image
-                                  source={require('../assets/icons/close1.png')}
-                                  color={'#fa9579'}
-                                  style={
-                                    (styles.data,
-                                    {
-                                      width: 20,
-                                      height: 20,
-                                      alignContent: 'center',
-                                    })
-                                  }
-                                  margin={sizes.s}
-                                />
-                              </TouchableOpacity>
+                                <TouchableOpacity
+                                  onPress={() => handleDelete(index, 'meal2')}>
+                                  <Image
+                                    source={require('../assets/icons/close1.png')}
+                                    color={'#fa9579'}
+                                    style={
+                                      (styles.data,
+                                      {
+                                        width: 20,
+                                        height: 20,
+                                        alignContent: 'center',
+                                      })
+                                    }
+                                    margin={sizes.s}
+                                  />
+                                </TouchableOpacity>
                               </Text>
-                              
                             </View>
                           ))}
                         </Block>
@@ -2293,9 +2278,9 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                   </Block>
                 )}
                 <Button flex={2} marginTop={sizes.m}>
-                  <Text black bold>
+                  {/* <Text black bold>
                     Water Tracker
-                  </Text>
+                  </Text> */}
                 </Button>
 
                 {/* <Progress.Bar progress={0.3}  width={100}  /> */}
@@ -2319,13 +2304,13 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                       />
                       <Text h5 center white>
                         {/* {user?.name} */}
-                        8L
+                       Water Tracker
                       </Text>
                       <Text p center white>
-                        Water per day
+                      {/* Target */}
                       </Text>
                       <Block flex={0} align="center" padding={sizes.xl}>
-                        <ProgressBar
+                        {/* <ProgressBar
                           steps={6}
                           ranges={[
                             '0',
@@ -2342,9 +2327,9 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                           currentStep={currentStep}
                           stepToStepAnimationDuration={1000}
                           withDots
-                        />
+                        /> */}
                       </Block>
-                      <Block
+                      {/* <Block
                         row
                         justify="space-between"
                         marginBottom={sizes.base}
@@ -2366,6 +2351,25 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                             </Text>
                           </TouchableOpacity>
                         </Button>
+                      </Block> */}
+                      <Block row>
+                        <Block  flex={0} width={200} height={100} card center>
+                          <Block center flex={0}>
+                          <Lottie
+                        width={64}
+                        height={64}
+                        // marginBottom={sizes.sm}
+                        source={require('../assets/json/water.json')}
+                        progress={animationProgress.current}
+                      />
+                          </Block>
+                          <Block flex={0}>
+                          <Text center>hi</Text>
+                          <Text center>Water intake</Text>
+                          </Block>
+                    
+                          
+                        </Block>
                       </Block>
                     </Block>
                   </Image>

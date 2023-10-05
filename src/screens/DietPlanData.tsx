@@ -339,6 +339,8 @@ const DietPlanData = ({route, navigation}) => {
     switch (mealType) {
       case 'breakfast':
       case 'breakfast':
+        console.log(responseData, mealDetails , "from device breakfast");
+        
         addBreakfastItem(responseData, mealDetails);
         break;
       case 'morningSnackItems':

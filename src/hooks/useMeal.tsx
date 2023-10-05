@@ -157,7 +157,7 @@ const MealContextProvider: React.FC = ({children}) => {
           carb_in_g: item.carb,
           cholestrol_in_mg: item.cholestrol,
           details: {
-            id: item.id,
+            id: item.serving_description_id,
             selectedWeight: item.taken_weight,
             multiplication: item.quantity,
             quantity: item.quantity,
@@ -186,7 +186,7 @@ const MealContextProvider: React.FC = ({children}) => {
           fat_in_g: item.fat,
           fiber_in_g: item.fiber,
           food_name: item.food_name,
-          id: item.id,
+          id: item.serving_description_id,
           image: item.food_image,
           iron_in_mg: item.iron,
           monounsaturated_fat_in_g: item.monounsaturated_fat,
@@ -269,6 +269,8 @@ const MealContextProvider: React.FC = ({children}) => {
                 // console.log(transformedData, 'Transformed data');
                 if (transformedData.breakfastItems) {
                   setBreakfastItems(transformedData.breakfastItems);
+                  console.log(transformedData.breakfastItems , "from db");
+                  
                 }
                 if (transformedData.dinnerItems) {
                   setDinnerItems(transformedData.dinnerItems);
@@ -401,7 +403,7 @@ const MealContextProvider: React.FC = ({children}) => {
   // }, []);
 
   const addBreakfastItem = (food: any, details: any, db: any, dbs: any) => {
-    console.log(details.meal_type, 'testing 123');
+    console.log(food,details, 'testing 123 to  db  breakfast');
     // return false;
 
     // console.log(details,'food details' );

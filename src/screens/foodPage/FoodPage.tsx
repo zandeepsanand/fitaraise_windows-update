@@ -103,7 +103,7 @@ const FoodPage = ({route, navigation}) => {
     morningSnackItems,
     addBreakfastItem,
   } = useContext(MealContext);
-  console.log(breakfastItems);
+  // console.log(breakfastItems[6] ,"first one");
   
 
   const {assets, colors, gradients, sizes, fonts, user} = useTheme();
@@ -143,41 +143,108 @@ const FoodPage = ({route, navigation}) => {
     debouncedHandleEdit(item);
   };
 
-  function handleEdit(item) {
-    // console.log(item , "check item ");
+//   function handleEdit(item) {
+//     // console.log(item , "check item ");
     
-    setIsEditMode(true);
-    api
-      .get(`get_serving_desc_by_food_id/${item.id}`)
-      .then((response) => {
-        setServingDetailsFull(response.data.data.serving_desc);
-        const servingNames = response.data.data.serving_desc.map(
-          (serving) => serving.name,
-        );
-        const servingId = response.data.data.serving_desc.map(
-          (serving) => serving.id,
-        );
-        servingId.unshift(4792);
-        const servingInitialGram = response.data.data.serving_desc.map(
-          (serving) => serving.weight,
-        );
-        const servingGrams = response.data.data.serving_desc.map(
-          (serving) => `${serving.name} (${serving.weight} g)`,
-        );
-        servingInitialGram.unshift(100);
-        setServingId(servingId[0]);
-        setServingDetails(servingNames);
-        nutritionCalculation(item);
-        setServingGrams(servingGrams);
-        setInitialGram(item.details.selectedWeight);
-        servingGrams.unshift('100 g');
-        setSelectedDropDown(item.details.selectedDropDown);
-      })
-      .catch((error) => {
-        console.error(error);
+//     setIsEditMode(true);
+// const food_id =api.get(`get_food_items/${item.food_name}`).then((res)=>{
+//   console.log("food items ", res.data )
+// })
+
+
+
+//     api
+//       .get(`get_serving_desc_by_food_id/${item.id}`)
+//       .then((response) => {
+//         console.log(response.data.data , "the food details");
+        
+//         setServingDetailsFull(response.data.data.serving_desc);
+//         const servingNames = response.data.data.serving_desc.map(
+//           (serving) => serving.name,
+//         );
+//         const servingId = response.data.data.serving_desc.map(
+//           (serving) => serving.id,
+//         );
+//         servingId.unshift(4792);
+//         const servingInitialGram = response.data.data.serving_desc.map(
+//           (serving) => serving.weight,
+//         );
+//         const servingGrams = response.data.data.serving_desc.map(
+//           (serving) => `${serving.name} (${serving.weight} g)`,
+//         );
+//         servingInitialGram.unshift(100);
+//         setServingId(servingId[0]);
+//         setServingDetails(servingNames);
+//         nutritionCalculation(item);
+//         setServingGrams(servingGrams);
+//         setInitialGram(item.details.selectedWeight);
+//         servingGrams.unshift('100 g');
+//         setSelectedDropDown(item.details.selectedDropDown);
+//       })
+//       .catch((error) => {
+//         console.error(error);
+//         setIsEditMode(false);
+//       });
+//   }
+function handleEdit(item) {
+  setIsEditMode(true);
+
+  // Fetch food_id
+  const food_id = api.get(`get_food_items/${item.food_name}`)
+    .then((res) => {
+      console.log( res.data.data , "hallo ");
+
+      // Check if food_id is available
+      if (res.data) {
+        // Execute another function if food_id is available
+        anotherFunction(res.data);
+
+        // Continue with the rest of your code
+        api.get(`get_serving_desc_by_food_id/${item.id}`)
+          .then((response) => {
+            console.log(response.data.data, "the food details");
+
+            setServingDetailsFull(response.data.data.serving_desc);
+            const servingNames = response.data.data.serving_desc.map((serving) => serving.name);
+            const servingId = response.data.data.serving_desc.map((serving) => serving.id);
+            servingId.unshift(4792);
+            const servingInitialGram = response.data.data.serving_desc.map((serving) => serving.weight);
+            const servingGrams = response.data.data.serving_desc.map(
+              (serving) => `${serving.name} (${serving.weight} g)`
+            );
+            servingInitialGram.unshift(100);
+            setServingId(servingId[0]);
+            setServingDetails(servingNames);
+            nutritionCalculation(item);
+            setServingGrams(servingGrams);
+            setInitialGram(item.details.selectedWeight);
+            servingGrams.unshift('100 g');
+            setSelectedDropDown(item.details.selectedDropDown);
+          })
+          .catch((error) => {
+            console.error(error);
+            setIsEditMode(false);
+          });
+      } else {
+        // Handle the case when food_id is not available
+        console.error("food_id not available");
         setIsEditMode(false);
-      });
-  }
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      setIsEditMode(false);
+    });
+}
+
+// Define another function to be executed if food_id is available
+function anotherFunction(foodData) {
+  // Your code to handle foodData goes here
+  console.log("Executing anotherFunction with foodData:", foodData);
+}
+
+// Replace the code inside anotherFunction with your specific logic for handling foodData
+
 
   function nutritionCalculation(item, selectedWeight1) {
     // without selecting the dropdown menu for calculation
