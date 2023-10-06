@@ -30,14 +30,14 @@ const LoadingScreen = () => {
             const authToken = authData.token;
   
             if (authToken) {
-              const requiredCalorieResponse = await api.get(`get_daily_required_calories/68`);
+              const requiredCalorieResponse = await api.get(`get_daily_required_calories/${authData.formData.customer_id}`);
               const diet_List = await api.get(`get_recommended_diet/${authData.formData.customer_id}`);
   
   
               const requiredCalorie = requiredCalorieResponse.data.data;
               
               const dietPlan = diet_List.data.data.recommended_diet_list;
-              console.log(requiredCalorie , "calorie");
+              console.log(requiredCalorie , "calorie required");
               if ((requiredCalorieResponse.data.success === true) && (authData.formData)) {
                 // Reset the navigation stack and navigate to 'Menu'
                 navigation.reset({

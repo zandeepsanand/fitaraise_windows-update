@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
 import {Alert, Animated, Linking, StyleSheet} from 'react-native';
 
 import {
@@ -16,16 +16,30 @@ import Firstpage from './Frstpage';
 import {Block, Text, Switch, Button, Image} from '../components';
 import {useData, useTheme, useTranslation} from '../hooks';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { CommonActions } from '@react-navigation/native';
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from 'react-native-alert-notification';
+import LoginContext from '../hooks/LoginContext';
 
 const Drawer = createDrawerNavigator();
 
 /* drawer menu screens navigation */
 const ScreensStack = ({route}) => {
   const {data, formDataCopy, dietPlan} = route.params ?? {};
+  useEffect(() => {
+    // Update the screen content using the new parameters
+    console.log(data, 'Updated data drawer');
+
+    // Additionally, you can perform any other necessary updates here
+  }, [data, formDataCopy, dietPlan]);
 
   // console.log('ScreensStack Component - Data:', data);
   // console.log('ScreensStack Component - FormDataCopy:', formDataCopy);
-  // console.log('ScreensStack Component - DietPlan:', dietPlan);
+  console.log('ScreensStack Component - DietPlan:', dietPlan);
 
   const {colors} = useTheme();
   const isDrawerOpen = useIsDrawerOpen();
@@ -79,7 +93,9 @@ const DrawerContent = (
 ) => {
   const {navigation, formDataCopy} = props;
   const {t} = useTranslation();
-  const {isDark, handleIsDark} = useData();
+  const {isDark, handleIsDark} = useData(false);
+  // console.log(isDark , "dark");
+  
   const [active, setActive] = useState('Tab');
   const {assets, colors, gradients, sizes} = useTheme();
   const labelColor = colors.text;
@@ -106,26 +122,49 @@ const DrawerContent = (
 
   const handleWebLink = useCallback((url) => Linking.openURL(url), []);
 
-  const handleEditGoalPress = () => {
-    Alert.alert(
-      'Edit Goal',
-      'Do you want to edit your goal?',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {
-          text: 'Edit',
-          onPress: () => {
-            // Handle the logic to navigate to the "Edit Goal" screen here
-            navigation.navigate('Details'); // Replace 'Details' with the correct screen name
-          },
-        },
-      ],
-      {cancelable: false},
+  const {
+    customerId,
+    isLoggedIn,
+    token,
+    logout, // You can access the logout function
+  } = useContext(LoginContext);
+
+  const handleLogout = () => {
+    console.log('clicked');
+
+    // Call the logout function to log the user out
+    logout();
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'loginNew' }],
+      })
     );
+  };
+
+  const handleEditGoalPress = () => {
+    console.log('clicked');
+    
+ 
+    // Alert.alert(
+    //   'Edit Goal',
+    //   'Do you want to edit your goal?',
+    //   [
+    //     {
+    //       text: 'Cancel',
+    //       onPress: () => console.log('Cancel Pressed'),
+    //       style: 'cancel',
+    //     },
+    //     {
+    //       text: 'Edit',
+    //       onPress: () => {
+    //         // Handle the logic to navigate to the "Edit Goal" screen here
+    //         navigation.navigate('Details'); // Replace 'Details' with the correct screen name
+    //       },
+    //     },
+    //   ],
+    //   {cancelable: false},
+    // );
   };
   // const [active, setActive] = useState('Tab'); // Initialize with the default screen name
 
@@ -142,9 +181,9 @@ const DrawerContent = (
       to: 'Demo',
       icon: assets.rental,
     },
-    {name: 'Water Tracker', to: 'Pro', icon: assets.kcal},
-    {name: 'Track Progress', to: 'Profile', icon: assets.office},
-    {name: 'Share App', to: 'Register', icon: assets.profile},
+    {name: 'Water Tracker', to: 'NotFoundPage', icon: assets.kcal},
+    {name: 'Track Progress', to: 'NotFoundPage2', icon: assets.office},
+    {name: 'Share App', to: 'NotFoundPage3', icon: assets.profile},
   ];
 
   return (
@@ -231,7 +270,11 @@ const DrawerContent = (
           marginBottom={sizes.s}
           // onPress={() =>
           //   handleWebLink('https://github.com/creativetimofficial')
+
           // }
+          onPress={() => {
+            handleLogout();
+          }}
         >
           <Block
             flex={0}
@@ -255,16 +298,17 @@ const DrawerContent = (
           </Text>
         </Button>
 
-        {/* <Block row justify="space-between" marginTop={sizes.sm}>
+        <Block row justify="space-between" marginTop={sizes.sm}>
           <Text color={labelColor}>{t('darkMode')}</Text>
           <Switch
             checked={isDark}
             onPress={(checked) => {
               handleIsDark(checked);
-              Alert.alert('hei');
+              handleEditGoalPress();
+              Alert.alert('Only availble in Pro Version');
             }}
           />
-        </Block> */}
+        </Block>
       </Block>
     </DrawerContentScrollView>
   );
@@ -272,14 +316,25 @@ const DrawerContent = (
 
 /* drawer menu navigation */
 export default function Menu({route}) {
-  const {data, formDataCopy, dietPlan} = route.params ?? {};
-  // console.log(formDataCopy, data, 'menu drawer check');
+  const { data, formDataCopy, dietPlan } = route.params || {};
+
+  // Use useFocusEffect to update the screen when it gains focus
+  useFocusEffect(
+    React.useCallback(() => {
+      // Update the screen content using the new parameters
+      // For example, you can set the state or update the UI here
+      console.log(data, "Updated data");
+    }, [data, formDataCopy, dietPlan])
+  );
+  console.log(data, 'menu drawer check');
 
   const {gradients} = useTheme();
   const navigation = useNavigation(); // Get the navigation object
 
   useEffect(() => {
     // Navigate to the "Screens" screen when the Menu component is first loaded
+    console.log(data , "updatess");
+    
     navigation.navigate('Screens', { data, formDataCopy, dietPlan });
   }, []);
 

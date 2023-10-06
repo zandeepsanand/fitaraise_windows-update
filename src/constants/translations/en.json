@@ -50,7 +50,7 @@
     }
   },
   "app": {
-    "name": "Step One",
+    "name": "Fitaraise",
     "fullname": "Soft UI Kit",
     "native": "React Native",
     "link": "creative-tim.com"
@@ -67,7 +67,7 @@
     "extra": "Extra - Automotive"
   },
   "navigation": {
-    "home": "Step One",
+    "home": "Fitaraise",
     "dietplan": "Today's Target",
     "breakfast": "Breakfast",
     "components": "Components",
@@ -92,7 +92,7 @@
     "documentation": "Documentation"
   },
   "home": {
-    "title": "Soft UI",
+    "title": "Fitaraise",
     "following": "Sandeep",
     "trending": "Trending"
   },
@@ -108,7 +108,7 @@
     "aboutMe": "About me"
   },
   "pro": {
-    "title": "Soft UI PRO",
+    "title": "Fitaraise",
     "alert": "This feature is available in PRO version",
     "components": "• {{count} Components (Buttons, Inputs, Cards, etc)",
     "screens": "• {{count} Screens (Shopping, Notifications, Chat, etc)",

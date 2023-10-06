@@ -6,167 +6,203 @@ import {Block, Image, Input, Text} from '../../components/';
 
 import {Platform, TouchableOpacity, SectionList} from 'react-native';
 import Axios from 'axios';
-import { useTheme } from '../../hooks';
-import { View } from 'react-native';
-import { FlatList } from 'react-native';
-import { StyleSheet } from 'react-native';
-
+import {useTheme} from '../../hooks';
+import {View} from 'react-native';
+import {FlatList} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 const isAndroid = Platform.OS === 'android';
 
-export default function PreviousDietDetails({ data }) {
-    const {assets, colors, fonts, gradients, sizes} = useTheme();
-    if (!data) {
-      return null; // Handle the case when data hasn't been fetched yet
-    }
-    
-return(
+export default function PreviousDietDetails({data}) {
+  const {assets, colors, fonts, gradients, sizes} = useTheme();
+  const [expandedItems, setExpandedItems] = useState([]); 
+  if (!data) {
+    return null; // Handle the case when data hasn't been fetched yet
+  }
+
+  return (
     <>
-    <View>
-      {data.diet_details.map((mealType) => (
-        <>
-             <Block
-                        radius={sizes.sm}
-                        shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
-                        marginTop={sizes.s}
-                        marginHorizontal={0}
-                        card
-                        color="#f5e8fa">
-                        <Block row align="center" key={mealType.meal_type_id}>
-                          <Block flex={0}>
-                            <Image
-                              source={require('../../assets/icons/breakfast.png')}
-                              style={{
-                                width: sizes.xl,
-                                height: sizes.xl,
-                              }}
-                              marginLeft={sizes.s}
-                            />
-                          </Block>
-                          <Block flex={3} style={{alignSelf: 'center'}}>
-                            <TouchableOpacity
-                             >
-                              <Text p black semibold center padding={10}>
-                              {mealType.meal_type_name} 
+      <View>
+        {data.diet_details.map((mealType) => (
+          <>
+            <Block
+              radius={sizes.sm}
+              shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
+              marginTop={sizes.s}
+              marginHorizontal={0}
+              card
+              color="#f5e8fa">
+              <Block row align="center" key={mealType.meal_type_id}>
+                <Block flex={0}>
+                  <Image
+                    source={require('../../assets/icons/breakfast.png')}
+                    style={{
+                      width: sizes.xl,
+                      height: sizes.xl,
+                    }}
+                    marginLeft={sizes.s}
+                  />
+                </Block>
+                <Block flex={3} style={{alignSelf: 'center'}}>
+                  <TouchableOpacity>
+                    <Text p black semibold center padding={10}>
+                      {mealType.meal_type_name}
+                    </Text>
+                  </TouchableOpacity>
+
+                  <Block row flex={0} align="center" justify="center">
+                    <Block
+                      flex={0}
+                      height={1}
+                      width="50%"
+                      end={[1, 0]}
+                      start={[0, 1]}
+                      gradient={gradients.divider}
+                    />
+                    <Text center marginHorizontal={sizes.s}></Text>
+                    <Block
+                      flex={0}
+                      height={1}
+                      width="50%"
+                      end={[0, 1]}
+                      start={[1, 0]}
+                      gradient={gradients.divider}
+                    />
+                  </Block>
+                </Block>
+                <TouchableOpacity>
+                  <Block flex={0} style={{alignSelf: 'center'}}>
+                    <Image
+                      radius={0}
+                      width={25}
+                      height={25}
+                      color={'#9fa1a2'}
+                      source={assets.plus}
+                      transform={[{rotate: '360deg'}]}
+                      margin={sizes.s}
+                    />
+                  </Block>
+                </TouchableOpacity>
+              </Block>
+              <Block margin={0}>
+                <Block style={styles.container} margin={0}>
+                  {/* Header */}
+                  <Block style={styles.row} flex={1}>
+                    <Text style={styles.header2} size={12} bold></Text>
+                    <Text style={styles.header} bold size={12}>
+                      Protein
+                    </Text>
+                    <Text style={styles.header} bold size={12}>
+                      Carbs
+                    </Text>
+                    <Text style={styles.header} bold size={12}>
+                      Fat
+                    </Text>
+                    <Text style={styles.header} bold size={12}>
+                      KCAL
+                    </Text>
+                    <Text style={styles.header}></Text>
+                  </Block>
+
+                  {/* Data Rows */}
+                  <FlatList
+                    data={mealType.diet_list}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({item, index}) => (
+                      // <Block margin={0}>
+                      //   <View style={styles.item}>
+                      //     <Text
+                      //       style={
+                      //         (styles.data,
+                      //         {
+                      //           width: 70,
+                      //           padding: 5,
+                      //           alignSelf: 'center',
+                      //           alignContent: 'center',
+                      //         })
+                      //       }
+                      //       semibold>
+                      //       {item.food_name}
+                      //     </Text>
+                      //     <Text style={styles.data} center>
+                      //       {item.protienes}
+                      //     </Text>
+                      //     <Text style={styles.data} center>
+                      //       {item.carb}
+                      //     </Text>
+                      //     <Text style={styles.data} center>
+                      //       {item.fat}
+                      //     </Text>
+                      //     <Text style={styles.data} center>
+                      //       {item.calories}
+                      //     </Text>
+                      //     <TouchableOpacity>
+                      //       <Image
+                      //         source={require('../../assets/icons/close1.png')}
+                      //         color={'#9fa1a2'}
+                      //         style={
+                      //           (styles.data,
+                      //           {width: 20, height: 20, alignContent: 'center'})
+                      //         }
+                      //         marginTop={sizes.s}
+                      //       />
+                      //     </TouchableOpacity>
+                      //   </View>
+                      // </Block>
+                      <View key={index} style={{flexDirection: 'row'}}>
+                              <Text
+                                style={styles.header2}
+                                size={12}
+                                bold
+                                numberOfLines={
+                                  expandedItems.includes(index) ? 0 : 1
+                                }>
+                                {item.food_name}
                               </Text>
-                            </TouchableOpacity>
-        
-                            <Block row flex={0} align="center" justify="center">
-                              <Block
-                                flex={0}
-                                height={1}
-                                width="50%"
-                                end={[1, 0]}
-                                start={[0, 1]}
-                                gradient={gradients.divider}
-                              />
-                              <Text center marginHorizontal={sizes.s}></Text>
-                              <Block
-                                flex={0}
-                                height={1}
-                                width="50%"
-                                end={[0, 1]}
-                                start={[1, 0]}
-                                gradient={gradients.divider}
-                              />
-                            </Block>
-                          </Block>
-                          <TouchableOpacity
-                          
-                            >
-                            <Block flex={0} style={{alignSelf: 'center'}}>
-                              <Image
-                                radius={0}
-                                width={25}
-                                height={25}
-                                color={'#9fa1a2'}
-                                source={assets.plus}
-                                transform={[{rotate: '360deg'}]}
-                                margin={sizes.s}
-                              />
-                            </Block>
-                          </TouchableOpacity>
-                        </Block>
-                        <Block margin={0}>
-                          <Block style={styles.container} margin={0}>
-                            {/* Header */}
-                            <Block style={styles.row} flex={0}>
-                              <Text style={(styles.header, {width: 70})} center></Text>
-                              <Text style={styles.header} center semibold>
-                                Protein
+
+                              <Text style={styles.header} semibold size={12}>
+                                {item.protienes}
                               </Text>
-                              <Text style={styles.header} center semibold>
-                                Carbs
+                              <Text style={styles.header} semibold size={12}>
+                                {item.carb}
                               </Text>
-                              <Text style={styles.header} center semibold>
-                                Fat
+                              <Text style={styles.header} semibold size={12}>
+                                {item.fat}
                               </Text>
-                              <Text style={styles.header} center semibold>
-                                KCAL
+                              <Text style={styles.header} semibold size={12}>
+                                {item.calories}
                               </Text>
-                              <Text style={styles.header}></Text>
-                            </Block>
-        
-                            {/* Data Rows */}
-                            <FlatList
-            data={mealType.diet_list}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-                            <Block margin={0}>
-                             
-                                <View  style={styles.item}>
-                                  <Text
+                              {/* <Text style={styles.header} semibold size={12}>
+                                <TouchableOpacity
+                                 >
+                                  <Image
+                                    source={require('../../assets/icons/close1.png')}
+                                    color={'#9fa1a2'}
                                     style={
                                       (styles.data,
                                       {
-                                        width: 70,
-                                        padding: 5,
-                                        alignSelf: 'center',
+                                        width: 20,
+                                        height: 20,
                                         alignContent: 'center',
                                       })
                                     }
-                                    semibold
-                                    >
-                                   {item.food_name}
-                                  </Text>
-                                  <Text style={styles.data} center >
-                                    {item.protienes}
-                                  </Text>
-                                  <Text style={styles.data} center>
-                                 {item.carb}
-                                  </Text>
-                                  <Text style={styles.data} center>
-                                   {item.fat}
-                                  </Text>
-                                  <Text style={styles.data} center>
-                                  {item.calories}
-                                  </Text>
-                                  <TouchableOpacity
-                                    >
-                                    <Image
-                                      source={require('../../assets/icons/close1.png')}
-                                      color={'#9fa1a2'}
-                                      style={
-                                        (styles.data,
-                                        {width: 20, height: 20, alignContent: 'center'})
-                                      }
-                                      marginTop={sizes.s}
-                                    />
-                                  </TouchableOpacity>
-                                </View>
-                            </Block>
-            )}/>
-                          </Block>
-                        </Block>
-                      </Block>
-        </>
-      ))}
-      {/* <Text>Total Calories: {data.todays_total_calories}</Text>
+                                    margin={sizes.s}
+                                  />
+                                </TouchableOpacity>
+                              </Text> */}
+                            </View>
+                    )}
+                  />
+                </Block>
+              </Block>
+            </Block>
+          </>
+        ))}
+        {/* <Text>Total Calories: {data.todays_total_calories}</Text>
       <Text>Customer Needed Calories: {data.customer_needed_calories}</Text> */}
-    </View>
-   
-      </>        
-)
+      </View>
+    </>
+  );
 }
 const styles = StyleSheet.create({
   container1: {
@@ -250,6 +286,16 @@ const styles = StyleSheet.create({
     padding: 5,
     alignSelf: 'center',
     minWidth: 60,
+  },
+  
+  header2: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: 'bold',
+    padding: 5,
+    // alignSelf: 'center',
+    minWidth: 70,
+    // justifyContent:'center'
   },
   data: {
     flex: 2,

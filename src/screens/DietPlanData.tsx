@@ -339,7 +339,7 @@ const DietPlanData = ({route, navigation}) => {
     switch (mealType) {
       case 'breakfast':
       case 'breakfast':
-        console.log(responseData, mealDetails , "from device breakfast");
+        // console.log(responseData, mealDetails , "from device breakfast");
         
         addBreakfastItem(responseData, mealDetails);
         break;
@@ -364,7 +364,7 @@ const DietPlanData = ({route, navigation}) => {
       default:
         break;
     }
-    // console.log("hai");
+    console.log(servingId);
     
     if (servingId !== null) {
       // console.log(servingId);

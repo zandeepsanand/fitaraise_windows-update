@@ -6,6 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import {ProgressBarAndroid} from 'react-native-elements';
 import {BASE_URL} from '@env';
 import {useData, useTheme, useTranslation} from '../hooks/';
 import {Block, Button, Image, Input, Text} from '../components/';
@@ -27,13 +28,56 @@ import PreviousDietDetails from './foodPage/PreviousDietDetails';
 const isAndroid = Platform.OS === 'android';
 
 import {useRoute} from '@react-navigation/native';
+import api from '../../api';
+// import { colors } from '../../app/res/colors';
+// import AnimatableProgressBar from 'animateprogress';
+
+const VerticalProgressBar = ({progress}) => {
+  const fillHeight = `${(1 - progress) * 100}%`;
+
+  return (
+    <View style={styles.progressBar}>
+      {/* Lottie animation for filling the progress bar */}
+      <Lottie
+        source={require('../assets/json/water2.json')} // Replace with the path to your fill animation JSON file
+        autoPlay={true}
+        loop={false}
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          height: fillHeight,
+          width: '100%',
+        }}
+      />
+      {/* <View style={[styles.progressBarFill, { height: fillHeight }]} /> */}
+    </View>
+  );
+};
 
 const DietPlan = ({navigation, text, maxLines = 3}) => {
   const route = useRoute();
+
   const {data, dietPlan, formDataCopy} = route.params;
+
+  useEffect(() => {
+    // Navigate to the "Screens" screen when the Menu component is first loaded
+    console.log(data , "updatess diet plan");
+    
+   
+  }, [data , dietPlan, formDataCopy]);
+
   console.log(data, 'check 2');
 
   const [expandedItems, setExpandedItems] = useState([]); // To keep track of expanded items
+  const [waterAmount, setWaterAmount] = React.useState(0);
+
+  const increaseWater = () => {
+    setWaterAmount(Math.min(waterAmount + 0.1, 1.0));
+  };
+
+  const decreaseWater = () => {
+    setWaterAmount(Math.max(waterAmount - 0.1, 0.0));
+  };
 
   // Function to toggle the expanded state of an item
   const toggleItemExpansion = (index) => {
@@ -326,7 +370,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
   useEffect(() => {
     Animated.timing(animationProgress.current, {
       toValue: 1,
-      duration: 5000,
+      duration: 15000,
       easing: Easing.linear,
       useNativeDriver: false,
     }).start();
@@ -367,8 +411,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     } else {
       // Fetch data from API using Axios and update apiData state
       try {
-        const response = await Axios.get(
-          `${BASE_URL}get_diet_list_wrt_date/${formDataCopy.customer_id}/${selectedDate}`,
+        const response = await api.get(
+          `get_diet_list_wrt_date/${formDataCopy.customer_id}/${selectedDate}`,
         );
         const responseData = response.data.data;
         console.log(responseData, 'diet data');
@@ -444,10 +488,14 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                   titleStyle={{fontWeight: 'bold', fontSize: 22}}
                   subtitle={
                     totalCaloriesOfAllFoods >= data.calories
-                      ? `${totalCaloriesOfAllFoods} KCAL` 
+                      ? `${totalCaloriesOfAllFoods} KCAL`
                       : `KCAL LEFT 🔥`
                   }
-                  subtitleStyle={{fontWeight: 'bold', fontSize: 15,paddingTop:10}}
+                  subtitleStyle={{
+                    fontWeight: 'bold',
+                    fontSize: 15,
+                    paddingTop: 10,
+                  }}
 
                   // onAnimationComplete={()=>{alert('hai')}}
                   // disableAnimation={totalCaloriesOfAllFoods >= data.calories}
@@ -2304,13 +2352,13 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                       />
                       <Text h5 center white>
                         {/* {user?.name} */}
-                       Water Tracker
+                        Water Tracker
                       </Text>
                       <Text p center white>
-                      {/* Target */}
+                        {/* Target */}
                       </Text>
-                      <Block flex={0} align="center" padding={sizes.xl}>
-                        {/* <ProgressBar
+                      {/* <Block flex={0} align="center" padding={sizes.xl}>
+                        <ProgressBar
                           steps={6}
                           ranges={[
                             '0',
@@ -2327,8 +2375,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                           currentStep={currentStep}
                           stepToStepAnimationDuration={1000}
                           withDots
-                        /> */}
-                      </Block>
+                        />
+                      </Block> */}
                       {/* <Block
                         row
                         justify="space-between"
@@ -2352,23 +2400,102 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                           </TouchableOpacity>
                         </Button>
                       </Block> */}
-                      <Block row>
-                        <Block  flex={0} width={200} height={100} card center>
-                          <Block center flex={0}>
-                          <Lottie
-                        width={64}
-                        height={64}
-                        // marginBottom={sizes.sm}
-                        source={require('../assets/json/water.json')}
-                        progress={animationProgress.current}
-                      />
+                      <Block row marginTop={25} centerContent>
+                        <Block
+                          flex={0}
+                          width={160}
+                          height={80}
+                          card
+                          center
+                          marginTop={30}>
+                          <Block
+                            center
+                            flex={0}
+                            marginBottom={10}
+                            marginRight={20}>
+                            <Lottie
+                              width={44}
+                              height={54}
+                              source={require('../assets/json/water.json')}
+                              progress={animationProgress.current}
+                            />
                           </Block>
-                          <Block flex={0}>
-                          <Text center>hi</Text>
-                          <Text center>Water intake</Text>
+                          <Block flex={0} marginLeft={30}>
+                            <Text center info h5 bold>
+                            {Math.round(waterAmount * 100)}% 
+                            </Text>
+                            <Text center semibold secondary>
+                              Water intake
+                            </Text>
                           </Block>
-                    
-                          
+                        </Block>
+                        <Block
+                          flex={0}
+                          // card
+                          width={130}
+                          marginHorizontal={10}
+                          center
+                          padding={10}>
+                          <Block
+                            flex={1}
+                            centerContent
+                            center
+                            style={{
+                              justifyContent: 'center',
+                              alignSelf: 'center',
+                            }}>
+                            {/* <Block center marginBottom={10}>
+                            <Lottie
+                              width={64}
+                              height={64}
+                              source={require('../assets/json/water.json')}
+                              progress={animationProgress.current}
+                            />
+                          </Block> */}
+                            <Image
+                              center
+                              source={require('../assets/icons/glass.png')}
+                              height={40}
+                              width={40}></Image>
+                          </Block>
+                          <Block row center marginTop={10}>
+                            <Block flex={0} marginRight={5}>
+                              <Button info onPress={decreaseWater}>
+                                <Text bold white p>
+                                  -
+                                </Text>
+                              </Button>
+                            </Block>
+                            <Block flex={0}>
+                              <Button
+                                info
+                                marginLeft={5}
+                                onPress={increaseWater}>
+                                <Text bold white>
+                                  {' '}
+                                  +{' '}
+                                </Text>
+                              </Button>
+                            </Block>
+                          </Block>
+                        </Block>
+                        <Block flex={1} center>
+                       
+                          <Block transform={[{rotate: '-90deg'}]} centerContent flex={0} width={100} margin={-20}>
+                            {/* <Lottie
+                             source={require('../assets/json/water2.json')} // Replace with the path to your fill animation JSON file
+                             autoPlay={false}
+                             loop={false}
+                             style={{ width: 50, height: 100, position: 'absolute', bottom: 0 }}
+                            >
+
+                            </Lottie> */}
+                            <Progress.Bar
+                              progress={waterAmount}
+                              width={100}
+                              height={10}
+                              color="skyblue"></Progress.Bar>
+                          </Block>
                         </Block>
                       </Block>
                     </Block>
@@ -2389,6 +2516,20 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
   );
 };
 const styles = StyleSheet.create({
+  progressBar: {
+    width: 10,
+    height: 100,
+    backgroundColor: '#ccc',
+    borderRadius: 15,
+  },
+  progressBarFill: {
+    backgroundColor: 'skyblue',
+    borderRadius: 15,
+  },
+  progressText: {
+    fontSize: 16,
+    marginVertical: 10,
+  },
   container1: {
     flex: 1,
     backgroundColor: '#22faa0',

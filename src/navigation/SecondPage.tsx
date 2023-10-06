@@ -60,19 +60,19 @@ export default function SecondPage({navigation, route}) {
   const {following, trending} = useData();
   const [products, setProducts] = useState(following);
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerBackground: () => (
-        <Image
-          radius={0}
-          resizeMode="cover"
-          width={sizes.width}
-          height={headerHeight}
-          source={assets.header4}
-        />
-      ),
-    });
-  }, [assets.header4, navigation, sizes.width, headerHeight]);
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerBackground: () => (
+  //       <Image
+  //         radius={0}
+  //         resizeMode="cover"
+  //         width={sizes.width}
+  //         height={headerHeight}
+  //         source={assets.header4}
+  //       />
+  //     ),
+  //   });
+  // }, [assets.header4, navigation, sizes.width, headerHeight]);
   const animationProgress = useRef(new Animated.Value(0));
 
   useEffect(() => {

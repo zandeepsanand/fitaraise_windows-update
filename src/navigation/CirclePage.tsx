@@ -107,7 +107,7 @@ const CirclePage = ({route, navigation}) => {
       console.log('Data saved successfully.');
   
       // Navigate to the desired screen with the parameters
-      navigation.navigate('Menu', {
+      navigation.navigate('Loading', {
        
     
           data,

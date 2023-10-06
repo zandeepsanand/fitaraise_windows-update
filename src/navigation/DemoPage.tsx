@@ -64,20 +64,20 @@ export default function DemoPage({navigation, route}) {
       useNativeDriver: false,
     }).start();
   }, []);
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerBackground: () => (
-        <Image
-          radius={0}
-          resizeMode="cover"
-          width={sizes.width}
-          height={headerHeight}
-          source={assets.header4}
-        />
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerBackground: () => (
+  //       <Image
+  //         radius={0}
+  //         resizeMode="cover"
+  //         width={sizes.width}
+  //         height={headerHeight}
+  //         source={assets.header4}
+  //       />
 
-      ),
-    });
-  }, [assets.header4, navigation, sizes.width, headerHeight]);
+  //     ),
+  //   });
+  // }, [assets.header4, navigation, sizes.width, headerHeight]);
 
 
 

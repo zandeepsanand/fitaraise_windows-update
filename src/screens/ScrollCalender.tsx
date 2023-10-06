@@ -76,6 +76,7 @@ export default function ScrollCalender({formDataCopy, onDateChange}) {
           onDateSelected={handleDateSelected}
           // dayContainerStyle={{height:45}}
           // scrollerPaging={{height:10}}
+          
       
 
          

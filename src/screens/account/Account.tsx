@@ -5,6 +5,7 @@ import React, {useContext} from 'react';
 import {Block, Image, Text} from '../../components';
 import {TouchableOpacity} from 'react-native';
 import LoginContext from '../../hooks/LoginContext';
+import { CommonActions } from '@react-navigation/native';
 
 export default function Account({route ,navigation}) {
   const {formData} = route.params ?? {};
@@ -20,7 +21,12 @@ export default function Account({route ,navigation}) {
 
     // Call the logout function to log the user out
     logout();
-    navigation.navigate('loginNew');
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'loginNew' }],
+      })
+    );
   };
   return (
     <Block safe marginTop={15}>
@@ -153,15 +159,15 @@ export default function Account({route ,navigation}) {
                   color={'green'}
                   width={25}
                   height={25}
-                  source={require('../../assets/icons/bell2.png')}></Image>
+                  source={require('../../assets/icons/settings1.png')}></Image>
               </Block>
               <Block flex={1} paddingLeft={20} paddingTop={15}>
                 <Block flex={0} center>
                   <Text p semibold>
-                    Notification
+                    Settings
                   </Text>
                   <Text semibold secondary opacity={0.5} paddingTop={5}>
-                    Make Changes to your notifictations
+                    Make Changes to your settings
                   </Text>
                 </Block>
               </Block>
@@ -277,7 +283,7 @@ export default function Account({route ,navigation}) {
                   color={'green'}
                   width={25}
                   height={25}
-                  source={require('../../assets/icons/bell2.png')}></Image>
+                  source={require('../../assets/icons/support.png')}></Image>
               </Block>
               <Block flex={1} paddingLeft={20} paddingTop={15}>
                 <Block flex={0} center>

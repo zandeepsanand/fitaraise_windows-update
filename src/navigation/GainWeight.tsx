@@ -30,19 +30,19 @@ export default function GainWeight({navigation, route}) {
   const [weeklyGoal, setWeeklyGoal] = React.useState('');
   const [gainDatas , setGainDatas] = React.useState([]);
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerBackground: () => (
-        <Image
-          radius={0}
-          resizeMode="cover"
-          width={sizes.width}
-          height={headerHeight}
-          source={assets.header3}
-        />
-      ),
-    });
-  }, [assets.header3, navigation, sizes.width, headerHeight]);
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerBackground: () => (
+  //       <Image
+  //         radius={0}
+  //         resizeMode="cover"
+  //         width={sizes.width}
+  //         height={headerHeight}
+  //         source={assets.header3}
+  //       />
+  //     ),
+  //   });
+  // }, [assets.header3, navigation, sizes.width, headerHeight]);
   const animationProgress = useRef(new Animated.Value(0));
   useEffect(() => {
 

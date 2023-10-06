@@ -1552,19 +1552,19 @@ const Components = ({route, navigation}) => {
   // const navigation = useNavigation();
   const headerHeight = useHeaderHeight();
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerBackground: () => (
-        <Image
-          radius={0}
-          resizeMode="cover"
-          width={sizes.width}
-          height={headerHeight}
-          source={assets.header3}
-        />
-      ),
-    });
-  }, [assets.header3, navigation, sizes.width, headerHeight]);
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerBackground: () => (
+  //       <Image
+  //         radius={0}
+  //         resizeMode="cover"
+  //         width={sizes.width}
+  //         height={headerHeight}
+  //         source={assets.header3}
+  //       />
+  //     ),
+  //   });
+  // }, [assets.header3, navigation, sizes.width, headerHeight]);
 
   return (
     <Block safe>

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, { useEffect } from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import {Articles, Components, Home, Profile, Register, Pro} from '../screens';
@@ -10,6 +10,7 @@ import LoginScreenNew from './LoginPageNew';
 import TabNavigator from './TabNavigator';
 import DemoAlert from '../screens/alert/DemoAlert';
 import Account from '../screens/account/Account';
+import NotFoundPage from '../screens/error/ErrorPage';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,12 @@ export default ({data, formDataCopy, dietPlan}) => {
   // console.log('ScreensStack Component - DietPlan:', dietPlan);
   const formData = formDataCopy;
   // console.log(formData , "check");
+  useEffect(() => {
+    // Navigate to the "Screens" screen when the Menu component is first loaded
+    console.log(data , "updatess diet plan screen");
+    
+   
+  }, [data , dietPlan, formDataCopy]);
   
   const {t} = useTranslation();
   const screenOptions = useScreenOptions();
@@ -59,6 +66,21 @@ export default ({data, formDataCopy, dietPlan}) => {
       <Stack.Screen
         name="Register"
         component={Register}
+        options={{headerShown: false}}
+      />
+         <Stack.Screen
+        name="NotFoundPage"
+        component={NotFoundPage}
+        options={{headerShown: false}}
+      />
+         <Stack.Screen
+        name="NotFoundPage2"
+        component={NotFoundPage}
+        options={{headerShown: false}}
+      />
+       <Stack.Screen
+        name="NotFoundPage3"
+        component={NotFoundPage}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

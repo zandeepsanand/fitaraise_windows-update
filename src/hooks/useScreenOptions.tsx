@@ -45,7 +45,7 @@ export default () => {
           style={{marginRight: sizes.sm}}
           onPress={() =>
             navigation.navigate('Screens', {
-              screen: 'Register',
+              screen: 'NotFoundPage',
             })
           }>
           <Image source={icons.bell} radius={0} color={colors.icon} />
@@ -62,7 +62,7 @@ export default () => {
         <TouchableOpacity
           onPress={() =>
             navigation.navigate('Screens', {
-              screen: 'Tab',
+              screen: 'NotFoundPage',
             })
           }>
           <Image source={icons.kcal} radius={0} color={colors.icon} style={{width:20,height:20}}/>
