@@ -19,7 +19,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 import {log} from 'react-native-reanimated';
 import _ from 'lodash'; // Import Lodash
 import api from '../../../api';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 type Movie = {
   id: string;
@@ -754,7 +754,7 @@ const EveningSingle = ({route, navigation}) => {
                         </Block>
                       </TouchableOpacity>
                       {expanded && selectedItemId === item.details.id && (
-                        <Block flex={2} style={{height: 1000}}>
+                        <Block flex={2} style={{height: 900}}>
                           <Block
                             card
                             row
@@ -897,19 +897,7 @@ const EveningSingle = ({route, navigation}) => {
                                     {item.details.totalVitaminAIU}
                                   </Text>
                                 </Block>
-                                <Block
-                                  style={styles.row}
-                                  flex={0}
-                                  card
-                                  margin={1}>
-                                  <Text style={styles.data} center semibold>
-                                    Vitamin A Retinol Activity Equivalents (RAE)
-                                    :
-                                  </Text>
-                                  <Text style={styles.data} center>
-                                    {item.details.totalVitaminARAE}
-                                  </Text>
-                                </Block>
+
                                 <Block
                                   style={styles.row}
                                   flex={0}

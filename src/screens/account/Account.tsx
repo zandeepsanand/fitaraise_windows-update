@@ -51,7 +51,7 @@ export default function Account({route ,navigation}) {
               <Text h5 semibold white>
                 {formData.first_name} {formData.last_name}
               </Text>
-              <Text p semibold white secondary>
+              <Text p semibold white secondary size={13}>
                 @gmail.com
               </Text>
             </Block>
@@ -90,7 +90,7 @@ export default function Account({route ,navigation}) {
                   <Text p semibold>
                     My Account
                   </Text>
-                  <Text semibold secondary opacity={0.5} paddingTop={5}>
+                  <Text semibold secondary opacity={0.5} paddingTop={5 } size={12}>
                     Make Changes to your account
                   </Text>
                 </Block>
@@ -128,7 +128,7 @@ export default function Account({route ,navigation}) {
                   <Text p semibold>
                     Notification
                   </Text>
-                  <Text semibold secondary opacity={0.5} paddingTop={5}>
+                  <Text semibold secondary opacity={0.5} paddingTop={5} size={12}>
                     Make Changes to your notifictations
                   </Text>
                 </Block>
@@ -166,7 +166,7 @@ export default function Account({route ,navigation}) {
                   <Text p semibold>
                     Settings
                   </Text>
-                  <Text semibold secondary opacity={0.5} paddingTop={5}>
+                  <Text semibold secondary opacity={0.5} paddingTop={5} size={12}>
                     Make Changes to your settings
                   </Text>
                 </Block>
@@ -252,7 +252,7 @@ export default function Account({route ,navigation}) {
                   <Text p semibold>
                     Share App
                   </Text>
-                  <Text semibold secondary opacity={0.5} paddingTop={5}>
+                  <Text semibold secondary opacity={0.5} paddingTop={5} size={12}>
                     Share to your friends
                   </Text>
                 </Block>

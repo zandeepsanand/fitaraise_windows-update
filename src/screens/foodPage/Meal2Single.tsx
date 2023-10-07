@@ -492,7 +492,7 @@ const Meal2Single = ({route, navigation}) => {
               navigation.navigate('searchfood', {
                 mealType: 'meal2',
                 meal_type,
-                formDataCopy
+                formDataCopy,
               })
             }>
             <Block
@@ -757,7 +757,7 @@ const Meal2Single = ({route, navigation}) => {
                         </Block>
                       </TouchableOpacity>
                       {expanded && selectedItemId === item.details.id && (
-                        <Block flex={2} style={{height: 1000}}>
+                        <Block flex={2} style={{height: 900}}>
                           <Block
                             card
                             row
@@ -900,19 +900,7 @@ const Meal2Single = ({route, navigation}) => {
                                     {item.details.totalVitaminAIU}
                                   </Text>
                                 </Block>
-                                <Block
-                                  style={styles.row}
-                                  flex={0}
-                                  card
-                                  margin={1}>
-                                  <Text style={styles.data} center semibold>
-                                    Vitamin A Retinol Activity Equivalents (RAE)
-                                    :
-                                  </Text>
-                                  <Text style={styles.data} center>
-                                    {item.details.totalVitaminARAE}
-                                  </Text>
-                                </Block>
+
                                 <Block
                                   style={styles.row}
                                   flex={0}

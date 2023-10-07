@@ -1,17 +1,18 @@
 /* eslint-disable prettier/prettier */
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useData, useTheme, useTranslation} from '../../hooks';
 import {Block, Button, Image, Input, Product, Text} from '../../components/';
 import {StatusBar as ExpoStatusBar} from 'expo-status-bar';
 import {StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const WorkoutFirstPage = ({
   navigation,
   route: {
-    params: {workoutData},
+    params: { workoutData }, // Renamed to avoid naming conflict
   },
 }) => {
-  console.log(workoutData);
+  console.log(workoutData , "workout data");
   
   const {t} = useTranslation();
   const [tab, setTab] = useState<number>(0);
@@ -26,6 +27,11 @@ const WorkoutFirstPage = ({
     },
     [following, trending, setTab, setProducts],
   );
+
+
+
+
+ 
 
   return (
     <Block>

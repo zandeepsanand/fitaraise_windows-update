@@ -19,7 +19,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 import {log} from 'react-native-reanimated';
 import _ from 'lodash'; // Import Lodash
 import api from '../../../api';
-import { TouchableWithoutFeedback } from 'react-native';
+import {TouchableWithoutFeedback} from 'react-native';
 
 type Movie = {
   id: string;
@@ -370,7 +370,7 @@ const MorningSnackSingle = ({route, navigation}) => {
         try {
           await addMorningSnackItem(item, mealDetails);
 
-          console.log(item, mealDetails,'morng snack added successfully');
+          console.log(item, mealDetails, 'morng snack added successfully');
           // Handle any post-addition logic or navigation here
         } catch (error) {
           console.error('Error adding breakfast item:', error);
@@ -467,7 +467,7 @@ const MorningSnackSingle = ({route, navigation}) => {
           </Text>
         ) : (
           <Text bold padding={10}>
-            Morning Snack Items
+            Morning Snacks
           </Text>
         )}
 
@@ -764,8 +764,8 @@ const MorningSnackSingle = ({route, navigation}) => {
                           )}
                         </Block>
                       </TouchableOpacity>
-                      {expanded && selectedItemId === item.details.food_id && (
-                        <Block flex={2} style={{height: 1000}}>
+                      {expanded && selectedItemId === item.details.id && (
+                        <Block flex={2} style={{height: 900}}>
                           <Block
                             card
                             row
@@ -908,19 +908,7 @@ const MorningSnackSingle = ({route, navigation}) => {
                                     {item.details.totalVitaminAIU}
                                   </Text>
                                 </Block>
-                                <Block
-                                  style={styles.row}
-                                  flex={0}
-                                  card
-                                  margin={1}>
-                                  <Text style={styles.data} center semibold>
-                                    Vitamin A Retinol Activity Equivalents (RAE)
-                                    :
-                                  </Text>
-                                  <Text style={styles.data} center>
-                                    {item.details.totalVitaminARAE}
-                                  </Text>
-                                </Block>
+                                {/*  */}
                                 <Block
                                   style={styles.row}
                                   flex={0}

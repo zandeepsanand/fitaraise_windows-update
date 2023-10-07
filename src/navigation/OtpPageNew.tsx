@@ -227,7 +227,7 @@ const OtpPageNew = ({
               <Text style={styles.content} center>
                 We will send you a one time password on this{' '}
                 <Text bold>Mobile Number</Text>
-                <Text style={styles.phoneNumberText}> 8606783324 </Text>
+                <Text style={styles.phoneNumberText}> {formData.mobile_number}</Text>
               </Text>
               <Block style={styles.otpContainer}>
                 <Block style={styles.otpBox}>

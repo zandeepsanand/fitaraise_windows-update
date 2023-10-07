@@ -957,7 +957,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                               });
                             }}>
                             <Text p black semibold center padding={10}>
-                              Morning Snack
+                              Morning Snack ({totalMorningSnackCalorie}) kcal
                             </Text>
                           </TouchableOpacity>
                           //   <TouchableOpacity onPress={toggleExpand}>
@@ -1439,7 +1439,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                               })
                             }>
                             <Text p black semibold center padding={10}>
-                              Evening Snack
+                              Evening Snack ({totalEveningSnackCalorie}) kcal
                             </Text>
                           </TouchableOpacity>
                         )}
@@ -1904,7 +1904,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                             }}>
                             <Text p black semibold center padding={10}>
                               {' '}
-                              Meals 1
+                              Meals 1 ({totalMeal1Calorie}) kcal
                             </Text>
                           </TouchableOpacity>
                         ) : (
@@ -1918,7 +1918,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                               });
                             }}>
                             <Text p black semibold center padding={10}>
-                              Meal 1
+                              Meal 1 ({totalMeal1Calorie}) kcal
                             </Text>
                           </TouchableOpacity>
                         )}
@@ -2130,7 +2130,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                             }>
                             <Text p black semibold center padding={10}>
                               {' '}
-                              Meals 2 kcal
+                              Meals 2 ({totalMeal2Calorie})  kcal
                             </Text>
                           </TouchableOpacity>
                         ) : (
@@ -2144,7 +2144,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                               })
                             }>
                             <Text p black semibold center padding={10}>
-                              Meal 2 kcal
+                              Meal 2 ({totalMeal2Calorie}) kcal
                             </Text>
                           </TouchableOpacity>
                         )}

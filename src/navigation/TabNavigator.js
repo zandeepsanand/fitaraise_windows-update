@@ -22,8 +22,13 @@ const TabNavigator = ({route}) => {
     // Navigate to the "Screens" screen when the Menu component is first loaded
     console.log(data , "updatess diet plan tab");
     
+    
    
   }, [data , dietPlan, formDataCopy]);
+  const workoutData = formDataCopy;
+ 
+  console.log(workoutData , "workout data");
+
   return (
     <Tab.Navigator 
     initialRouteName="pie" // Set the initial tab to "Home"
@@ -55,7 +60,7 @@ const TabNavigator = ({route}) => {
       <Tab.Screen
         name="workout"
         component={WorkoutFirstPage}
-        initialParams={{ data,dietPlan,formDataCopy }}
+        initialParams={{ data,dietPlan,workoutData }}
         options={{
           headerShown: false,
 

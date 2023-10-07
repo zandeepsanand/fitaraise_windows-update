@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {useCallback, useEffect, useState} from 'react';
 import {useData, useTheme, useTranslation} from '../../../hooks';
 import {Block, Button, Image, Input, Product, Text} from '../../../components/';
@@ -13,23 +14,24 @@ import SelectDropdown from 'react-native-select-dropdown';
 import HomeWorkoutCalender from './HomeWorkoutCalender';
 import axios from 'axios';
 import {BASE_URL} from '@env';
+import api from '../../../../api';
 
 const HomeWorkoutMain = ({navigation, route}) => {
   const {t} = useTranslation();
-  const {data, formDataCopy, savedDate} = route.params;
+  const { homeWorkout, workoutData, savedDate} = route.params;
   // const isSavedDateAvailable = savedDate !== undefined && savedDate !== null;
   // console.log(isSavedDateAvailable, 'saved mdate from congrats page ');
 
-  console.log(data, 'haiii');
+  console.log(homeWorkout, 'haiii');
 
   const [tab, setTab] = useState<number>(0);
   const {following, trending} = useData();
   const [products, setProducts] = useState(following);
   const {assets, colors, fonts, gradients, sizes} = useTheme();
   const [selectedLevel, setSelectedLevel] = useState(
-    formDataCopy.workout_level,
+    workoutData.workout_level,
   );
-  const [data2, setData2] = useState(data);
+  const [data2, setData2] = useState(homeWorkout);
   console.log(data2, 'testing');
 
   const handleProducts = useCallback(
@@ -42,16 +44,16 @@ const HomeWorkoutMain = ({navigation, route}) => {
   const handleWorkoutClick = (workout) => {
     // Call the API with workoutId and fetch exercise details
     // Once you have the exercise data, navigate to the 'HomeWorkoutAll' screen
-    navigation.navigate('HomeWorkoutAll', {workout, data});
+    navigation.navigate('HomeWorkoutAll', {workout, homeWorkout});
     // console.log(workout);
   };
   const handleLevelChange = (level) => {
     setSelectedLevel(level);
     if (['beginner', 'intermediate', 'expert'].includes(level)) {
       // Make an Axios API call here with the selected level
-      axios
+      api
         .get(
-          `${BASE_URL}get_home_workouts?gender=${formDataCopy.gender}&level=${level}`,
+          `get_home_workouts?gender=${workoutData.gender}&level=${level}`,
         )
         .then((response) => {
           // Handle the API response here

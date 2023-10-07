@@ -9,7 +9,6 @@ import {
   SectionList,
   StyleSheet,
   View,
-  
 } from 'react-native';
 import Axios from 'axios';
 import {FlatList} from 'react-native';
@@ -89,7 +88,7 @@ const FoodPage = ({route, navigation}) => {
   const handleEditButtonClick = (itemId) => {
     console.log(itemId);
     setEditItemId(itemId.details.id);
-    setEditItemName(itemId.id)
+    setEditItemName(itemId.id);
   };
 
   const [isEditFormVisible, setIsEditFormVisible] = useState(false);
@@ -104,7 +103,6 @@ const FoodPage = ({route, navigation}) => {
     addBreakfastItem,
   } = useContext(MealContext);
   // console.log(breakfastItems[6] ,"first one");
-  
 
   const {assets, colors, gradients, sizes, fonts, user} = useTheme();
   const [selectedValue, setSelectedValue] = useState(245);
@@ -143,108 +141,113 @@ const FoodPage = ({route, navigation}) => {
     debouncedHandleEdit(item);
   };
 
-//   function handleEdit(item) {
-//     // console.log(item , "check item ");
-    
-//     setIsEditMode(true);
-// const food_id =api.get(`get_food_items/${item.food_name}`).then((res)=>{
-//   console.log("food items ", res.data )
-// })
+  //   function handleEdit(item) {
+  //     // console.log(item , "check item ");
 
+  //     setIsEditMode(true);
+  // const food_id =api.get(`get_food_items/${item.food_name}`).then((res)=>{
+  //   console.log("food items ", res.data )
+  // })
 
+  //     api
+  //       .get(`get_serving_desc_by_food_id/${item.id}`)
+  //       .then((response) => {
+  //         console.log(response.data.data , "the food details");
 
-//     api
-//       .get(`get_serving_desc_by_food_id/${item.id}`)
-//       .then((response) => {
-//         console.log(response.data.data , "the food details");
-        
-//         setServingDetailsFull(response.data.data.serving_desc);
-//         const servingNames = response.data.data.serving_desc.map(
-//           (serving) => serving.name,
-//         );
-//         const servingId = response.data.data.serving_desc.map(
-//           (serving) => serving.id,
-//         );
-//         servingId.unshift(4792);
-//         const servingInitialGram = response.data.data.serving_desc.map(
-//           (serving) => serving.weight,
-//         );
-//         const servingGrams = response.data.data.serving_desc.map(
-//           (serving) => `${serving.name} (${serving.weight} g)`,
-//         );
-//         servingInitialGram.unshift(100);
-//         setServingId(servingId[0]);
-//         setServingDetails(servingNames);
-//         nutritionCalculation(item);
-//         setServingGrams(servingGrams);
-//         setInitialGram(item.details.selectedWeight);
-//         servingGrams.unshift('100 g');
-//         setSelectedDropDown(item.details.selectedDropDown);
-//       })
-//       .catch((error) => {
-//         console.error(error);
-//         setIsEditMode(false);
-//       });
-//   }
-function handleEdit(item) {
-  setIsEditMode(true);
+  //         setServingDetailsFull(response.data.data.serving_desc);
+  //         const servingNames = response.data.data.serving_desc.map(
+  //           (serving) => serving.name,
+  //         );
+  //         const servingId = response.data.data.serving_desc.map(
+  //           (serving) => serving.id,
+  //         );
+  //         servingId.unshift(4792);
+  //         const servingInitialGram = response.data.data.serving_desc.map(
+  //           (serving) => serving.weight,
+  //         );
+  //         const servingGrams = response.data.data.serving_desc.map(
+  //           (serving) => `${serving.name} (${serving.weight} g)`,
+  //         );
+  //         servingInitialGram.unshift(100);
+  //         setServingId(servingId[0]);
+  //         setServingDetails(servingNames);
+  //         nutritionCalculation(item);
+  //         setServingGrams(servingGrams);
+  //         setInitialGram(item.details.selectedWeight);
+  //         servingGrams.unshift('100 g');
+  //         setSelectedDropDown(item.details.selectedDropDown);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //         setIsEditMode(false);
+  //       });
+  //   }
+  function handleEdit(item) {
+    setIsEditMode(true);
 
-  // Fetch food_id
-  const food_id = api.get(`get_food_items/${item.food_name}`)
-    .then((res) => {
-      console.log( res.data.data , "hallo ");
+    // Fetch food_id
+    const food_id = api
+      .get(`get_food_items/${item.food_name}`)
+      .then((res) => {
+        console.log(res.data.data, 'hallo ');
 
-      // Check if food_id is available
-      if (res.data) {
-        // Execute another function if food_id is available
-        anotherFunction(res.data);
+        // Check if food_id is available
+        if (res.data) {
+          // Execute another function if food_id is available
+          anotherFunction(res.data);
 
-        // Continue with the rest of your code
-        api.get(`get_serving_desc_by_food_id/${item.id}`)
-          .then((response) => {
-            console.log(response.data.data, "the food details");
+          // Continue with the rest of your code
+          api
+            .get(`get_serving_desc_by_food_id/${item.id}`)
+            .then((response) => {
+              console.log(response.data.data, 'the food details');
 
-            setServingDetailsFull(response.data.data.serving_desc);
-            const servingNames = response.data.data.serving_desc.map((serving) => serving.name);
-            const servingId = response.data.data.serving_desc.map((serving) => serving.id);
-            servingId.unshift(4792);
-            const servingInitialGram = response.data.data.serving_desc.map((serving) => serving.weight);
-            const servingGrams = response.data.data.serving_desc.map(
-              (serving) => `${serving.name} (${serving.weight} g)`
-            );
-            servingInitialGram.unshift(100);
-            setServingId(servingId[0]);
-            setServingDetails(servingNames);
-            nutritionCalculation(item);
-            setServingGrams(servingGrams);
-            setInitialGram(item.details.selectedWeight);
-            servingGrams.unshift('100 g');
-            setSelectedDropDown(item.details.selectedDropDown);
-          })
-          .catch((error) => {
-            console.error(error);
-            setIsEditMode(false);
-          });
-      } else {
-        // Handle the case when food_id is not available
-        console.error("food_id not available");
+              setServingDetailsFull(response.data.data.serving_desc);
+              const servingNames = response.data.data.serving_desc.map(
+                (serving) => serving.name,
+              );
+              const servingId = response.data.data.serving_desc.map(
+                (serving) => serving.id,
+              );
+              servingId.unshift(4792);
+              const servingInitialGram = response.data.data.serving_desc.map(
+                (serving) => serving.weight,
+              );
+              const servingGrams = response.data.data.serving_desc.map(
+                (serving) => `${serving.name} (${serving.weight} g)`,
+              );
+              servingInitialGram.unshift(100);
+              setServingId(servingId[0]);
+              setServingDetails(servingNames);
+              nutritionCalculation(item);
+              setServingGrams(servingGrams);
+              setInitialGram(item.details.selectedWeight);
+              servingGrams.unshift('100 g');
+              setSelectedDropDown(item.details.selectedDropDown);
+            })
+            .catch((error) => {
+              console.error(error);
+              setIsEditMode(false);
+            });
+        } else {
+          // Handle the case when food_id is not available
+          console.error('food_id not available');
+          setIsEditMode(false);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
         setIsEditMode(false);
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      setIsEditMode(false);
-    });
-}
+      });
+  }
 
-// Define another function to be executed if food_id is available
-function anotherFunction(foodData) {
-  // Your code to handle foodData goes here
-  console.log("Executing anotherFunction with foodData:", foodData);
-}
+  // Define another function to be executed if food_id is available
+  function anotherFunction(foodData) {
+    // Your code to handle foodData goes here
+    console.log('Executing anotherFunction with foodData:', foodData);
+  }
 
-// Replace the code inside anotherFunction with your specific logic for handling foodData
-
+  // Replace the code inside anotherFunction with your specific logic for handling foodData
 
   function nutritionCalculation(item, selectedWeight1) {
     // without selecting the dropdown menu for calculation
@@ -431,8 +434,7 @@ function anotherFunction(foodData) {
     mealType,
     meal_type,
   };
-  console.log(id , "db id ");
-  
+  console.log(id, 'db id ');
 
   const handleAddFood = async (item) => {
     setIsEditMode(false);
@@ -604,35 +606,38 @@ function anotherFunction(foodData) {
                 color="#eaefff"
                 flex={0.5}>
                 <Block row align="center">
-                <Block flex={0}>
-                  {item.image ===
-                  'https://admin.fitaraise.com/storage/uploads/app_images/no_image.png' ? (
-                
-                    <Block flex={0}
-                      style={{
-                        width: 50,
-                        height: 50,
-                        backgroundColor: '#fff',
-                        borderRadius: sizes.s,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}
-                      marginLeft={sizes.s}>
-                      <Text style={{fontSize: 50, color: '#fff'}} bold primary>
-                        {item.food_name.charAt(0)}
-                      </Text>
-                    </Block>
-                  ) : (
-                    <Image
-                      source={{uri: `${item.image}`}}
-                      style={{
-                        width: 50,
-                        height: 50,
-                      }}
-                      marginLeft={sizes.s}
-                    />
-                  )}
-                </Block>
+                  <Block flex={0}>
+                    {item.image ===
+                    'https://admin.fitaraise.com/storage/uploads/app_images/no_image.png' ? (
+                      <Block
+                        flex={0}
+                        style={{
+                          width: 50,
+                          height: 50,
+                          backgroundColor: '#fff',
+                          borderRadius: sizes.s,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                        marginLeft={sizes.s}>
+                        <Text
+                          style={{fontSize: 50, color: '#fff'}}
+                          bold
+                          primary>
+                          {item.food_name.charAt(0)}
+                        </Text>
+                      </Block>
+                    ) : (
+                      <Image
+                        source={{uri: `${item.image}`}}
+                        style={{
+                          width: 50,
+                          height: 50,
+                        }}
+                        marginLeft={sizes.s}
+                      />
+                    )}
+                  </Block>
                   <Block flex={3} style={{alignSelf: 'center'}}>
                     <Text p black semibold center padding={10}>
                       {item.food_name} ({item.details.totalCalorie}kcal)
@@ -675,7 +680,9 @@ function anotherFunction(foodData) {
                 </Block>
                 <Block margin={0}>
                   <Block margin={0} paddingTop={10} paddingLeft={10}>
-                    {isEditMode && (editItemId === item.details.id) && (editItemName === item.id) ? (
+                    {isEditMode &&
+                    editItemId === item.details.id &&
+                    editItemName === item.id ? (
                       <Block
                         row
                         style={{alignSelf: 'center'}}
@@ -852,7 +859,7 @@ function anotherFunction(foodData) {
                         </Block>
                       </TouchableWithoutFeedback>
                       {expanded && selectedItemId === item.details.id && (
-                        <Block flex={2} style={{height: 1000}}>
+                        <Block flex={2} style={{height: 900}}>
                           <Block
                             card
                             row
@@ -995,19 +1002,7 @@ function anotherFunction(foodData) {
                                     {item.details.totalVitaminAIU}
                                   </Text>
                                 </Block>
-                                <Block
-                                  style={styles.row}
-                                  flex={0}
-                                  card
-                                  margin={1}>
-                                  <Text style={styles.data} center semibold>
-                                    Vitamin A Retinol Activity Equivalents (RAE)
-                                    :
-                                  </Text>
-                                  <Text style={styles.data} center>
-                                    {item.details.totalVitaminARAE}
-                                  </Text>
-                                </Block>
+
                                 <Block
                                   style={styles.row}
                                   flex={0}

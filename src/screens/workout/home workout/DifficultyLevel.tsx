@@ -7,26 +7,26 @@ import {StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
 import DuoToggleSwitch from 'react-native-duo-toggle-switch';
 import Ripple from 'react-native-material-ripple';
 // import ErrorModal from './ErrorModal';
-const formData = {
-  acitivity_level: 'sedentary',
-  age: '29',
-  customer_id: '14',
-  device_token: '',
-  dob: '',
-  email: 'saasaee@gmail.com',
-  first_name: '',
-  gender: '',
-  height: '',
-  height_unit: '',
-  image: '',
-  is_vegetarian: '',
-  last_name: '',
-  mobile_number: '',
-  weekly_goal: '',
-  weight: '',
-  weight_unit: '',
-  weight_want_to: '',
-};
+// const formData = {
+//   acitivity_level: 'sedentary',
+//   age: '29',
+//   customer_id: '14',
+//   device_token: '',
+//   dob: '',
+//   email: 'saasaee@gmail.com',
+//   first_name: '',
+//   gender: '',
+//   height: '',
+//   height_unit: '',
+//   image: '',
+//   is_vegetarian: '',
+//   last_name: '',
+//   mobile_number: '',
+//   weekly_goal: '',
+//   weight: '',
+//   weight_unit: '',
+//   weight_want_to: '',
+// };
 
 const DifficultyLevel = ({
   navigation,

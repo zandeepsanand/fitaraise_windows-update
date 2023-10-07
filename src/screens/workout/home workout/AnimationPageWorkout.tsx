@@ -28,6 +28,8 @@ import {BASE_URL} from '@env';
   } from 'react-native';
   import {useNavigation} from '@react-navigation/core';
   import {useHeaderHeight} from '@react-navigation/stack';
+import api from '../../../../api';
+import { log } from 'react-native-reanimated';
   
   export default function AnimationPageWorkout({navigation, route}) {
     const {assets, fonts, sizes, gradients, colors} = useTheme();
@@ -54,25 +56,27 @@ import {BASE_URL} from '@env';
     
           const fetchData = async () => {
             try {
-              const response = await axios.post(
-                `${BASE_URL}set_personal_datas`,
-                formDataCopy,
+              const response = await api.post(
+                `set_personal_datas`,
+                workoutData,
               );
-           
+              console.log(response , "what");
+              
+                
     
               if (response.data.success) {
                
                 
                 // Call the second API
-                const secondApiResponse = await axios.get(
-                  `${BASE_URL}get_home_workouts?gender=${formDataCopy.gender}&level=${formDataCopy.workout_level}`,
+                const secondApiResponse = await api.get(
+                  `get_home_workouts?gender=${workoutData.gender}&level=${workoutData.workout_level}`,
                 );
                 // Do something with the second API response
-                const data = secondApiResponse.data.data;
+                const homeWorkout = secondApiResponse.data.data;
                 // setData(secondApiResponse.data.data);
-                console.log(data, 'the data of second apifffff');
-                if (data === null) {
-                   alert('some error occur');
+                console.log(homeWorkout, 'the data of second apifffff');
+                if (homeWorkout === null) {
+                   alert('Network error occur');
                 } else {
                   console.log('success');
                   setTimeout(() => {
@@ -80,7 +84,7 @@ import {BASE_URL} from '@env';
                     // navigation.navigate('HomeWorkoutMain', { data, formDataCopy });
                     navigation.navigate('HomeTabNavigator', {
                       screen: 'HomeWorkoutMain', // Screen name within the TabNavigator
-                      params: { data, formDataCopy}, // Pass your parameters here
+                      params: { homeWorkout, workoutData}, // Pass your parameters here
                     });
                   }, 2000);
                 }
