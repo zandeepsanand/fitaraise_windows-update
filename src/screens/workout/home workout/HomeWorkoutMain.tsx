@@ -44,7 +44,7 @@ const HomeWorkoutMain = ({navigation, route}) => {
   const handleWorkoutClick = (workout) => {
     // Call the API with workoutId and fetch exercise details
     // Once you have the exercise data, navigate to the 'HomeWorkoutAll' screen
-    navigation.navigate('HomeWorkoutAll', {workout, homeWorkout});
+    navigation.navigate('HomeWorkoutAll', {workout});
     // console.log(workout);
   };
   const handleLevelChange = (level) => {
@@ -76,7 +76,16 @@ const HomeWorkoutMain = ({navigation, route}) => {
   }, []);
 
   return (
-    <Block scroll showsVerticalScrollIndicator={false}>
+    <Block safe paddingTop={10}>
+
+    
+    <Block
+     scroll
+     paddingHorizontal={sizes.s}
+     showsVerticalScrollIndicator={false}
+     contentContainerStyle={{paddingBottom: sizes.padding}}
+    
+    >
       {isLoading && (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop:140}}>
           <ActivityIndicator size="large" color="blue" />
@@ -188,6 +197,7 @@ const HomeWorkoutMain = ({navigation, route}) => {
           </Block>
         </Block>
       )}
+    </Block>
     </Block>
   );
 };

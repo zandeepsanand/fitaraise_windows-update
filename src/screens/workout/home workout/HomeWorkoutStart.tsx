@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {useCallback, useEffect, useState} from 'react';
 import axios from 'axios';
 import {BASE_URL} from '@env';
@@ -19,6 +20,7 @@ import HomeWorkoutDetailsPage from './HomeWorkoutDetailsPage';
 import HomeWorkoutDetailsPageTwo from './HomeWorkoutDetailsPageTwo';
 import Timer from './Timer';
 import TimerIntermediatePage from './TimerIntermediatePage';
+import api from '../../../../api';
 
 const workoutData = [
   {name: 'Workout 1', details: 'Details of Workout 1'},
@@ -171,21 +173,17 @@ const HomeWorkoutStart = () => {
   };
 
   const handleFinish = () => {
-    axios
+    api
       .post(
-        `${BASE_URL}add_home_workout_excercises_done`,
+        `add_home_workout_excercises_done`,
         {
           customer_id,
           workout_id,
           excercise_id,
           home_workout_excercise,
           completed_date,
-        },
-        {
-          headers: {
-            Authorization: `Bearer 477|F4h2p6ibB4FFhCwx0RJLNO6rPRXhPbMttg2x1iYT`,
-          },
-        },
+        }
+        ,
       )
       .then((response) => {
         console.log(response.data);

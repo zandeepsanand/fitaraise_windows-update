@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {useCallback, useEffect, useState} from 'react';
 import {Platform, Linking, StyleSheet,TouchableWithoutFeedback} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
@@ -7,6 +8,7 @@ import {BASE_URL} from '@env';
 
 import {Block, Button, Image, Text} from '../../../components/';
 import {useData, useTheme, useTranslation} from '../../../hooks/';
+import api from '../../../../api';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -41,12 +43,8 @@ const HomeWorkoutAll = ({route}) => {
     [user],
   );
   useEffect(() => {
-    axios
-      .get(`${BASE_URL}get_home_workout_excercises/${workout.id}`, {
-        headers: {
-          Authorization: `Bearer 477|F4h2p6ibB4FFhCwx0RJLNO6rPRXhPbMttg2x1iYT`,
-        },
-      })
+    api
+      .get(`get_home_workout_excercises/${workout.id}`)
       .then((response) => {
         setExerciseData(response.data.data);
         // console.log('Exercise data after API call:', response.data.data);
@@ -55,6 +53,8 @@ const HomeWorkoutAll = ({route}) => {
         console.error('Error fetching exercise data:', error);
       });
   }, [workout.id]);
+  console.log(exerciseData);
+  
 
   return (
     <Block safe marginTop={sizes.md} marginBottom={10}>
@@ -216,7 +216,9 @@ const HomeWorkoutAll = ({route}) => {
                 marginHorizontal={10}
                 row
                 key={exercise.id}
-                marginTop={5}>
+                marginTop={5}
+                color={exercise.completed_today ? 'skyblue' : 'white'}
+                >
                 <Image
                   width={75}
                   height={75}

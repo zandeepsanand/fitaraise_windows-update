@@ -10,6 +10,8 @@ const GenderPage = ({navigation,
     params: {workoutData},
   },}) => {
   const {t} = useTranslation();
+  console.log(workoutData , "log work");
+  
  
   const {following, trending} = useData();
   const [products, setProducts] = useState(following);

@@ -86,6 +86,7 @@ import MyDrawerNavigator from './Drawer';
 import AlertCustom from '../screens/alert/AlertCustom';
 import DemoAlert from '../screens/alert/DemoAlert';
 import Account from '../screens/account/Account';
+import HomeWorkoutLoadingScreen from '../screens/workout/home workout/HomeWorkoutLoadingScreen';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
@@ -152,6 +153,11 @@ export default () => {
             <Stack.Screen
                 name="Account"
                 component={Account}
+                options={{headerShown: false}}
+              />
+                <Stack.Screen
+                name="HomeWorkoutLoadingScreen"
+                component={HomeWorkoutLoadingScreen}
                 options={{headerShown: false}}
               />
             <Stack.Screen

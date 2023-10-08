@@ -8,6 +8,7 @@ import WorkoutFirstPage from '../screens/workout/WorkoutFirstPage';
 import {Image} from '../components';
 import Account from '../screens/account/Account';
 import NotFoundPage from '../screens/error/ErrorPage';
+import HomeWorkoutLoadingScreen from '../screens/workout/home workout/HomeWorkoutLoadingScreen';
 
 
 
@@ -58,9 +59,9 @@ const TabNavigator = ({route}) => {
         }}
       />
       <Tab.Screen
-        name="workout"
+        name="fitness"
         component={WorkoutFirstPage}
-        initialParams={{ data,dietPlan,workoutData }}
+        initialParams={{ workoutData }}
         options={{
           headerShown: false,
 

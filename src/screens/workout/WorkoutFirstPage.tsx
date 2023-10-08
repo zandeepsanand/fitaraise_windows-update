@@ -8,11 +8,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const WorkoutFirstPage = ({
   navigation,
-  route: {
-    params: { workoutData }, // Renamed to avoid naming conflict
-  },
+  route
 }) => {
-  console.log(workoutData , "workout data");
+
+  const {workoutData} = route.params;
+
+  console.log(workoutData , "workout  first page");
   
   const {t} = useTranslation();
   const [tab, setTab] = useState<number>(0);
@@ -55,7 +56,7 @@ const WorkoutFirstPage = ({
           <View style={styles.container}>
             <TouchableWithoutFeedback
               onPress={() => {
-                navigation.navigate('Gender',{workoutData});
+                navigation.navigate('HomeWorkoutLoadingScreen',{workoutData});
                 handleProducts(2);
               }}>
               <Block

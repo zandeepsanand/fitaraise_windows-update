@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {createContext, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -53,6 +54,10 @@ export const LoginProvider = ({children}) => {
     try {
       // Clear the stored authentication data from AsyncStorage
       await AsyncStorage.removeItem('authData');
+      await AsyncStorage.removeItem('workoutData');
+      await AsyncStorage.removeItem('homeWorkout');
+
+
       // Clear any other necessary data or states
   
       // Optionally, you can clear the token if you have a setAuthToken function

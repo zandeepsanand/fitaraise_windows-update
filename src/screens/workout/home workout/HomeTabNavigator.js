@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // TabNavigator.js
 import React from 'react';
 import {useTheme} from '../../../hooks';
@@ -11,6 +12,7 @@ import Profile from '../../Profile';
 import HomeWorkoutMain from './HomeWorkoutMain';
 
 import Frstpage from '../../../navigation/Frstpage';
+import LoadingScreen from '../../../navigation/LoadingScreen';
 // import {Profile} from '../screens';
 
 const workoutIcon = `
@@ -36,7 +38,7 @@ const HomeTabNavigator = () => {
           tabBarLabel: 'Home',
           tabBarIcon: ({color, size}) => (
             <Image
-              source={require('../../../assets/icons/home2.png')}
+              source={require('../../../assets/icons/house.png')}
               style={{
                 tintColor: color,
                 width: size,
@@ -47,15 +49,15 @@ const HomeTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Frstpage"
-        component={Frstpage}
+        name="Loading"
+        component={LoadingScreen}
         options={{
           headerShown: false,
 
           tabBarLabel: 'Diet', // Custom tab label
           tabBarIcon: ({color, size}) => (
             <Image
-              source={require('../../../assets/icons/workout.png')} // Replace with your image source
+              source={require('../../../assets/icons/diet.png')} // Replace with your image source
               style={{tintColor: color, width: size, height: size}}
             />
           ),
@@ -70,7 +72,7 @@ const HomeTabNavigator = () => {
           tabBarLabel: 'Nutrition Facts', // Custom tab label
           tabBarIcon: ({color, size}) => (
             <Image
-              source={require('../../../assets/icons/read.png')} // Replace with your image source
+              source={require('../../../assets/icons/book.png')} // Replace with your image source
               style={{tintColor: color, width: size, height: size}}
             />
           ),

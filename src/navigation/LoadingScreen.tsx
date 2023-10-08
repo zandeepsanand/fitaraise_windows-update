@@ -38,6 +38,8 @@ const LoadingScreen = () => {
               
               const dietPlan = diet_List.data.data.recommended_diet_list;
               console.log(requiredCalorie , "calorie required");
+              console.log(authData.formData , "for workout example");
+              
               if ((requiredCalorieResponse.data.success === true) && (authData.formData)) {
                 // Reset the navigation stack and navigate to 'Menu'
                 navigation.reset({
