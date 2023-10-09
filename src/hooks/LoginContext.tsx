@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import {createContext, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setAuthToken } from '../../api'; // Import the setAuthToken function
 
 type LoginContextValue = {
   customerId: string | null;
@@ -45,6 +46,7 @@ export const LoginProvider = ({children}) => {
       setIsLoggedIn(true);
       setFormData(formData);
       setToken(token);
+      setAuthToken(token);
     } catch (error) {
       console.error('Error saving data to AsyncStorage:', error);
     }

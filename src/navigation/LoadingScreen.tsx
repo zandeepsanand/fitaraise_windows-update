@@ -4,13 +4,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
-import api from '../../api';
+import api, { setAuthToken } from '../../api';
 import {Animated, Easing} from 'react-native';
 import Lottie from 'lottie-react-native';
 
 const LoadingScreen = () => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(true); // State to track loading status
+console.log(api , "api check");
 
   const animationProgress = useRef(new Animated.Value(0));
   useEffect(() => {
@@ -30,6 +31,7 @@ const LoadingScreen = () => {
             const authToken = authData.token;
   
             if (authToken) {
+              setAuthToken(authToken);
               const requiredCalorieResponse = await api.get(`get_daily_required_calories/${authData.formData.customer_id}`);
               const diet_List = await api.get(`get_recommended_diet/${authData.formData.customer_id}`);
   

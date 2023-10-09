@@ -4,7 +4,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import {ActivityIndicator, View, StyleSheet} from 'react-native';
-import api from '../../../../api';
+import api, { setAuthToken } from '../../../../api';
 import {Animated, Easing} from 'react-native';
 import Lottie from 'lottie-react-native';
 
@@ -105,9 +105,13 @@ const HomeWorkoutLoadingScreen = ({route}) => {
         if (authDataJSON) {
           const authData = JSON.parse(authDataJSON);
           const authToken = authData.token;
+          console.log('token');
+          
 
           if (authToken) {
             setIsLoading(true);
+            setAuthToken(authToken);
+            
 
             try {
               // const workoutDataJSON = await AsyncStorage.getItem('workoutData');

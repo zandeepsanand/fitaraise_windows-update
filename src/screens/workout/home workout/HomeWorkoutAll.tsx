@@ -1,6 +1,12 @@
 /* eslint-disable prettier/prettier */
 import React, {useCallback, useEffect, useState} from 'react';
-import {Platform, Linking, StyleSheet,TouchableWithoutFeedback} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  Platform,
+  Linking,
+  StyleSheet,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/core';
 import axios from 'axios';
@@ -9,12 +15,16 @@ import {BASE_URL} from '@env';
 import {Block, Button, Image, Text} from '../../../components/';
 import {useData, useTheme, useTranslation} from '../../../hooks/';
 import api from '../../../../api';
+import {isAuthTokenSet} from '../../../../api';
 
 const isAndroid = Platform.OS === 'android';
 
 const HomeWorkoutAll = ({route}) => {
   const {workout} = route.params;
+  console.log(workout, 'workout datas');
+
   const [exerciseData, setExerciseData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const {user} = useData();
   const {t} = useTranslation();
   const navigation = useNavigation();
@@ -43,18 +53,62 @@ const HomeWorkoutAll = ({route}) => {
     [user],
   );
   useEffect(() => {
-    api
-      .get(`get_home_workout_excercises/${workout.id}`)
-      .then((response) => {
-        setExerciseData(response.data.data);
-        // console.log('Exercise data after API call:', response.data.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching exercise data:', error);
-      });
+    const checkAuthenticationStatus = async () => {
+      try {
+        // Set isLoading to true to indicate that the check is in progress
+        setIsLoading(true);
+
+        const authDataJSON = await AsyncStorage.getItem('authData');
+
+        if (authDataJSON) {
+          const authData = JSON.parse(authDataJSON);
+          const authToken = authData.token;
+
+          if (authToken) {
+            try {
+              // Check if the token is still set
+              const tokenIsSet = await isAuthTokenSet();
+              console.log(tokenIsSet, 'token is set');
+
+              if (tokenIsSet) {
+                // Proceed with the API call
+                const response = await api.get(
+                  `get_home_workout_excercises/${workout.id}`,
+                );
+                setExerciseData(response.data.data);
+                // ...
+              } else {
+                // Handle the case where the token is not set or has expired
+                console.error(
+                  'Token is not set or has expired. Handle accordingly.',
+                );
+              }
+            } catch (error) {
+              // Handle API call errors
+              console.error('Error fetching exercise data:', error);
+            }
+          } else {
+            // Handle the case where authToken is not set
+            console.error('authToken is not set');
+          }
+        } else {
+          // Handle the case where authDataJSON is not set
+          console.error('authDataJSON is not set');
+        }
+      } catch (error) {
+        // Handle AsyncStorage errors
+        console.error('Error reading authData from AsyncStorage:', error);
+      } finally {
+        // Set isLoading to false when the check is finished
+        setIsLoading(false);
+      }
+    };
+
+    // Call the checkAuthenticationStatus function
+    checkAuthenticationStatus();
   }, [workout.id]);
+
   console.log(exerciseData);
-  
 
   return (
     <Block safe marginTop={sizes.md} marginBottom={10}>
@@ -202,7 +256,7 @@ const HomeWorkoutAll = ({route}) => {
 
           {exerciseData.map((exercise) => (
             <TouchableWithoutFeedback
-            key={exercise.id}
+              key={exercise.id}
               onPress={() => {
                 console.log('Navigating with exercise:', exercise);
                 navigation.navigate('HomeWorkoutSingle', {
@@ -217,17 +271,14 @@ const HomeWorkoutAll = ({route}) => {
                 row
                 key={exercise.id}
                 marginTop={5}
-                color={exercise.completed_today ? 'skyblue' : 'white'}
-                >
+                color={exercise.completed_today ? 'skyblue' : 'white'}>
                 <Image
                   width={75}
                   height={75}
                   radius={10}
                   source={{
                     uri: `${exercise.image}`,
-                  }}
-                  
-                  ></Image>
+                  }}></Image>
 
                 <Block center>
                   <Block>
