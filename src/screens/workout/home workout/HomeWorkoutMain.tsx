@@ -44,7 +44,7 @@ const HomeWorkoutMain = ({navigation, route}) => {
   const handleWorkoutClick = (workout) => {
     // Call the API with workoutId and fetch exercise details
     // Once you have the exercise data, navigate to the 'HomeWorkoutAll' screen
-    navigation.navigate('HomeWorkoutAll', {workout});
+    navigation.navigate('HomeWorkoutAll', {workout ,workoutData});
     // console.log(workout);
   };
   const handleLevelChange = (level) => {

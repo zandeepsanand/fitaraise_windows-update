@@ -44,7 +44,7 @@ function PopupPage() {
 }
 const HomeWorkoutStart = () => {
   const route = useRoute();
-  const {exerciseData} = route.params;
+  const {exerciseData ,workoutData} = route.params;
   // console.log(exerciseData);
 
   const {user} = useData();
@@ -159,18 +159,18 @@ const HomeWorkoutStart = () => {
   }, [currentWorkout, timeLeft, isTimerPaused, showRestPopup, modalVisible]);
 
   const completed_date = new Date().toISOString().slice(0, 10);
-  // console.log(completed_date);
-  const customer_id = 10;
+  // console.log(workoutData.customer_id ,"LOG ID ");
+  const customer_id = workoutData.customer_id;
   const workout_id = currentWorkout.workout_id;
   const excercise_id = currentWorkout.excercise;
   const home_workout_excercise = currentWorkout.id;
-  const workoutData = {
-    customer_id,
-    workout_id,
-    excercise_id,
-    home_workout_excercise,
-    completed_date,
-  };
+  // const workoutData = {
+  //   customer_id,
+  //   workout_id,
+  //   excercise_id,
+  //   home_workout_excercise,
+  //   completed_date,
+  // };
 
   const handleFinish = () => {
     api

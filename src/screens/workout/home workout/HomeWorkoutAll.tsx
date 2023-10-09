@@ -20,8 +20,8 @@ import {isAuthTokenSet} from '../../../../api';
 const isAndroid = Platform.OS === 'android';
 
 const HomeWorkoutAll = ({route}) => {
-  const {workout} = route.params;
-  console.log(workout, 'workout datas');
+  const {workout ,workoutData} = route.params;
+  // console.log(workout, 'workout datas');
 
   const [exerciseData, setExerciseData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -68,7 +68,9 @@ const HomeWorkoutAll = ({route}) => {
             try {
               // Check if the token is still set
               const tokenIsSet = await isAuthTokenSet();
-              console.log(tokenIsSet, 'token is set');
+              // console.log(tokenIsSet, 'token is set');
+              console.log(workout.id , "check workout id ");
+              
 
               if (tokenIsSet) {
                 // Proceed with the API call
@@ -108,7 +110,7 @@ const HomeWorkoutAll = ({route}) => {
     checkAuthenticationStatus();
   }, [workout.id]);
 
-  console.log(exerciseData);
+  console.log(exerciseData , "single exercise data");
 
   return (
     <Block safe marginTop={sizes.md} marginBottom={10}>
@@ -320,7 +322,7 @@ const HomeWorkoutAll = ({route}) => {
       <TouchableWithoutFeedback
         onPress={() => {
           navigation.navigate('HomeWorkoutStart', {
-            exerciseData: exerciseData,
+            exerciseData: exerciseData,workoutData
           });
         }}>
         <Block style={styles.stickyButton} center justify="center">

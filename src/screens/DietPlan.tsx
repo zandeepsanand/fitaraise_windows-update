@@ -61,7 +61,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
   useEffect(() => {
     // Navigate to the "Screens" screen when the Menu component is first loaded
-    console.log(data , "updatess diet plan");
+    // console.log(data , "updatess diet plan");
     
    
   }, [data , dietPlan, formDataCopy]);

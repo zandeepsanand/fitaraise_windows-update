@@ -186,7 +186,7 @@ const MealContextProvider: React.FC = ({children}) => {
           fat_in_g: item.fat,
           fiber_in_g: item.fiber,
           food_name: item.food_name,
-          id: item.serving_description_id,
+          id: item.food_id,
           image: item.food_image,
           iron_in_mg: item.iron,
           monounsaturated_fat_in_g: item.monounsaturated_fat,
@@ -403,7 +403,7 @@ const MealContextProvider: React.FC = ({children}) => {
   // }, []);
 
   const addBreakfastItem = (food: any, details: any, db: any, dbs: any) => {
-    console.log(food,details, 'testing 123 to  db  breakfast');
+    // console.log( 'again added');
     // return false;
 
     // console.log(details,'food details' );
@@ -415,6 +415,7 @@ const MealContextProvider: React.FC = ({children}) => {
       (item) => item.id === food.id,
     );
     if (existingIndex !== -1) {
+     
       const updatedItems = [...breakfastItems];
       updatedItems[existingIndex] = {...food, details};
       setBreakfastItems(updatedItems);
@@ -441,6 +442,7 @@ const MealContextProvider: React.FC = ({children}) => {
           console.log(response.message, 'error');
         });
     } else {
+      console.log( 'existing account');
       setBreakfastItems([...breakfastItems, {...food, details}]);
       var bodyFormData = new FormData();
       bodyFormData.append('customer_id', details.customer_id);
@@ -820,6 +822,8 @@ const MealContextProvider: React.FC = ({children}) => {
         ...updatedDetails,
       };
       setBreakfastItems(updatedItems);
+      console.log('updated');
+      
     }
   };
 

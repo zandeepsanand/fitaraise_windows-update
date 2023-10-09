@@ -111,6 +111,7 @@ const HomeWorkoutLoadingScreen = ({route}) => {
           if (authToken) {
             setIsLoading(true);
             setAuthToken(authToken);
+            console.log(authToken, "token preview");
             
 
             try {

@@ -102,7 +102,7 @@ const FoodPage = ({route, navigation}) => {
     morningSnackItems,
     addBreakfastItem,
   } = useContext(MealContext);
-  // console.log(breakfastItems[6] ,"first one");
+  console.log(breakfastItems[0] ,"first one");
 
   const {assets, colors, gradients, sizes, fonts, user} = useTheme();
   const [selectedValue, setSelectedValue] = useState(245);
@@ -186,15 +186,10 @@ const FoodPage = ({route, navigation}) => {
     setIsEditMode(true);
 
     // Fetch food_id
-    const food_id = api
-      .get(`get_food_items/${item.food_name}`)
-      .then((res) => {
-        console.log(res.data.data, 'hallo ');
+  
 
         // Check if food_id is available
-        if (res.data) {
-          // Execute another function if food_id is available
-          anotherFunction(res.data);
+     
 
           // Continue with the rest of your code
           api
@@ -229,16 +224,8 @@ const FoodPage = ({route, navigation}) => {
               console.error(error);
               setIsEditMode(false);
             });
-        } else {
-          // Handle the case when food_id is not available
-          console.error('food_id not available');
-          setIsEditMode(false);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        setIsEditMode(false);
-      });
+       
+     
   }
 
   // Define another function to be executed if food_id is available
