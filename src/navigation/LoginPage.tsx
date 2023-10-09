@@ -223,7 +223,7 @@ const LoginPage = ({route}) => {
         <Block flex={0} style={{zIndex: 0}}></Block>
         {/* register form */}
         <Block keyboard behavior={!isAndroid ? 'padding' : 'height'}>
-          <Image
+          {/* <Image
             source={require('../assets/images/bg1.png')}
             style={{position: 'absolute'}}
             width="100%"
@@ -231,7 +231,7 @@ const LoginPage = ({route}) => {
             radius={10}
             blurRadius={10}
             color={isDark ? colors.icon : undefined}
-          />
+          /> */}
           <Lottie
             style={{position: 'absolute'}}
             marginBottom={sizes.sm}
@@ -239,11 +239,12 @@ const LoginPage = ({route}) => {
             progress={animationProgress.current}
           />
           <Block
-            marginTop={90}
+            // marginTop={90}
             flex={1}
             radius={sizes.sm}
-            marginHorizontal="8%"
+            marginHorizontal="1%"
             shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
+          marginBottom={10}
           >
             <Block
               card

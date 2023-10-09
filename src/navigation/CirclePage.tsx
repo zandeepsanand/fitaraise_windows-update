@@ -123,7 +123,7 @@ const CirclePage = ({route, navigation}) => {
   }
   
   return (
-    <>
+   
       <Block
         scroll
         showsVerticalScrollIndicator={false}
@@ -194,26 +194,26 @@ const CirclePage = ({route, navigation}) => {
                 </Text>
               </Block>
               <Block center align="center" style={{maxHeight: 90}}>
-                <Text p black bold>
+                <Text p danger bold>
                   Protien
                 </Text>
-                <Text p black semibold padding={10} center>
+                <Text p danger semibold padding={10} center>
                   {data.protien_g}g ({data.protien_percent})
                 </Text>
               </Block>
               <Block center align="center" style={{maxHeight: 90}}>
-                <Text p black bold>
+                <Text p primary bold>
                   Carbs
                 </Text>
-                <Text p black semibold padding={10} center>
+                <Text p primary semibold padding={10} center>
                   {data.carb_g}g ({data.carb_percent})
                 </Text>
               </Block>
               <Block center align="center" style={{maxHeight: 90}}>
-                <Text p black bold>
+                <Text p info bold>
                   Fats
                 </Text>
-                <Text p black semibold padding={10} center>
+                <Text p info semibold padding={10} center>
                   {/* {data.protien_g} */}
                   {data.fat_g}g ({data.fat_percent})
                 </Text>
@@ -229,7 +229,11 @@ const CirclePage = ({route, navigation}) => {
             resizeMode="cover"
             // source={require('../assets/images/bg111.jpg')}
             radius={sizes.cardRadius}>
-            <Block flex={1} paddingTop={10}>
+               <TouchableOpacity
+            onPress={() => {
+              checkPage();
+            }}>
+               <Block flex={1} paddingTop={10}>
               <Block>
                 <Block
                   style={styles.mainCardView}
@@ -238,7 +242,7 @@ const CirclePage = ({route, navigation}) => {
                   gradient={gradients?.[tab === 0 ? 'success' : '#fffff']}>
                   <Block center>
                     <Text p font={fonts.semibold} white>
-                      {'For Best Results....'}
+                      {'Go to home'}
                     </Text>
                     <View
                       style={{
@@ -250,6 +254,8 @@ const CirclePage = ({route, navigation}) => {
                 </Block>
               </Block>
             </Block>
+            </TouchableOpacity>
+           
             <Block flex={1} marginHorizontal={5} padding={20} paddingTop={0}>
               <Block row marginHorizontal={20}>
                 <Text bold>* </Text>
@@ -275,55 +281,11 @@ const CirclePage = ({route, navigation}) => {
           </Image>
         </Block>
 
-        {/* <Block
-        flex={0}
-        card
-        center
-        style={{position: 'relative', alignSelf: 'center', margin: 10}}>
-        <CircularProgressBase
-          {...props}
-          value={80}
-          radius={125}
-          activeStrokeColor={'#e84118'}
-          inActiveStrokeColor={'#e84118'}>
-          <CircularProgressBase
-            {...props}
-            value={87}
-            radius={100}
-            activeStrokeColor={'#badc58'}
-            inActiveStrokeColor={'#badc58'}>
-            <CircularProgressBase
-              {...props}
-              value={62}
-              radius={75}
-              activeStrokeColor={'#18dcff'}
-              inActiveStrokeColor={'#18dcff'}
-            />
-          </CircularProgressBase>
-        </CircularProgressBase>
-      </Block> */}
-
-        <View style={styles.container2}>
-          <TouchableOpacity
-            onPress={() => {
-              checkPage();
-            }}>
-            <Image source={assets.Button} />
-          </TouchableOpacity>
-        </View>
-      </Block>
-      {/* <View style={styles.container}>
-    
-      <View style={styles.contentContainer}>
       
-        
-      </View>
-    
-      <TouchableOpacity style={styles.buttonContainer}>
-       <NextButton/>
-      </TouchableOpacity>
-    </View> */}
-    </>
+
+      
+      </Block>
+ 
   );
 };
 const styles = StyleSheet.create({

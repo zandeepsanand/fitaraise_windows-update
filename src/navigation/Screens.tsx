@@ -43,7 +43,7 @@ export default ({data, formDataCopy, dietPlan}) => {
        <Stack.Screen
         name="Demo"
         component={DemoAlert}
-        options={{title: t('navigation.home')}}
+        options={{title: 'I Want to'}}
         initialParams={{ formData }}
       />
     <Stack.Screen

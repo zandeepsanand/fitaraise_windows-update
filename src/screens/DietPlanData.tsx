@@ -116,7 +116,9 @@ const DietPlanData = ({route, navigation}) => {
   const IMAGE_MARGIN = (sizes.width - IMAGE_SIZE * 3 - sizes.padding * 2) / 2;
   const IMAGE_VERTICAL_MARGIN =
     (sizes.width - (IMAGE_VERTICAL_SIZE + sizes.sm) * 2) / 2;
+    const [isLoadingServingGrams ,setIsLoadingServingGrams ] =useState(false);
   useEffect(() => {
+    setIsLoadingServingGrams(true);
     axios
       .get(`${BASE_URL}get_serving_desc_by_food_id/${responseData.id}`)
       .then((response) => {
@@ -157,6 +159,7 @@ const DietPlanData = ({route, navigation}) => {
         setServingGrams(servingGrams);
         setInitialGram(servingInitialGram[0]);
         setSelectedDropDown(servingGrams[0]);
+        setIsLoadingServingGrams(false);
       })
       .catch((error) => {
         console.error(error);
@@ -529,7 +532,7 @@ const DietPlanData = ({route, navigation}) => {
                     borderRadius: 20,
                     marginLeft: 10,
                   }}
-                  data={servingGrams}
+                  data={isLoadingServingGrams ? ['Loading...'] : servingGrams}
                   onSelect={(selectedItem, index) => {
                     // console.log(servingGrams, 'ok bie ');
                     const item = servingGrams.find((item) =>

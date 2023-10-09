@@ -9,6 +9,7 @@ import {
   SectionList,
   StyleSheet,
   View,
+  ActivityIndicator,
 } from 'react-native';
 import Axios from 'axios';
 import {FlatList} from 'react-native';
@@ -141,57 +142,12 @@ const FoodPage = ({route, navigation}) => {
     debouncedHandleEdit(item);
   };
 
-  //   function handleEdit(item) {
-  //     // console.log(item , "check item ");
+ 
+  const [isLoadingServingGrams ,setIsLoadingServingGrams ] =useState(false);
 
-  //     setIsEditMode(true);
-  // const food_id =api.get(`get_food_items/${item.food_name}`).then((res)=>{
-  //   console.log("food items ", res.data )
-  // })
-
-  //     api
-  //       .get(`get_serving_desc_by_food_id/${item.id}`)
-  //       .then((response) => {
-  //         console.log(response.data.data , "the food details");
-
-  //         setServingDetailsFull(response.data.data.serving_desc);
-  //         const servingNames = response.data.data.serving_desc.map(
-  //           (serving) => serving.name,
-  //         );
-  //         const servingId = response.data.data.serving_desc.map(
-  //           (serving) => serving.id,
-  //         );
-  //         servingId.unshift(4792);
-  //         const servingInitialGram = response.data.data.serving_desc.map(
-  //           (serving) => serving.weight,
-  //         );
-  //         const servingGrams = response.data.data.serving_desc.map(
-  //           (serving) => `${serving.name} (${serving.weight} g)`,
-  //         );
-  //         servingInitialGram.unshift(100);
-  //         setServingId(servingId[0]);
-  //         setServingDetails(servingNames);
-  //         nutritionCalculation(item);
-  //         setServingGrams(servingGrams);
-  //         setInitialGram(item.details.selectedWeight);
-  //         servingGrams.unshift('100 g');
-  //         setSelectedDropDown(item.details.selectedDropDown);
-  //       })
-  //       .catch((error) => {
-  //         console.error(error);
-  //         setIsEditMode(false);
-  //       });
-  //   }
   function handleEdit(item) {
     setIsEditMode(true);
-
-    // Fetch food_id
-  
-
-        // Check if food_id is available
-     
-
-          // Continue with the rest of your code
+    setIsLoadingServingGrams(true);
           api
             .get(`get_serving_desc_by_food_id/${item.id}`)
             .then((response) => {
@@ -219,6 +175,7 @@ const FoodPage = ({route, navigation}) => {
               setInitialGram(item.details.selectedWeight);
               servingGrams.unshift('100 g');
               setSelectedDropDown(item.details.selectedDropDown);
+              setIsLoadingServingGrams(false);
             })
             .catch((error) => {
               console.error(error);
@@ -711,8 +668,8 @@ const FoodPage = ({route, navigation}) => {
                               borderRadius: 20,
                               marginLeft: 10,
                             }}
-                            data={servingGrams}
-                            onSelect={(selectedItem, index) => {
+                            data={isLoadingServingGrams ? ['Loading...'] : servingGrams}
+                              onSelect={(selectedItem, index) => {
                               // console.log(servingGrams, 'ok bie ');
                               const item1 = servingGrams.find((item1) =>
                                 item1.includes(selectedItem),

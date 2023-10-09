@@ -30,7 +30,15 @@ export default function DemoAlert({ route,navigation }) {
       textBody: 'Action confirmed!',
       // button: 'Close',
     });
-    navigation.replace('Details',{formData});
+    // navigation.replace('Details',{formData});
+    // navigation.reset({
+    //   index: 0,
+    //   routes: [{ name: 'Menu', params: { data: requiredCalorie, formDataCopy: authData.formData , dietPlan } }],
+    // });
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'Details' , params: {formData}}],
+    });
 
     // Close the confirmation dialog
     setConfirmationVisible(false);

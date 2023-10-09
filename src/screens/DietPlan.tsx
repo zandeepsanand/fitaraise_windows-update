@@ -445,7 +445,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
               radius={sizes.cardRadius}
               source={assets.green}
               blurRadius={10}>
-              <Button
+              {/* <Button
                 row
                 flex={0}
                 justify="flex-start"
@@ -459,9 +459,9 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                   transform={[{rotate: '180deg'}]}
                 />
                 <Text p white marginLeft={sizes.s}>
-                  {/* {t('profile.title')} */}
+               
                 </Text>
-              </Button>
+              </Button> */}
               <Block flex={0} align="center">
                 <CircularProgress
                   // value={(initialValueWithoutDecimals - totalCaloriesOfAllFoods) >= 0 ? (initialValueWithoutDecimals - totalCaloriesOfAllFoods) : totalCaloriesOfAllFoods}
@@ -481,14 +481,14 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                   circleBackgroundColor={'#353353'}
                   title={
                     totalCaloriesOfAllFoods >= data.calories
-                      ? 'REACHED 🔥'
+                      ? 'Excess 🔥'
                       : `${data.calories - totalCaloriesOfAllFoods}`
                   }
                   titleColor={'white'}
                   titleStyle={{fontWeight: 'bold', fontSize: 22}}
                   subtitle={
                     totalCaloriesOfAllFoods >= data.calories
-                      ? `${totalCaloriesOfAllFoods} KCAL`
+                      ? `${-((data.calories)-totalCaloriesOfAllFoods)} KCAL`
                       : `KCAL LEFT 🔥`
                   }
                   subtitleStyle={{
@@ -644,13 +644,13 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                   }
                 }}
                 disabled={!dietPlan}>
-                <Image
+                {/* <Image
                   background
                   resizeMode="cover"
                   source={assets.card6}
                   blurRadius={5}
-                  radius={sizes.cardRadius}>
-                  <Block padding={sizes.padding}>
+                  radius={sizes.cardRadius}> */}
+                  <Block padding={sizes.padding} card>
                     {/* user details */}
                     <Block row>
                       <Block>
@@ -660,7 +660,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                       </Block>
                     </Block>
                   </Block>
-                </Image>
+                {/* </Image> */}
               </TouchableOpacity>
             </Block>
 
