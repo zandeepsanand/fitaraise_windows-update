@@ -478,7 +478,8 @@ const LoginPage = ({route}) => {
                     !isValid.password ||
                     !isValid.name ||
                     !isValid.last_name
-                  }>
+                  }
+                  >
                   {isLoading && (
                     <ActivityIndicator size="small" color="white" />
                   )}
@@ -524,7 +525,7 @@ const LoginPage = ({route}) => {
                 shadow={!isAndroid}
                 marginVertical={sizes.s}
                 marginHorizontal={sizes.sm}
-                onPress={() => navigation.navigate('LoginScreenNewRegister')}>
+                onPress={() => navigation.navigate('loginNew')}>
                 <Text bold primary transform="uppercase">
                   {t('common.signin')}
                 </Text>

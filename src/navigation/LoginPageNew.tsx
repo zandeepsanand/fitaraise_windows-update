@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useContext, useEffect, useState, useRef} from 'react';
+import React, {useContext, useEffect, useState, useRef, useCallback} from 'react';
 import {
   SafeAreaView,
   View,
@@ -9,6 +9,9 @@ import {
   Platform,
   StyleSheet,
 } from 'react-native';
+import axios from 'axios';
+import {BASE_URL} from '@env';
+import * as regex from '../constants/regex';
 import api, {setAuthToken} from '../../api';
 import {Block, Button, Image, Input, Text} from '../components';
 import {useTheme} from '../hooks';
@@ -19,8 +22,23 @@ import {StackActions} from '@react-navigation/native';
 import {Animated, Easing} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Lottie from 'lottie-react-native';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 const isAndroid = Platform.OS === 'android';
+interface IRegistration {
+  name: string;
+  last_name: string;
+  email: string;
+  number: string;
+  password: string;
+}
+interface IRegistrationValidation {
+  name: boolean;
+  last_name: boolean;
+  email: boolean;
+  number: boolean;
+  password: boolean;
+}
 
 const LoginScreenNew = ({navigation, route}) => {
   const [email, setEmail] = useState('');
@@ -29,8 +47,13 @@ const LoginScreenNew = ({navigation, route}) => {
   const [password, setPassword] = useState('');
   const [userId, setUserId] = useState('');
   const [buttonShow, setButtonShow] = useState(false);
+  const [phoneShow, setPhoneShow] = useState(false);
+  const [emailShow, setEmailShow] = useState(false);
+  const [formShow, setFormShow] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState('');
   const blockRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Function to start the animation
   const animateBlock = () => {
@@ -53,6 +76,17 @@ const LoginScreenNew = ({navigation, route}) => {
       useNativeDriver: false,
     }).start();
   }, []);
+
+  useEffect(() => {
+    setIsValid((state) => ({
+      ...state,
+      name: regex.name.test(registration.name),
+      last_name: regex.last_name.test(registration.last_name),
+      email: regex.email.test(registration.email),
+      number: regex.number.test(registration.number),
+      password: regex.password.test(registration.password),
+    }));
+  }, [registration, setIsValid]);
 
   // console.log(userId, 'userId');
 
@@ -104,6 +138,45 @@ const LoginScreenNew = ({navigation, route}) => {
       console.error('Login Error:', error);
     }
   };
+  const handleSignUp = useCallback(() => {
+    console.log('clicked');
+    
+    if (
+      isValid.number
+    ) {
+      setIsLoading(true); // Start loading
+
+      axios
+        .get(`${BASE_URL}login_personal_customer_account/${phoneNumber}`)
+        .then((response) => {
+          setIsLoading(false); // Stop loading
+
+          // Handle response from server
+          // setCustomerId(response.data.data.customer_id);
+
+          const id = response.data.data.customer_id;
+          const formDataCopy = {
+           
+            customer_id: id,
+            mobile_number: phoneNumber,
+          }
+          console.log(formDataCopy ,"checking");
+          
+
+      
+          navigation.setParams({formData: formDataCopy});
+          navigation.navigate('OtpPage', {
+            formData: formDataCopy,
+          });
+        })
+        .catch((error) => {
+          setIsLoading(false); // Stop loading
+          console.log(error);
+          // Handle error from server
+          alert(error);
+        });
+    }
+  }, [ phoneNumber, navigation]);
 
   const handleResend = async () => {
     try {
@@ -125,8 +198,40 @@ const LoginScreenNew = ({navigation, route}) => {
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
+  const [isValid, setIsValid] = useState<IRegistrationValidation>({
+    name: false,
+    last_name: false,
+    email: false,
+    number: false,
+    password: false,
+  });
+  const [registration, setRegistration] = useState<IRegistration>({
+    name: '',
+    last_name: '',
+    email: '',
+    number: '',
+    password: '',
+  });
+  console.log(registration);
 
   const {assets, colors, gradients, sizes} = useTheme();
+  const handleChange = useCallback(
+    (value) => {
+      setRegistration((state) => ({...state, ...value}));
+      
+    },
+    [setRegistration,  registration],
+  );
+  useEffect(() => {
+    setIsValid((state) => ({
+      ...state,
+      name: regex.name.test(registration.name),
+      last_name: regex.last_name.test(registration.last_name),
+      email: regex.email.test(registration.email),
+      number: regex.number.test(registration.number),
+      password: regex.password.test(registration.password),
+    }));
+  }, [registration, setIsValid]);
   return (
     <Block safe marginTop={sizes.xl} style={{backgroundColor: '#ffff'}}>
       <Block scrollEnabled>
@@ -135,20 +240,19 @@ const LoginScreenNew = ({navigation, route}) => {
             source={require('../assets/icons/fitaraise.png')}
             height={300}
             width={300}
+            color={'gray'}
             style={{alignSelf: 'center'}}
           />
-             <Lottie
-            style={{
-              
-              // position: 'relative'
-            }
-              
-            
+          {/* <Lottie
+            style={
+              {
+                // position: 'relative'
+              }
             }
             marginBottom={sizes.sm}
             source={require('../assets/json/bg.json')}
             progress={animationProgress.current}
-          />
+          /> */}
         </Block>
 
         <Animatable.View
@@ -160,7 +264,7 @@ const LoginScreenNew = ({navigation, route}) => {
             borderTopRightRadius: 50,
             borderTopLeftRadius: 50,
             position: 'relative',
-            flex:1
+            flex: 1,
           }}>
           <Block
             marginTop={-sizes.sm}
@@ -170,10 +274,8 @@ const LoginScreenNew = ({navigation, route}) => {
               borderTopRightRadius: 25,
               borderTopLeftRadius: 25,
               zIndex: 10,
-              position:'absolute'
-            }}
-          
-            >
+              position: 'absolute',
+            }}>
             <Block padding={20}>
               <Text center h4 primary bold>
                 Welcome Back !
@@ -181,186 +283,528 @@ const LoginScreenNew = ({navigation, route}) => {
               <Text center secondary semibold size={14}>
                 We missed you
               </Text>
-              <Block
-                card
-                padding={10}
-                margin={10}
-                flex={0}
-                height={100}
-                color={'lightgreen'}
-                marginTop={20}>
-                <Block row height={85} center>
-                  <Block
-                    flex={0}
-                    center
-                    width={60}
-                    height={60}
-                    radius={50}
-                    color={'#f0f0f8'}
-                    paddingLeft={18}
-                    marginTop={10}>
-                    <Image
-                      color={'green'}
-                      width={25}
-                      height={25}
-                      source={require('../assets/icons/user.png')}></Image>
-                  </Block>
-                  <Block flex={1} center>
-                    <Block flex={0} center>
-                      <Text p semibold center white>
-                        Login With Mobile Number
-                      </Text>
-                      {/* <Text semibold secondary opacity={0.5} paddingTop={5} size={12}>
-                    Share to your friends
-                  </Text> */}
-                    </Block>
-                  </Block>
-                  <Block flex={0} center paddingRight={10}></Block>
-                </Block>
-              </Block>
-              <Block
-                card
-                color={'lightgreen'}
-                padding={10}
-                margin={10}
-                flex={0}
-                height={100}>
- <Block row height={85} center>
-                  <Block
-                    flex={0}
-                    center
-                    width={60}
-                    height={60}
-                    radius={50}
-                    color={'#f0f0f8'}
-                    paddingLeft={18}
-                    marginTop={10}>
-                    <Image
-                      color={'green'}
-                      width={25}
-                      height={25}
-                      source={require('../assets/icons/user.png')}></Image>
-                  </Block>
-                  <Block flex={1} center>
-                    <Block flex={0} center>
-                      <Text p semibold center white>
-                        Login With Email
-                      </Text>
-                      {/* <Text semibold secondary opacity={0.5} paddingTop={5} size={12}>
-                    Share to your friends
-                  </Text> */}
-                    </Block>
-                  </Block>
-                  <Block flex={0} center paddingRight={10}></Block>
-                </Block>
 
-                </Block>
-              <Block
-                row
-                flex={0}
-                align="center"
-                justify="center"
-                marginBottom={sizes.sm}
-                paddingHorizontal={sizes.xxl}>
-                <Block
-                  flex={0}
-                  height={1}
-                  width="50%"
-                  end={[1, 0]}
-                  start={[0, 1]}
-                  gradient={gradients.divider}
-                />
-                <Text center marginHorizontal={sizes.s}>
-                  or
-                </Text>
-                <Block
-                  flex={0}
-                  height={1}
-                  width="50%"
-                  end={[0, 1]}
-                  start={[1, 0]}
-                  gradient={gradients.divider}
-                />
-              </Block>
-              <Block
-                card
-                padding={10}
-                margin={10}
-                flex={0}
-                height={100}></Block>
+              {formShow ? (
+                <>
+                  {phoneShow ? (
+                    <>
+                      <Block
+                        flex={1}
+                        paddingHorizontal={sizes.sm}
+                        style={{position: 'relative'}}>
+                        <View style={styles.inputContainer}>
+                          <Image
+                            source={require('../assets/icons/Message.png')} // Replace with your icon source
+                            style={styles.icon}
+                          />
+                          <TextInput
+                            style={styles.input}
+                            autoCapitalize="none"
+                            placeholder="Enter text"
+                            value={email}
+                            onChangeText={(text) => setEmail(text)}
+                            placeholder="Email"
+                          />
+                        </View>
+                        <View style={styles.inputContainer}>
+                          <Image
+                            source={require('../assets/icons/lock.png')} // Replace with your icon source
+                            style={styles.icon}
+                          />
+                          <TextInput
+                            secureTextEntry={!isPasswordVisible}
+                            style={styles.input}
+                            value={password}
+                            onChangeText={(text) => setPassword(text)}
+                            placeholder="Password"
+                            autoCapitalize="none"
+                          />
+                          <TouchableOpacity onPress={togglePasswordVisibility}>
+                            {isPasswordVisible ? (
+                              <Image
+                                color={'#ADA4A5'}
+                                source={require('../assets/icons/show.png')}
+                                style={styles.icon}
+                              />
+                            ) : (
+                              <Image
+                                color={'#ADA4A5'}
+                                source={require('../assets/icons/hide.png')}
+                                style={styles.icon}
+                              />
+                            )}
+                          </TouchableOpacity>
+                        </View>
+
+                        <Button
+                          gradient={gradients.primary}
+                          shadow={!isAndroid}
+                          marginVertical={sizes.s}
+                          marginHorizontal={sizes.sm}
+                          onPress={() => handleLogin()}>
+                          <Text bold white style={{color: 'white'}}>
+                            Login
+                          </Text>
+                        </Button>
+                      </Block>
+                      
+                      <Block
+                        row
+                        flex={0}
+                        align="center"
+                        justify="center"
+                        marginBottom={sizes.sm}
+                        paddingHorizontal={sizes.xxl}>
+                        <Block
+                          flex={0}
+                          height={1}
+                          width="50%"
+                          end={[1, 0]}
+                          start={[0, 1]}
+                          gradient={gradients.divider}
+                        />
+                        <Text center marginHorizontal={sizes.s}>
+                          or
+                        </Text>
+                        <Block
+                          flex={0}
+                          height={1}
+                          width="50%"
+                          end={[0, 1]}
+                          start={[1, 0]}
+                          gradient={gradients.divider}
+                        />
+                      </Block>
+                      <Block padding={10} margin={10} flex={0} height={100}>
+                        <Block row center justify="space-evenly">
+                          <Button
+                            outlined
+                            gray
+                            shadow={!isAndroid}
+                            style={{
+                              justifyContent: 'center',
+                              alignSelf: 'center',
+                            }}>
+                            <Image
+                              source={assets.facebook}
+                              height={sizes.m}
+                              width={sizes.m}
+                              color={colors.icon}
+                            />
+                          </Button>
+                          <Button
+                            outlined
+                            gray
+                            shadow={!isAndroid}
+                            style={{
+                              justifyContent: 'center',
+                              alignSelf: 'center',
+                            }}>
+                            <Image
+                              source={assets.apple}
+                              height={sizes.m}
+                              width={sizes.m}
+                              color={colors.icon}
+                            />
+                          </Button>
+                          <Button
+                            outlined
+                            gray
+                            shadow={!isAndroid}
+                            style={{
+                              justifyContent: 'center',
+                              alignSelf: 'center',
+                            }}>
+                            <Image
+                              source={assets.google}
+                              height={sizes.m}
+                              width={sizes.m}
+                              color={colors.icon}
+                            />
+                          </Button>
+                          <Button
+                            outlined
+                            gray
+                            shadow={!isAndroid}
+                            style={{
+                              justifyContent: 'center',
+                              alignSelf: 'center',
+                            }}  
+                            onPress={()=>{
+                              setFormShow(true);
+                              setPhoneShow(false);
+                              setEmailShow(true);
+                            }}
+                            >
+                            <Image
+                              source={require('../assets/icons/fone.png')}
+                              height={sizes.m}
+                              width={sizes.m}
+                              color={colors.icon}
+                            />
+                          </Button>
+                          
+                        </Block>
+                        
+                      </Block>
+                    </>
+                  ) : (
+                    <>
+                      <Block
+                        flex={1}
+                        paddingHorizontal={sizes.sm}
+                        style={{position: 'relative'}}>
+                        <Block paddingTop={50}>
+                          <Block row>
+                            <Block flex={0} width={65}>
+                              <Input disabled placeholder="+91"></Input>
+                            </Block>
+                            <Block flex={1} marginLeft={10}>
+                              <Input
+                                marginBottom={sizes.m}
+                                // label="Phone Number"
+                                placeholder="Enter phone number"
+                                keyboardType="numeric"
+                                maxLength={10}
+                                // onChangeText={(value) => {{setPhoneNumber(value)}}}
+                                onChangeText={(value) => {
+                                  {
+                                    {
+                                      {
+                                        setPhoneNumber(value);
+                                      }
+                                    }
+                                    handleChange({number: value});
+                                  }
+                                }}
+                                value={phoneNumber}
+                                success={Boolean(registration.number && isValid.number)}
+                                danger={Boolean(registration.number && !isValid.number)}
+                              />
+                            </Block>
+                          </Block>
+                        </Block>
+
+                        <Button
+
+                          gradient={gradients.primary}
+                          shadow={!isAndroid}
+                          marginVertical={sizes.s}
+                          marginHorizontal={sizes.sm}
+                          onPress={() => handleSignUp()}
+                          disabled={
+                          
+                            !isValid.number
+                          }
+                          >
+                          <Text bold white style={{color: 'white'}}>
+                            Send otp
+                          </Text>
+                        </Button>
+                        
+                      </Block>
+                      
+                      <Block
+                        row
+                        flex={0}
+                        align="center"
+                        justify="center"
+                        marginTop={20}
+                        marginBottom={sizes.sm}
+                        paddingHorizontal={sizes.xxl}>
+                        <Block
+                          flex={0}
+                          height={1}
+                          width="50%"
+                          end={[1, 0]}
+                          start={[0, 1]}
+                          gradient={gradients.divider}
+                        />
+                        <Text center marginHorizontal={sizes.s}>
+                          or
+                        </Text>
+                        <Block
+                          flex={0}
+                          height={1}
+                          width="50%"
+                          end={[0, 1]}
+                          start={[1, 0]}
+                          gradient={gradients.divider}
+                        />
+                      </Block>
+                      <Block padding={10} margin={10} flex={0} height={100}>
+                        <Block row center justify="space-evenly">
+                          <Button
+                            outlined
+                            gray
+                            shadow={!isAndroid}
+                            style={{
+                              justifyContent: 'center',
+                              alignSelf: 'center',
+                            }}>
+                            <Image
+                              source={assets.facebook}
+                              height={sizes.m}
+                              width={sizes.m}
+                              color={colors.icon}
+                            />
+                          </Button>
+                          <Button
+                            outlined
+                            gray
+                            shadow={!isAndroid}
+                            style={{
+                              justifyContent: 'center',
+                              alignSelf: 'center',
+                            }}>
+                            <Image
+                              source={assets.apple}
+                              height={sizes.m}
+                              width={sizes.m}
+                              color={colors.icon}
+                            />
+                          </Button>
+                          <Button
+                            outlined
+                            gray
+                            shadow={!isAndroid}
+                            style={{
+                              justifyContent: 'center',
+                              alignSelf: 'center',
+                            }}>
+                            <Image
+                              source={assets.google}
+                              height={sizes.m}
+                              width={sizes.m}
+                              color={colors.icon}
+                            />
+                          </Button>
+                          <Button
+                            outlined
+                            gray
+                            shadow={!isAndroid}
+                            style={{
+                              justifyContent: 'center',
+                              alignSelf: 'center',
+                            }}  
+                            onPress={()=>{
+                              setFormShow(true);
+                              setPhoneShow(true);
+                              setEmailShow(true);
+                            }}
+                            >
+                            <Image
+                              source={require('../assets/icons/mail.png')}
+                              height={sizes.m}
+                              width={sizes.m}
+                              color={colors.icon}
+                            />
+                          </Button>
+                        </Block>
+                      </Block>
+                    </>
+                  )}
+
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      marginBottom: 30,
+                    }}>
+                    <Text>New to the app?</Text>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('country')}>
+                      <Text
+                        primary
+                        bold
+                        style={{color: 'green', fontWeight: '700'}}>
+                        {' '}
+                        Register
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              ) : (
+                <>
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      setFormShow(true);
+                      setPhoneShow(false);
+                      setEmailShow(true);
+                    }}>
+                    <Block
+                      card
+                      padding={10}
+                      margin={10}
+                      flex={0}
+                      height={100}
+                      color={'lightgreen'}
+                      marginTop={20}>
+                      <Block row height={85} center>
+                        <Block
+                          flex={0}
+                          center
+                          width={60}
+                          height={60}
+                          radius={50}
+                          color={'#f0f0f8'}
+                          paddingLeft={18}
+                          marginTop={10}>
+                          <Image
+                            color={'green'}
+                            width={25}
+                            height={25}
+                            source={require('../assets/icons/fone.png')}></Image>
+                        </Block>
+                        <Block flex={1} center>
+                          <Block flex={0} center>
+                            <Text p semibold center white>
+                              Login With Mobile Number
+                            </Text>
+                            {/* <Text semibold secondary opacity={0.5} paddingTop={5} size={12}>
+                    Share to your friends
+                  </Text> */}
+                          </Block>
+                        </Block>
+                        <Block flex={0} center paddingRight={10}></Block>
+                      </Block>
+                    </Block>
+                  </TouchableWithoutFeedback>
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      setFormShow(true);
+                      setPhoneShow(true);
+                      setEmailShow(false);
+                    }}>
+                    <Block
+                      card
+                      color={'lightgreen'}
+                      padding={10}
+                      margin={10}
+                      flex={0}
+                      height={100}>
+                      <Block row height={85} center>
+                        <Block
+                          flex={0}
+                          center
+                          width={60}
+                          height={60}
+                          radius={50}
+                          color={'#f0f0f8'}
+                          paddingLeft={18}
+                          marginTop={10}>
+                          <Image
+                            color={'green'}
+                            width={25}
+                            height={25}
+                            source={require('../assets/icons/mail.png')}></Image>
+                        </Block>
+                        <Block flex={1} center>
+                          <Block flex={0} center>
+                            <Text p semibold center white>
+                              Login With Email
+                            </Text>
+                            {/* <Text semibold secondary opacity={0.5} paddingTop={5} size={12}>
+                    Share to your friends
+                  </Text> */}
+                          </Block>
+                        </Block>
+                        <Block flex={0} center paddingRight={10}></Block>
+                      </Block>
+                    </Block>
+                  </TouchableWithoutFeedback>
+                  <Block
+                    row
+                    flex={0}
+                    align="center"
+                    justify="center"
+                    marginBottom={sizes.sm}
+                    paddingHorizontal={sizes.xxl}>
+                    <Block
+                      flex={0}
+                      height={1}
+                      width="50%"
+                      end={[1, 0]}
+                      start={[0, 1]}
+                      gradient={gradients.divider}
+                    />
+                    <Text center marginHorizontal={sizes.s}>
+                      or
+                    </Text>
+                    <Block
+                      flex={0}
+                      height={1}
+                      width="50%"
+                      end={[0, 1]}
+                      start={[1, 0]}
+                      gradient={gradients.divider}
+                    />
+                  </Block>
+                  <Block padding={10} margin={10} flex={0} height={100}>
+                    <Block row center justify="space-evenly">
+                      <Button
+                        outlined
+                        gray
+                        shadow={!isAndroid}
+                        style={{justifyContent: 'center', alignSelf: 'center'}}>
+                        <Image
+                          source={assets.facebook}
+                          height={sizes.m}
+                          width={sizes.m}
+                          color={colors.icon}
+                        />
+                      </Button>
+                      <Button
+                        outlined
+                        gray
+                        shadow={!isAndroid}
+                        style={{justifyContent: 'center', alignSelf: 'center'}}>
+                        <Image
+                          source={assets.apple}
+                          height={sizes.m}
+                          width={sizes.m}
+                          color={colors.icon}
+                        />
+                      </Button>
+                      <Button
+                        outlined
+                        gray
+                        shadow={!isAndroid}
+                        style={{justifyContent: 'center', alignSelf: 'center'}}>
+                        <Image
+                          source={assets.google}
+                          height={sizes.m}
+                          width={sizes.m}
+                          color={colors.icon}
+                        />
+                      </Button>
+                    </Block>
+                  </Block>
+
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      marginBottom: 30,
+                    }}>
+                    <Text>New to the app?</Text>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('country')}>
+                      <Text
+                        primary
+                        bold
+                        style={{color: 'green', fontWeight: '700'}}>
+                        {' '}
+                        Register
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              )}
             </Block>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                marginBottom: 30,
-              }}>
-              <Text>New to the app?</Text>
-              <TouchableOpacity onPress={() => navigation.navigate('country')}>
-                <Text primary bold style={{color: 'green', fontWeight: '700'}}>
-                  {' '}
-                  Register
-                </Text>
-              </TouchableOpacity>
-            </View>
           </Block>
         </Animatable.View>
-        {/* <Block paddingHorizontal={sizes.sm}>
-          <View style={styles.inputContainer}>
-            <Image
-              source={require('../assets/icons/Message.png')} // Replace with your icon source
-              style={styles.icon}
-            />
-            <TextInput
-              style={styles.input}
-              autoCapitalize="none"
-              placeholder="Enter text"
-              value={email}
-              onChangeText={(text) => setEmail(text)}
-              placeholder="Email"
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Image
-              source={require('../assets/icons/lock.png')} // Replace with your icon source
-              style={styles.icon}
-            />
-            <TextInput
-              secureTextEntry={!isPasswordVisible}
-              style={styles.input}
-              value={password}
-              onChangeText={(text) => setPassword(text)}
-              placeholder="Password"
-              autoCapitalize="none"
-            />
-            <TouchableOpacity onPress={togglePasswordVisibility}>
-              {isPasswordVisible ? (
-                <Image
-                  color={'#ADA4A5'}
-                  source={require('../assets/icons/show.png')}
-                  style={styles.icon}
-                />
-              ) : (
-                <Image
-                  color={'#ADA4A5'}
-                  source={require('../assets/icons/hide.png')}
-                  style={styles.icon}
-                />
-              )}
-            </TouchableOpacity>
-          </View>
 
-          <Button
-            gradient={gradients.primary}
-            shadow={!isAndroid}
-            marginVertical={sizes.s}
-            marginHorizontal={sizes.sm}
-            onPress={() => handleLogin()}>
-            <Text bold white style={{color: 'white'}}>
-              Login
-            </Text>
-          </Button>
-        </Block> */}
         {buttonShow && (
           <Button
             gradient={gradients.primary}
