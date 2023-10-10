@@ -130,7 +130,7 @@ const LoginPage = ({route}) => {
             customer_id: id,
             mobile_number: phoneNumber,
           }
-          // console.log(formDataCopy ,"checking");
+          console.log(formDataCopy ,"checking");
           
 
           const updatedFormData = {
@@ -147,6 +147,7 @@ const LoginPage = ({route}) => {
           setIsLoading(false); // Stop loading
           console.log(error);
           // Handle error from server
+          alert(error);
         });
     }
   }, [formData, phoneNumber, navigation]);

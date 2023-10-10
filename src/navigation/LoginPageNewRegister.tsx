@@ -136,6 +136,11 @@ const LoginScreenNewRegister = ({navigation, route}) => {
             style={{alignSelf: 'center'}}
           />
         </Block>
+<Block>
+
+</Block>
+
+
         <Block paddingHorizontal={sizes.sm}>
           <View style={styles.inputContainer}>
             <Image
@@ -200,7 +205,7 @@ const LoginScreenNewRegister = ({navigation, route}) => {
           <TouchableOpacity onPress={() => navigation.navigate('country')}>
             <Text primary bold style={{color: 'green', fontWeight: '700'}}>
               {' '}
-              Register
+              Register 
             </Text>
           </TouchableOpacity>
         </View>

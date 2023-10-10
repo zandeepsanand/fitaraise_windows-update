@@ -253,11 +253,11 @@ export default function Frstpage({
           </Block>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
-        disabled
+       
           // onPressOut={() => navigation.navigate('water')}
           onPress={() => {
             handleProducts(4);
-            // handleLogout();
+            handleLogout();
           }}>
           <Block 
             style={styles.mainCardView}

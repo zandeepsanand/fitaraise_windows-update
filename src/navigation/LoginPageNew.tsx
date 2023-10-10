@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState, useRef} from 'react';
 import {
   SafeAreaView,
   View,
@@ -15,7 +15,10 @@ import {useTheme} from '../hooks';
 import InputField from '../components/inputField';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginContext, {loginSuccess} from '../hooks/LoginContext';
-import { StackActions } from '@react-navigation/native';
+import {StackActions} from '@react-navigation/native';
+import {Animated, Easing} from 'react-native';
+import * as Animatable from 'react-native-animatable';
+import Lottie from 'lottie-react-native';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -27,6 +30,29 @@ const LoginScreenNew = ({navigation, route}) => {
   const [userId, setUserId] = useState('');
   const [buttonShow, setButtonShow] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const blockRef = useRef(null);
+
+  // Function to start the animation
+  const animateBlock = () => {
+    if (blockRef.current) {
+      blockRef.current.slideInUp(1000); // Adjust the duration as needed
+    }
+  };
+
+  // Trigger the animation when the component mounts
+  useEffect(() => {
+    animateBlock();
+  }, []);
+  const animationProgress = useRef(new Animated.Value(0));
+
+  useEffect(() => {
+    Animated.timing(animationProgress.current, {
+      toValue: 1,
+      duration: 15000,
+      easing: Easing.linear,
+      useNativeDriver: false,
+    }).start();
+  }, []);
 
   // console.log(userId, 'userId');
 
@@ -48,7 +74,7 @@ const LoginScreenNew = ({navigation, route}) => {
         }
       } else {
         console.log(response.data.data);
-        
+
         const {first_name, id, last_name} = response.data.data;
 
         // Create an object that combines token and formData
@@ -61,8 +87,8 @@ const LoginScreenNew = ({navigation, route}) => {
             // Add other formData properties here
           },
         };
-        const formData = authData.formData
-// console.log(formData);
+        const formData = authData.formData;
+        // console.log(formData);
 
         // Store the authData object as a JSON string in AsyncStorage
         await AsyncStorage.setItem('authData', JSON.stringify(authData));
@@ -71,7 +97,7 @@ const LoginScreenNew = ({navigation, route}) => {
         setAuthToken(authData.token); // Set the token for future requests
 
         // You can navigate to another screen or perform other actions here
-        navigation.dispatch(StackActions.replace('Loading', { formData }));
+        navigation.dispatch(StackActions.replace('Loading', {formData}));
       }
     } catch (error) {
       // Handle login errors here
@@ -104,15 +130,182 @@ const LoginScreenNew = ({navigation, route}) => {
   return (
     <Block safe marginTop={sizes.xl} style={{backgroundColor: '#ffff'}}>
       <Block scrollEnabled>
-        <Block>
+        <Block flex={0} height={250}>
           <Image
             source={require('../assets/icons/fitaraise.png')}
             height={300}
             width={300}
             style={{alignSelf: 'center'}}
           />
+             <Lottie
+            style={{
+              
+              // position: 'relative'
+            }
+              
+            
+            }
+            marginBottom={sizes.sm}
+            source={require('../assets/json/bg.json')}
+            progress={animationProgress.current}
+          />
         </Block>
-        <Block paddingHorizontal={sizes.sm}>
+
+        <Animatable.View
+          ref={blockRef}
+          animation="slideInUp"
+          duration={1000} // Adjust the duration as needed
+          style={{
+            // marginTop: -sizes.sm,
+            borderTopRightRadius: 50,
+            borderTopLeftRadius: 50,
+            position: 'relative',
+            flex:1
+          }}>
+          <Block
+            marginTop={-sizes.sm}
+            marginLeft={-sizes.sm}
+            // color={'lightgreen'}
+            style={{
+              borderTopRightRadius: 25,
+              borderTopLeftRadius: 25,
+              zIndex: 10,
+              position:'absolute'
+            }}
+          
+            >
+            <Block padding={20}>
+              <Text center h4 primary bold>
+                Welcome Back !
+              </Text>
+              <Text center secondary semibold size={14}>
+                We missed you
+              </Text>
+              <Block
+                card
+                padding={10}
+                margin={10}
+                flex={0}
+                height={100}
+                color={'lightgreen'}
+                marginTop={20}>
+                <Block row height={85} center>
+                  <Block
+                    flex={0}
+                    center
+                    width={60}
+                    height={60}
+                    radius={50}
+                    color={'#f0f0f8'}
+                    paddingLeft={18}
+                    marginTop={10}>
+                    <Image
+                      color={'green'}
+                      width={25}
+                      height={25}
+                      source={require('../assets/icons/user.png')}></Image>
+                  </Block>
+                  <Block flex={1} center>
+                    <Block flex={0} center>
+                      <Text p semibold center white>
+                        Login With Mobile Number
+                      </Text>
+                      {/* <Text semibold secondary opacity={0.5} paddingTop={5} size={12}>
+                    Share to your friends
+                  </Text> */}
+                    </Block>
+                  </Block>
+                  <Block flex={0} center paddingRight={10}></Block>
+                </Block>
+              </Block>
+              <Block
+                card
+                color={'lightgreen'}
+                padding={10}
+                margin={10}
+                flex={0}
+                height={100}>
+ <Block row height={85} center>
+                  <Block
+                    flex={0}
+                    center
+                    width={60}
+                    height={60}
+                    radius={50}
+                    color={'#f0f0f8'}
+                    paddingLeft={18}
+                    marginTop={10}>
+                    <Image
+                      color={'green'}
+                      width={25}
+                      height={25}
+                      source={require('../assets/icons/user.png')}></Image>
+                  </Block>
+                  <Block flex={1} center>
+                    <Block flex={0} center>
+                      <Text p semibold center white>
+                        Login With Email
+                      </Text>
+                      {/* <Text semibold secondary opacity={0.5} paddingTop={5} size={12}>
+                    Share to your friends
+                  </Text> */}
+                    </Block>
+                  </Block>
+                  <Block flex={0} center paddingRight={10}></Block>
+                </Block>
+
+                </Block>
+              <Block
+                row
+                flex={0}
+                align="center"
+                justify="center"
+                marginBottom={sizes.sm}
+                paddingHorizontal={sizes.xxl}>
+                <Block
+                  flex={0}
+                  height={1}
+                  width="50%"
+                  end={[1, 0]}
+                  start={[0, 1]}
+                  gradient={gradients.divider}
+                />
+                <Text center marginHorizontal={sizes.s}>
+                  or
+                </Text>
+                <Block
+                  flex={0}
+                  height={1}
+                  width="50%"
+                  end={[0, 1]}
+                  start={[1, 0]}
+                  gradient={gradients.divider}
+                />
+              </Block>
+              <Block
+                card
+                padding={10}
+                margin={10}
+                flex={0}
+                height={100}></Block>
+            </Block>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                marginBottom: 30,
+              }}>
+              <Text>New to the app?</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('country')}>
+                <Text primary bold style={{color: 'green', fontWeight: '700'}}>
+                  {' '}
+                  Register
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </Block>
+        </Animatable.View>
+        {/* <Block paddingHorizontal={sizes.sm}>
           <View style={styles.inputContainer}>
             <Image
               source={require('../assets/icons/Message.png')} // Replace with your icon source
@@ -167,7 +360,7 @@ const LoginScreenNew = ({navigation, route}) => {
               Login
             </Text>
           </Button>
-        </Block>
+        </Block> */}
         {buttonShow && (
           <Button
             gradient={gradients.primary}
@@ -180,20 +373,6 @@ const LoginScreenNew = ({navigation, route}) => {
             </Text>
           </Button>
         )}
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            marginBottom: 30,
-          }}>
-          <Text>New to the app?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('country')}>
-            <Text primary bold style={{color: 'green', fontWeight: '700'}}>
-              {' '}
-              Register
-            </Text>
-          </TouchableOpacity>
-        </View>
       </Block>
     </Block>
   );
