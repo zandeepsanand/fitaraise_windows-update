@@ -31,7 +31,6 @@ import * as Animatable from 'react-native-animatable';
 import Lottie from 'lottie-react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
-
 const isAndroid = Platform.OS === 'android';
 interface IRegistration {
   name: string;
@@ -49,7 +48,7 @@ interface IRegistrationValidation {
 }
 
 const NameLastName = ({navigation, route}) => {
-  const {formData,token} = route.params;
+  const {formData, token} = route.params;
 
   const [email, setEmail] = useState('');
   const [lastName, setLastName] = useState('');
@@ -133,44 +132,40 @@ const NameLastName = ({navigation, route}) => {
   }, [registration, setIsValid]);
 
   const signup = useCallback(() => {
-    if (isValid.name || isValid.last_name) {
-        console.log(formData);
-        
-      setIsLoading(true); // Start loading
-      const formDataCopy = {
-        ...formData,
-        first_name: registration.name,
-        last_name: registration.last_name,
-      };
-      const authData = {
-        token: token,
-        formData :formData
-      };
+    setIsLoading(true); // Start loading
+    const formDataCopy = {
+      ...formData,
+      first_name: registration.name,
+      last_name: registration.last_name,
+    };
+    const authData = {
+      token: token,
+      formData: formData,
+    };
     //   const formData = authData.formData;
-      // console.log(formData);
+    // console.log(formData);
 
-      // Store the authData object as a JSON string in AsyncStorage
-     AsyncStorage.setItem('authData', JSON.stringify(authData));
+    // Store the authData object as a JSON string in AsyncStorage
+    AsyncStorage.setItem('authData', JSON.stringify(authData));
 
-      // Use the loginSuccess method from LoginContext
-      setAuthToken(token);
-      axios
-        .post(`${BASE_URL}set_personal_datas`, formDataCopy)
-        .then((response) => {
-          setIsLoading(false); // Stop loading
-          console.log(formDataCopy, 'checking');
-          navigation.setParams({formData: formDataCopy});
-          navigation.navigate('Loading', {
-            formData: formDataCopy,
-          });
-        })
-        .catch((error) => {
-          setIsLoading(false); // Stop loading
-          console.log(error);
-          // Handle error from server
-          alert(error);
+    // Use the loginSuccess method from LoginContext
+    setAuthToken(token);
+    axios
+      .post(`${BASE_URL}set_personal_datas`, formDataCopy)
+      .then((response) => {
+        setIsLoading(false); // Stop loading
+        console.log(formDataCopy, 'checking');
+        navigation.setParams({formData: formDataCopy});
+        navigation.navigate('Loading', {
+          formData: formDataCopy,
         });
-    }
+      })
+      .catch((error) => {
+        setIsLoading(false); // Stop loading
+        console.log(error);
+        // Handle error from server
+        alert(error);
+      });
   }, [formData, phoneNumber, navigation]);
   return (
     <Block safe marginTop={sizes.xl} style={{backgroundColor: '#ffff'}}>

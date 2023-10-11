@@ -287,6 +287,7 @@ const LoginScreenNew = ({navigation, route}) => {
                     <>
                       <Block
                         flex={1}
+                        paddingTop={30}
                         paddingHorizontal={sizes.sm}
                         style={{position: 'relative'}}>
                         <View style={styles.inputContainer}>
@@ -451,7 +452,7 @@ const LoginScreenNew = ({navigation, route}) => {
                         flex={1}
                         paddingHorizontal={sizes.sm}
                         style={{position: 'relative'}}>
-                        <Block paddingTop={50}>
+                        <Block paddingTop={77}>
                           <Block row>
                             <Block flex={0} width={65}>
                               <Input disabled placeholder="+91"></Input>
