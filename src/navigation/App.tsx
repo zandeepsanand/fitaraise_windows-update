@@ -87,6 +87,7 @@ import AlertCustom from '../screens/alert/AlertCustom';
 import DemoAlert from '../screens/alert/DemoAlert';
 import Account from '../screens/account/Account';
 import HomeWorkoutLoadingScreen from '../screens/workout/home workout/HomeWorkoutLoadingScreen';
+import NameLastName from './NameLastName';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
@@ -150,6 +151,12 @@ export default () => {
           <NavigationContainer theme={navigationTheme}>
             <Stack.Navigator initialRouteName="Loading">
             <Stack.Screen name="Menu" component={Menu} options={{ headerShown: false }} />
+            <Stack.Screen
+                name="NameLastName"
+                component={NameLastName}
+                options={{headerShown: false}}
+              />
+            
             <Stack.Screen
                 name="Account"
                 component={Account}

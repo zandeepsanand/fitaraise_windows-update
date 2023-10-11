@@ -45,9 +45,11 @@ const OtpPage = ({
     params: {phoneNumber, data, formData},
   },
 }) => {
+  
+  
   const {loginSuccess} = useContext(LoginContext);
   const parsedData = JSON.parse(data);
-  console.log(parsedData, 'checkgfhfh');
+  // console.log(parsedData, 'checkgfhfh');
   const firstInput = useRef();
   const secondInput = useRef();
   const thirdInput = useRef();
@@ -262,34 +264,72 @@ const OtpPage = ({
                       }/${otpArray.join('')}`,
                     )
                     .then((res) => {
-                      console.log(res.data);
-                      // // Handle response from server
-
-                      // // console.log(res.data);
-                      // // ; CustomerId(res)
-                      // const customerId = res.data.data.customer_id;
-                      // console.log(customerId);
-
-                      // loginSuccess(customerId);
-                      // // Update the customerId state in your component
-                      // setCustomerId(customerId);
-                      // CustomerId(res);
-                      // Check if the response indicates success
+                      // console.log(res.data.token);
+                   
                       if (res.data.success === true) {
+                        // const customerId = res.data.data.customer_id;
+                        // console.log(customerId);
+
+
+                        // const updatedFormData = {
+                        //   ...formData,
+                        //   customer_id: customerId,
+                        // };
+
+                        // setCustomerId(customerId);
+
+
+
+                        // navigation.navigate('Frstpage', {
+                        //   formData: updatedFormData,
+                        // });
                         const customerId = res.data.data.customer_id;
-                        console.log(customerId);
+                        const token = res.data.data.token;
+                        console.log(token);
+                        
 
-                        const updatedFormData = {
-                          ...formData,
-                          customer_id: customerId,
-                        };
+                        // Check if formData has "first name" and "last name" properties
+                        if (formData.hasOwnProperty('first_name') && formData.hasOwnProperty('last_name')) {
+                          const updatedFormData = {
+                            ...formData,
+                            customer_id: customerId,
+                          };
+                          setCustomerId(customerId);
+                          navigation.navigate('Loading', {
+                            formData: updatedFormData,
+                          });
+                        } else {
+                          // Check the new API for "first_name" and "last_name" properties
+                          axios
+                            .get(`${BASE_URL}/get_personal_datas/${customerId}`)
+                            .then((personalDataRes) => {
+                              console.log(personalDataRes, "api of personal datas");
+                              
+                              if (
+                                personalDataRes.data.hasOwnProperty('first_name') &&
+                                personalDataRes.data.hasOwnProperty('last_name')
+                              ) {
+                                // "first_name" and "last_name" properties are present in the new API response
+                                const updatedFormData = {
+                                  ...formData,
+                                  customer_id: customerId,
+                                };
+                                setCustomerId(customerId);
+                                navigation.navigate('Frstpage', {
+                                  formData: updatedFormData,
+                                });
+                              } else {
+                                // "first_name" and "last_name" properties are missing, navigate to FillPage
+                                navigation.navigate('NameLastName',{formData,token});
+                              }
+                            })
+                            .catch((personalDataError) => {
+                              console.log(personalDataError);
+                              // Handle error from the new API
+                            });
+                        }
 
-                        setCustomerId(customerId);
 
-                        // Navigate to 'Frstpage' and pass the updatedFormData
-                        navigation.navigate('Frstpage', {
-                          formData: updatedFormData,
-                        });
                       } else {
                         // Handle the case where the response is not successful
                         console.log('API response indicates failure');

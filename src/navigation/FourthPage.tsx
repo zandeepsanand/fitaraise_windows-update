@@ -334,6 +334,12 @@ const Cards = ({route, navigation}) => {
   };
  
   async function checkPage() {
+    for (const key in formData) {
+      if (formData[key] === null) {
+        delete formData[key];
+      }
+    }
+  
     if (
       formData.gender &&
       formData.weight &&

@@ -28,6 +28,8 @@ console.log(api , "api check");
           const authDataJSON = await AsyncStorage.getItem('authData');
           if (authDataJSON) {
             const authData = JSON.parse(authDataJSON);
+            console.log(authData , "auth Data");
+            
             const authToken = authData.token;
   
             if (authToken) {

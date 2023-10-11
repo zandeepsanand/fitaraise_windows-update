@@ -139,11 +139,8 @@ const LoginScreenNew = ({navigation, route}) => {
     }
   };
   const handleSignUp = useCallback(() => {
-    console.log('clicked');
     
-    if (
-      isValid.number
-    ) {
+
       setIsLoading(true); // Start loading
 
       axios
@@ -175,7 +172,7 @@ const LoginScreenNew = ({navigation, route}) => {
           // Handle error from server
           alert(error);
         });
-    }
+    
   }, [ phoneNumber, navigation]);
 
   const handleResend = async () => {
