@@ -32,14 +32,14 @@ const ScreensStack = ({route}) => {
   const {data, formDataCopy, dietPlan} = route.params ?? {};
   useEffect(() => {
     // Update the screen content using the new parameters
-    console.log(data, 'Updated data drawer');
+    // console.log(data, 'Updated data drawer');
 
     // Additionally, you can perform any other necessary updates here
   }, [data, formDataCopy, dietPlan]);
 
   // console.log('ScreensStack Component - Data:', data);
   // console.log('ScreensStack Component - FormDataCopy:', formDataCopy);
-  console.log('ScreensStack Component - DietPlan:', dietPlan);
+  // console.log('ScreensStack Component - DietPlan:', dietPlan);
 
   const {colors} = useTheme();
   const isDrawerOpen = useIsDrawerOpen();
@@ -130,7 +130,7 @@ const DrawerContent = (
   } = useContext(LoginContext);
 
   const handleLogout = () => {
-    console.log('clicked');
+    // console.log('clicked');
 
     // Call the logout function to log the user out
     logout();
@@ -143,7 +143,7 @@ const DrawerContent = (
   };
 
   const handleEditGoalPress = () => {
-    console.log('clicked');
+    // console.log('clicked');
     
  
     // Alert.alert(
@@ -323,17 +323,17 @@ export default function Menu({route}) {
     React.useCallback(() => {
       // Update the screen content using the new parameters
       // For example, you can set the state or update the UI here
-      console.log(data, "Updated data");
+      // console.log(data, "Updated data");
     }, [data, formDataCopy, dietPlan])
   );
-  console.log(data, 'menu drawer check');
+  // console.log(data, 'menu drawer check');
 
   const {gradients} = useTheme();
   const navigation = useNavigation(); // Get the navigation object
 
   useEffect(() => {
     // Navigate to the "Screens" screen when the Menu component is first loaded
-    console.log(data , "updatess");
+    // console.log(data , "updatess");
     
     navigation.navigate('Screens', { data, formDataCopy, dietPlan });
   }, []);

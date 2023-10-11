@@ -86,6 +86,7 @@ const FoodPage = ({route, navigation}) => {
   const [foodItems, setFoodItems] = useState([]);
   const [editItemId, setEditItemId] = useState(null);
   const [editItemName, setEditItemName] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const handleEditButtonClick = (itemId) => {
     console.log(itemId);
     setEditItemId(itemId.details.id);
@@ -381,15 +382,18 @@ const FoodPage = ({route, navigation}) => {
   console.log(id, 'db id ');
 
   const handleAddFood = async (item) => {
+    setIsLoading(true);
     setIsEditMode(false);
     switch (mealType) {
       case 'breakfast':
         try {
+          setIsLoading(false);
           await addBreakfastItem(item, mealDetails);
           console.log('Breakfast item added successfully');
           console.log(mealDetails, 'dark');
           // Handle any post-addition logic or navigation here
         } catch (error) {
+          setIsLoading(false);
           console.error('Error adding breakfast item:', error);
           // Handle the error, if necessary
         }

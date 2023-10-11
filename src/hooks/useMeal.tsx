@@ -231,8 +231,11 @@ const MealContextProvider: React.FC = ({children}) => {
   }
   useEffect(() => {
     const checkAuthenticationStatus = async () => {
+     
+      
       try {
         const authDataJSON = await AsyncStorage.getItem('authData');
+        
         if (authDataJSON) {
           const authData = JSON.parse(authDataJSON);
           const authToken = authData.token;
@@ -252,16 +255,18 @@ const MealContextProvider: React.FC = ({children}) => {
               '0',
             )}`;
 
-            console.log(formattedDate, 'Formatted date');
+            // console.log(formattedDate, 'Formatted date');
 
             const apiUrl = `get_diet_list_wrt_date/${formDataCopy.customer_id}/${formattedDate}`;
             // Make the API request to get data
             api
               .get(apiUrl)
               .then((response) => {
+                // console.log(response , "food");
+                
                 // Handle the successful API response
                 const responseData = response.data;
-
+                // console.log(response,'response from api food');
                 // Use the mapping function to transform the data into the desired format
                 const transformedData = mapApiDataToDesiredFormat(responseData);
 
@@ -282,7 +287,11 @@ const MealContextProvider: React.FC = ({children}) => {
               .catch((error) => {
                 // Handle any errors that occur during the API request
                 console.error('Error fetching data:', error);
+                if (error.response && error.response.data) {
+                  console.error('Server Error Details:', error.response.data);
+                }
               });
+             
           }
         }
       } catch (error) {

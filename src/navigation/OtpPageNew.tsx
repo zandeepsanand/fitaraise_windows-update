@@ -78,80 +78,172 @@ const OtpPageNew = ({
     navigation.navigate('Frstpage', {formData: updatedFormData});
   }
 
-  const otpCheck = async () => {
-    // Mark the function as async
+  // const otpCheck = async () => {
+  //   // Mark the function as async
 
-    setIsLoadingVerify(true); // Start loading
+  //   setIsLoadingVerify(true); // Start loading
 
-    try {
-      const response = await api.get(
-        `otp_checking_personal_account/${formData.customer_id}/${otpArray.join(
-          '',
-        )}`,
-      );
-      // console.log(response.data , "otp response");
+  //   try {
+  //     const response = await api.get(
+  //       `otp_checking_personal_account/${formData.customer_id}/${otpArray.join(
+  //         '',
+  //       )}`,
+  //     );
+  //     // console.log(response.data , "otp response");
       
 
-      // if (response.data.success === true) {
-      //   const customerId = response.data.data.customer_id;
-      //   console.log(customerId);
+  //     // if (response.data.success === true) {
+  //     //   const customerId = response.data.data.customer_id;
+  //     //   console.log(customerId);
 
-      //   console.log(response.data.data.token);
-      //   // const authData = {
-      //   //   token: response.data.data.token,
-      //   //   customer_id: customerId,
-      //   // };
-      //   const authData = {
-      //     token: response.data.data.token,
-      //     formData: {
-      //       ...formData, // Spread the existing formData
-      //       customer_id: customerId,
-      //       // Add other new properties here
-      //     },
-      //   };
-      //   await AsyncStorage.setItem('authData', JSON.stringify(authData));
+  //     //   console.log(response.data.data.token);
+  //     //   // const authData = {
+  //     //   //   token: response.data.data.token,
+  //     //   //   customer_id: customerId,
+  //     //   // };
+  //     //   const authData = {
+  //     //     token: response.data.data.token,
+  //     //     formData: {
+  //     //       ...formData, // Spread the existing formData
+  //     //       customer_id: customerId,
+  //     //       // Add other new properties here
+  //     //     },
+  //     //   };
+  //     //   await AsyncStorage.setItem('authData', JSON.stringify(authData));
 
-      //   // Use the loginSuccess method from LoginContext
-      //   setAuthToken(authData.token);
-      //   navigation.navigate('Loading', {
-      //     formData: authData.formData,
-      //   });
-      // }
+  //     //   // Use the loginSuccess method from LoginContext
+  //     //   setAuthToken(authData.token);
+  //     //   navigation.navigate('Loading', {
+  //     //     formData: authData.formData,
+  //     //   });
+  //     // }
+  //     if (response.data.success === true) {
+  //       // const customerId = res.data.data.customer_id;
+  //       // console.log(customerId);
+
+
+  //       // const updatedFormData = {
+  //       //   ...formData,
+  //       //   customer_id: customerId,
+  //       // };
+
+  //       // setCustomerId(customerId);
+
+
+
+  //       // navigation.navigate('Frstpage', {
+  //       //   formData: updatedFormData,
+  //       // });
+  //       const customerId = response.data.data.customer_id;
+  //       const authData = {
+  //         token: response.data.data.token,
+  //         formData: {
+  //           ...formData, // Spread the existing formData
+  //           customer_id: customerId,
+  //           // Add other new properties here
+  //         },
+  //       };
+  //       await AsyncStorage.setItem('authData', JSON.stringify(authData));
+
+  //       // Use the loginSuccess method from LoginContext
+  //       // setAuthToken(authData.token);
+  //       setAuthToken(response.data.data.token);
+
+  //       // Check if formData has "first name" and "last name" properties
+  //       if (formData.hasOwnProperty('first_name') && formData.hasOwnProperty('last_name')) {
+  //         // console.log('false');
+          
+  //         const updatedFormData = {
+  //           ...formData,
+  //           customer_id: customerId,
+  //         };
+  //         setCustomerId(customerId);
+  //         navigation.navigate('Loading', {
+  //           formData: updatedFormData,
+  //         });
+  //       } else {
+  //         // Check the new API for "first_name" and "last_name" properties
+  //         axios
+  //           .get(`${BASE_URL}get_personal_datas/${customerId}`)
+  //           .then((personalDataRes) => {
+  //             // console.log(personalDataRes.data.data, "api of personal datas");
+              
+  //             if (
+  //               personalDataRes.data.data.first_name === null &&
+  //               personalDataRes.data.data.last_name === null
+  //             ) {
+  //               // "first_name" and "last_name" properties are null, navigate to 'NameLastName'
+  //               navigation.navigate('NameLastName', { formData });
+  //             } else {
+  //               formData= personalDataRes.data.data;
+  //               // console.log(formData, "new data from api");
+                
+  //               const authData = {
+  //                 token: response.data.data.token,
+  //                 formData: {
+  //                   ...formData, // Spread the existing formData
+  //                   customer_id: customerId,
+  //                   // Add other new properties here
+  //                 },
+  //               };
+  //               AsyncStorage.setItem('authData', JSON.stringify(authData));
+        
+  //               // Use the loginSuccess method from LoginContext
+  //               setAuthToken(authData.token);
+        
+  //               // "first_name" and "last_name" properties are not null, navigate to 'Loading'
+  //               navigation.navigate('Loading', { formData: authData.formData });
+  //             }
+  //           })
+  //           .catch((personalDataError) => {
+  //             setIsLoadingVerify(false);
+  //             console.log(personalDataError , "error message personal");
+  //             // Handle error from the new API
+  //           });
+  //       }
+  //     }
+  //      else {
+  //       // Handle the case where the response is not successful
+  //       alert(response.data.message);
+  //       setIsLoadingVerify(false);
+  //       console.log('API response indicates failure');
+  //       // You might want to display an error message to the user or take appropriate action
+  //     }
+  //   } catch (error) {
+  //     setIsLoadingVerify(false); // Stop loading
+  //     console.log(error);
+  //     // Handle error from server
+  //   }
+  // };
+  const otpCheck = async () => {
+    setIsLoadingVerify(true); // Start loading
+  
+    try {
+      const response = await api.get(
+        `otp_checking_personal_account/${formData.customer_id}/${otpArray.join('')}`
+      );
+  
       if (response.data.success === true) {
-        // const customerId = res.data.data.customer_id;
-        // console.log(customerId);
-
-
-        // const updatedFormData = {
-        //   ...formData,
-        //   customer_id: customerId,
-        // };
-
-        // setCustomerId(customerId);
-
-
-
-        // navigation.navigate('Frstpage', {
-        //   formData: updatedFormData,
-        // });
         const customerId = response.data.data.customer_id;
+  
         const authData = {
           token: response.data.data.token,
           formData: {
-            ...formData, // Spread the existing formData
+            ...formData,
             customer_id: customerId,
             // Add other new properties here
           },
         };
+  
         await AsyncStorage.setItem('authData', JSON.stringify(authData));
+  
+        setAuthToken(response.data.data.token);
 
-        // Use the loginSuccess method from LoginContext
-        setAuthToken(authData.token);
 
-        // Check if formData has "first name" and "last name" properties
+
+        
+  
         if (formData.hasOwnProperty('first_name') && formData.hasOwnProperty('last_name')) {
-          // console.log('false');
-          
           const updatedFormData = {
             ...formData,
             customer_id: customerId,
@@ -161,48 +253,38 @@ const OtpPageNew = ({
             formData: updatedFormData,
           });
         } else {
-          // Check the new API for "first_name" and "last_name" properties
           axios
             .get(`${BASE_URL}get_personal_datas/${customerId}`)
             .then((personalDataRes) => {
-              // console.log(personalDataRes.data.data, "api of personal datas");
-              
-              if (
-                personalDataRes.data.data.first_name === null &&
-                personalDataRes.data.data.last_name === null
-              ) {
-                // "first_name" and "last_name" properties are null, navigate to 'NameLastName'
+              if (personalDataRes.data.data.first_name === null &&
+                  personalDataRes.data.data.last_name === null) {
                 navigation.navigate('NameLastName', { formData });
               } else {
-                formData= personalDataRes.data.data;
-                // console.log(formData, "new data from api");
-                
+                formData = personalDataRes.data.data;
+                console.log('====================================');
+                console.log(response.data.data.token);
+                console.log('====================================');
                 const authData = {
                   token: response.data.data.token,
+                
                   formData: {
-                    ...formData, // Spread the existing formData
+                    ...formData,
                     customer_id: customerId,
                     // Add other new properties here
                   },
                 };
                 AsyncStorage.setItem('authData', JSON.stringify(authData));
-        
-                // Use the loginSuccess method from LoginContext
                 setAuthToken(authData.token);
-        
-                // "first_name" and "last_name" properties are not null, navigate to 'Loading'
                 navigation.navigate('Loading', { formData: authData.formData });
               }
             })
             .catch((personalDataError) => {
               setIsLoadingVerify(false);
-              console.log(personalDataError , "error message personal");
+              console.log(personalDataError, "error message personal");
               // Handle error from the new API
             });
         }
-      }
-       else {
-        // Handle the case where the response is not successful
+      } else {
         alert(response.data.message);
         setIsLoadingVerify(false);
         console.log('API response indicates failure');
@@ -211,9 +293,10 @@ const OtpPageNew = ({
     } catch (error) {
       setIsLoadingVerify(false); // Stop loading
       console.log(error);
-      // Handle error from server
+      // Handle error from the server
     }
   };
+  
   const [timer, setTimer] = useState(60);
   const [isResendEnabled, setIsResendEnabled] = useState(true);
 

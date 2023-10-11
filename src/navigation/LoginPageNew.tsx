@@ -1,5 +1,11 @@
 /* eslint-disable prettier/prettier */
-import React, {useContext, useEffect, useState, useRef, useCallback} from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+} from 'react';
 import {
   SafeAreaView,
   View,
@@ -139,41 +145,35 @@ const LoginScreenNew = ({navigation, route}) => {
     }
   };
   const handleSignUp = useCallback(() => {
-    
+    setIsLoading(true); // Start loading
 
-      setIsLoading(true); // Start loading
+    axios
+      .get(`${BASE_URL}login_personal_customer_account/${phoneNumber}`)
+      .then((response) => {
+        setIsLoading(false); // Stop loading
 
-      axios
-        .get(`${BASE_URL}login_personal_customer_account/${phoneNumber}`)
-        .then((response) => {
-          setIsLoading(false); // Stop loading
+        // Handle response from server
+        // setCustomerId(response.data.data.customer_id);
 
-          // Handle response from server
-          // setCustomerId(response.data.data.customer_id);
+        const id = response.data.data.customer_id;
+        const formDataCopy = {
+          customer_id: id,
+          mobile_number: phoneNumber,
+        };
+        console.log(formDataCopy, 'checking');
 
-          const id = response.data.data.customer_id;
-          const formDataCopy = {
-           
-            customer_id: id,
-            mobile_number: phoneNumber,
-          }
-          console.log(formDataCopy ,"checking");
-          
-
-      
-          navigation.setParams({formData: formDataCopy});
-          navigation.navigate('OtpPage', {
-            formData: formDataCopy,
-          });
-        })
-        .catch((error) => {
-          setIsLoading(false); // Stop loading
-          console.log(error);
-          // Handle error from server
-          alert(error);
+        navigation.setParams({formData: formDataCopy});
+        navigation.navigate('OtpPage', {
+          formData: formDataCopy,
         });
-    
-  }, [ phoneNumber, navigation]);
+      })
+      .catch((error) => {
+        setIsLoading(false); // Stop loading
+        console.log(error);
+        // Handle error from server
+        alert(error);
+      });
+  }, [phoneNumber, navigation]);
 
   const handleResend = async () => {
     try {
@@ -215,9 +215,8 @@ const LoginScreenNew = ({navigation, route}) => {
   const handleChange = useCallback(
     (value) => {
       setRegistration((state) => ({...state, ...value}));
-      
     },
-    [setRegistration,  registration],
+    [setRegistration, registration],
   );
   useEffect(() => {
     setIsValid((state) => ({
@@ -345,7 +344,7 @@ const LoginScreenNew = ({navigation, route}) => {
                           </Text>
                         </Button>
                       </Block>
-                      
+
                       <Block
                         row
                         flex={0}
@@ -427,13 +426,12 @@ const LoginScreenNew = ({navigation, route}) => {
                             style={{
                               justifyContent: 'center',
                               alignSelf: 'center',
-                            }}  
-                            onPress={()=>{
+                            }}
+                            onPress={() => {
                               setFormShow(true);
                               setPhoneShow(false);
                               setEmailShow(true);
-                            }}
-                            >
+                            }}>
                             <Image
                               source={require('../assets/icons/fone.png')}
                               height={sizes.m}
@@ -441,9 +439,7 @@ const LoginScreenNew = ({navigation, route}) => {
                               color={colors.icon}
                             />
                           </Button>
-                          
                         </Block>
-                        
                       </Block>
                     </>
                   ) : (
@@ -476,32 +472,30 @@ const LoginScreenNew = ({navigation, route}) => {
                                   }
                                 }}
                                 value={phoneNumber}
-                                success={Boolean(registration.number && isValid.number)}
-                                danger={Boolean(registration.number && !isValid.number)}
+                                success={Boolean(
+                                  registration.number && isValid.number,
+                                )}
+                                danger={Boolean(
+                                  registration.number && !isValid.number,
+                                )}
                               />
                             </Block>
                           </Block>
                         </Block>
 
                         <Button
-
                           gradient={gradients.primary}
                           shadow={!isAndroid}
                           marginVertical={sizes.s}
                           marginHorizontal={sizes.sm}
                           onPress={() => handleSignUp()}
-                          disabled={
-                          
-                            !isValid.number
-                          }
-                          >
+                          disabled={!isValid.number}>
                           <Text bold white style={{color: 'white'}}>
                             Send otp
                           </Text>
                         </Button>
-                        
                       </Block>
-                      
+
                       <Block
                         row
                         flex={0}
@@ -584,13 +578,12 @@ const LoginScreenNew = ({navigation, route}) => {
                             style={{
                               justifyContent: 'center',
                               alignSelf: 'center',
-                            }}  
-                            onPress={()=>{
+                            }}
+                            onPress={() => {
                               setFormShow(true);
                               setPhoneShow(true);
                               setEmailShow(true);
-                            }}
-                            >
+                            }}>
                             <Image
                               source={require('../assets/icons/mail.png')}
                               height={sizes.m}
