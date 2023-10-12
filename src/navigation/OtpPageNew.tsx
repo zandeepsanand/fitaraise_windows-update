@@ -258,7 +258,26 @@ const OtpPageNew = ({
             .then((personalDataRes) => {
               if (personalDataRes.data.data.first_name === null &&
                   personalDataRes.data.data.last_name === null) {
-                navigation.navigate('NameLastName', { formData });
+
+                formData = personalDataRes.data.data;
+                const authData = {
+                  token: response.data.data.token,
+                
+                  formData: {
+                    ...formData,
+                    customer_id: customerId,
+                    // Add other new properties here
+                  },
+
+                };
+
+
+            
+
+                AsyncStorage.setItem('authData', JSON.stringify(authData));
+                setAuthToken(authData.token);
+
+                navigation.navigate('NameLastName', { formData : authData.formData , token : response.data.data.token  });
               } else {
                 formData = personalDataRes.data.data;
                 console.log('====================================');

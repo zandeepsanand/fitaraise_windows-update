@@ -28,10 +28,10 @@ console.log(api , "api check");
           const authDataJSON = await AsyncStorage.getItem('authData');
           if (authDataJSON) {
             const authData = JSON.parse(authDataJSON);
-            console.log(authData , "auth Data");
+           
             
             const authToken = authData.token;
-  
+            console.log(authToken , "auth Data");
             if (authToken) {
               setAuthToken(authToken);
               const requiredCalorieResponse = await api.get(`get_daily_required_calories/${authData.formData.customer_id}`);
@@ -81,6 +81,10 @@ console.log(api , "api check");
         } catch (error) {
           console.error('Authentication Status Error:', error);
           setIsLoading(false);
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'loginNew' }],
+          });
         }
       };
   

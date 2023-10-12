@@ -48,7 +48,8 @@ interface IRegistrationValidation {
 }
 
 const NameLastName = ({navigation, route}) => {
-  const {formData, token} = route.params;
+  const {formData,token} = route.params;
+console.log(token , "form");
 
   const [email, setEmail] = useState('');
   const [lastName, setLastName] = useState('');
@@ -131,42 +132,107 @@ const NameLastName = ({navigation, route}) => {
     }));
   }, [registration, setIsValid]);
 
+  // const signup = useCallback(() => {
+
+  //   setIsLoading(true); // Start loading
+  //   const formDataCopy = {
+  //     ...formData,
+  //     first_name: registration.name,
+  //     last_name: registration.last_name,
+  //   };
+  //   console.log(formDataCopy , "check inside data form");
+    
+  //   const authData = {
+  //     token: token,
+  //     formData: formDataCopy,
+  //   };
+  //   //   const formData = authData.formData;
+  //   console.log(authData ,"to db");
+
+  //   // Store the authData object as a JSON string in AsyncStorage
+  //   AsyncStorage.setItem('authData', JSON.stringify(authData));
+
+  //   // Use the loginSuccess method from LoginContext
+  //   // setAuthToken(token);
+  //   for (const key in formDataCopy) {
+  //     if (formDataCopy[key] === null) {
+  //       delete formDataCopy[key];
+  //     }
+  //   }
+   
+    
+  //   api
+  //     .post(`set_personal_datas`, formDataCopy)
+  //     .then((response) => {
+  //       console.log(response.data);
+        
+  //       setIsLoading(false); // Stop loading
+  //       console.log(formDataCopy, 'checking');
+  //       navigation.setParams({formData: formDataCopy});
+  //       navigation.navigate('Loading', {
+  //         formData: formDataCopy,
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       setIsLoading(false); // Stop loading
+  //       console.log(error , "error");
+  //       // Handle error from server
+  //       alert(error);
+  //     });
+  // }, [formData, phoneNumber, navigation]);
+
   const signup = useCallback(() => {
     setIsLoading(true); // Start loading
-    const formDataCopy = {
-      ...formData,
-      first_name: registration.name,
-      last_name: registration.last_name,
-    };
+  
+    // Create a copy of formData
+    const formDataCopy = { ...formData };
+  
+    // Check if "first_name" and "last_name" are provided in the registration object
+    if (registration.name) {
+      formDataCopy.first_name = registration.name;
+    }
+  
+    if (registration.last_name) {
+      formDataCopy.last_name = registration.last_name;
+    }
+  
+    // Filter out null fields
+    for (const key in formDataCopy) {
+      if (formDataCopy[key] === null) {
+        delete formDataCopy[key];
+      }
+    }
+  
+    // Create the authData object
     const authData = {
       token: token,
-      formData: formData,
+      formData: formDataCopy,
     };
-    //   const formData = authData.formData;
-    // console.log(formData);
-
+  
     // Store the authData object as a JSON string in AsyncStorage
     AsyncStorage.setItem('authData', JSON.stringify(authData));
-
-    // Use the loginSuccess method from LoginContext
-    setAuthToken(token);
-    axios
-      .post(`${BASE_URL}set_personal_datas`, formDataCopy)
+  
+    // Make the API request
+    api
+      .post(`set_personal_datas`, formDataCopy)
       .then((response) => {
+        console.log(response.data);
         setIsLoading(false); // Stop loading
-        console.log(formDataCopy, 'checking');
-        navigation.setParams({formData: formDataCopy});
+        navigation.setParams({ formData: formDataCopy });
         navigation.navigate('Loading', {
           formData: formDataCopy,
         });
       })
       .catch((error) => {
         setIsLoading(false); // Stop loading
-        console.log(error);
+        console.log(error, "error");
         // Handle error from server
         alert(error);
       });
-  }, [formData, phoneNumber, navigation]);
+  }, [formData, registration, token, navigation]);
+  
+  
+
   return (
     <Block safe marginTop={sizes.xl} style={{backgroundColor: '#ffff'}}>
       <Block scrollEnabled>

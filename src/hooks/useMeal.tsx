@@ -60,6 +60,7 @@ const MealContextProvider: React.FC = ({children}) => {
   const [mealItems2, setMealItems2] = useState<any[]>([]);
   const [transformedData, setTransformedData] = useState([]);
   const [totalCalories, setTotalCalories] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   console.log(transformedData, 'log dinner ');
 
   // Mapping function to transform API data into the desired format
@@ -231,77 +232,55 @@ const MealContextProvider: React.FC = ({children}) => {
   }
   useEffect(() => {
     const checkAuthenticationStatus = async () => {
-     
-      
       try {
         const authDataJSON = await AsyncStorage.getItem('authData');
-        
+
         if (authDataJSON) {
           const authData = JSON.parse(authDataJSON);
           const authToken = authData.token;
 
           if (authToken) {
             const formDataCopy = authData.formData;
-            // console.log(formDataCopy , "form1");
-
-            // const apiUrl = `get_diet_list_wrt_date/${formDataCopy.customer_id}/2023-10-04`;
             const currentDate = new Date();
-
-            // Format the date as YYYY-MM-DD
             const formattedDate = `${currentDate.getFullYear()}-${String(
-              currentDate.getMonth() + 1,
-            ).padStart(2, '0')}-${String(currentDate.getDate()).padStart(
-              2,
-              '0',
-            )}`;
-
-            // console.log(formattedDate, 'Formatted date');
+              currentDate.getMonth() + 1
+            ).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
 
             const apiUrl = `get_diet_list_wrt_date/${formDataCopy.customer_id}/${formattedDate}`;
             // Make the API request to get data
             api
               .get(apiUrl)
               .then((response) => {
-                // console.log(response , "food");
-                
-                // Handle the successful API response
                 const responseData = response.data;
-                // console.log(response,'response from api food');
-                // Use the mapping function to transform the data into the desired format
                 const transformedData = mapApiDataToDesiredFormat(responseData);
 
-                // Now you can use transformedData in your application
-                // console.log(transformedData, 'Transformed data');
                 if (transformedData.breakfastItems) {
                   setBreakfastItems(transformedData.breakfastItems);
-                  console.log(transformedData.breakfastItems , "from db");
-                  
                 }
                 if (transformedData.dinnerItems) {
                   setDinnerItems(transformedData.dinnerItems);
                 }
-
-                // Update your state with the transformed data
-                // setDinnerItems(transformedData);
+                setIsLoading(false); // Data is loaded
               })
               .catch((error) => {
-                // Handle any errors that occur during the API request
                 console.error('Error fetching data:', error);
                 if (error.response && error.response.data) {
                   console.error('Server Error Details:', error.response.data);
                 }
+                setIsLoading(false); // Handle error and still set isLoading to false
               });
-             
           }
         }
       } catch (error) {
         console.error('Error retrieving authData:', error);
+        setIsLoading(false); // Handle error and still set isLoading to false
       }
     };
 
-    // Call the authentication check function
-    checkAuthenticationStatus();
-    // Define the URL for your API request
+    // Call the authentication check function only if data is not already loaded
+    if (isLoading) {
+      checkAuthenticationStatus();
+    }
   }, []);
 
   // Usage: Assuming you have received the API response in a variable called `apiResponse`
