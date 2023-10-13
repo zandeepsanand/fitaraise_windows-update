@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, {createContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import axios from 'axios';
 import {BASE_URL} from '@env';
 import api from '../../api';
@@ -61,6 +62,9 @@ const MealContextProvider: React.FC = ({children}) => {
   const [transformedData, setTransformedData] = useState([]);
   const [totalCalories, setTotalCalories] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [customerId, setCustomerId] = useState('');
+  console.log(customerId, 'useMeal customer id ');
+
   console.log(transformedData, 'log dinner ');
 
   // Mapping function to transform API data into the desired format
@@ -158,7 +162,7 @@ const MealContextProvider: React.FC = ({children}) => {
           carb_in_g: item.carb,
           cholestrol_in_mg: item.cholestrol,
           details: {
-            id: item.serving_description_id,
+            id: item.id,
             selectedWeight: item.taken_weight,
             multiplication: item.quantity,
             quantity: item.quantity,
@@ -241,10 +245,15 @@ const MealContextProvider: React.FC = ({children}) => {
 
           if (authToken) {
             const formDataCopy = authData.formData;
+            setCustomerId(formDataCopy.customer_id);
+
             const currentDate = new Date();
             const formattedDate = `${currentDate.getFullYear()}-${String(
-              currentDate.getMonth() + 1
-            ).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+              currentDate.getMonth() + 1,
+            ).padStart(2, '0')}-${String(currentDate.getDate()).padStart(
+              2,
+              '0',
+            )}`;
 
             const apiUrl = `get_diet_list_wrt_date/${formDataCopy.customer_id}/${formattedDate}`;
             // Make the API request to get data
@@ -283,138 +292,30 @@ const MealContextProvider: React.FC = ({children}) => {
     }
   }, []);
 
-  // Usage: Assuming you have received the API response in a variable called `apiResponse`
-  // const dinnerDataInDesiredFormat = mapApiDataToDesiredFormat(apiResponse);
 
-  // useEffect(() => {
-  //   // Define the URL for your API request
-  //   // Mapping function to transform API data into the desired format
-  //   function mapApiDataToDesiredFormat(apiResponse) {
-  //     const dietDetails = apiResponse.data.diet_details;
-  //     const dinnerData = dietDetails.find((meal) => meal.meal_type_id === 6);
-
-  //     if (dinnerData) {
-  //       const mappedDinnerData = dinnerData.diet_list.map((item) => {
-  //         return {
-  //           added_by: null,
-  //           cal_weight_200: item.calories, // Map calories from the item
-  //           calcium_in_mg: item.calcium,
-  //           calories: item.calories,
-  //           carb_in_g: item.carb,
-  //           cholestrol_in_mg: item.cholestrol,
-  //           created_at: item.created_at,
-  //           deleted_at: item.deleted_at,
-  //           details: {
-  //             added_date: item.added_date,
-  //             customer_id: item.customer_id,
-  //             desc: item.desc,
-  //             desc_num_food_tbl: item.desc_num_food_tbl,
-  //             food_id: item.id,
-  //             mealType: item.meal_type,
-  //             meal_type: item.meal_type_id,
-  //             multiplication: 1,
-  //             quantity: item.quantity,
-  //             selectedDropDown: item.serving_description,
-  //             selectedWeight: item.serving_weight_1, // You can choose the appropriate serving weight
-  //             serving_desc_id: item.serving_description_id,
-  //             taken_weight: item.taken_weight,
-  //             totalCalcium: item.calcium_in_mg,
-  //             totalCalorie: item.calories,
-  //             totalCarb: item.carb_in_g,
-  //             totalCholesterol: item.cholestrol_in_mg,
-  //             totalFat: item.fat_in_g,
-  //             totalFiber: item.fiber_in_g,
-  //             totalIron: item.iron_in_mg,
-  //             totalMonounsaturatedFat: item.monounsaturated_fat_in_g,
-  //             totalPolyunsaturatedFat: item.polyunsaturated_fat_in_g,
-  //             totalPotassium: item.potassium_in_mg,
-  //             totalProtein: item.protein_in_g,
-  //             totalSaturatedFat: item.saturated_fat_in_g,
-  //             totalSodium: item.sodium_in_mg,
-  //             totalSugar: item.sugar_in_g,
-  //             totalTransFat: item.trans_fat_in_g,
-  //             totalVitaminAIU: item.vitamin_a_iu,
-  //             totalVitaminARAE: item.vitamin_a_rae,
-  //             totalVitaminC: item.vitamin_c_in_mg,
-  //             totalVitaminD: item.vitamin_d_mg,
-  //           },
-  //           fat_in_g: item.fat_in_g,
-  //           fiber_in_g: item.fiber_in_g,
-  //           food_group: item.food_group,
-  //           food_name: item.food_name,
-  //           id: item.id,
-  //           image: item.food_image,
-  //           iron_in_mg: item.iron_in_mg,
-  //           is_active: item.is_active,
-  //           monounsaturated_fat_in_g: item.monounsaturated_fat,
-  //           polyunsaturated_fat_in_g: item.polyunsaturated_fat,
-  //           potassium_in_mg: item.potassium_in_mg,
-  //           protein_in_g: item.protein_in_g,
-  //           saturated_fat_in_g: item.saturated_fat_in_g,
-  //           serving_desc_1: '1 oz', // You can choose an appropriate serving description
-  //           serving_desc_2: '1 piece', // You can choose an appropriate serving description
-  //           serving_desc_3: '3 Piece', // You can choose an appropriate serving description
-  //           // ... Map other properties similarly
-  //         };
-  //       });
-
-  //       return mappedDinnerData;
-  //     }
-
-  //     // Return an empty array if there is no dinner data
-  //     return [];
-  //   }
-
-  //   // Usage: Assuming you have received the API response in a variable called `apiResponse`
-  //   const dinnerDataInDesiredFormat = mapApiDataToDesiredFormat(apiResponse);
-
-  //   const apiUrl = `get_diet_list_wrt_date/15/2023-10-03`;
-  //   api
-  //     .get(apiUrl)
-  //     .then((response) => {
-  //       // Handle the successful API response
-  //       const responseData = response.data;
-
-  //       // Use the mapping function to transform the data into the desired format
-  //       const transformedData = mapApiDataToDesiredFormat(responseData);
-
-  //       // Now you can use transformedData in your application
-  //       console.log(transformedData, 'Transformed data');
-
-  //       // Update your state or perform other actions with the transformed data
-  //       // setYourState(transformedData);
-  //     })
-  //     .catch((error) => {
-  //       // Handle any errors that occur during the API request
-  //       console.error('Error fetching data:', error);
-  //     });
-  // }, []);
-
-  const addBreakfastItem = (food: any, details: any, db: any, dbs: any) => {
-    // console.log( 'again added');
-    // return false;
-
-    // console.log(details,'food details' );
-    const formData = new FormData();
-    formData.append('details', JSON.stringify(details));
-    // console.log(formData , "hallllooooooooooo");
-    // if the item already exists in the breakfastItems array, update it instead of adding a new item
+ 
+  const addBreakfastItem = (food: any, details: any) => {
+    console.log(details.customer_id, 'customer id');
     const existingIndex = breakfastItems.findIndex(
       (item) => item.id === food.id,
     );
     if (existingIndex !== -1) {
-     
+      // Item already exists, update it
+      console.log(food, 'id from db to update food');
+      console.log(details, 'details id from db to update');
+
       const updatedItems = [...breakfastItems];
       updatedItems[existingIndex] = {...food, details};
-      setBreakfastItems(updatedItems);
+      // setBreakfastItems(updatedItems);
       var bodyFormData = new FormData();
-      bodyFormData.append('id', details.id);
+      bodyFormData.append('id', food.details.id);
       bodyFormData.append('meal_type', details.meal_type);
-      bodyFormData.append('food_id', details.food_id);
-      bodyFormData.append('taken_weight', details.taken_weight);
-      bodyFormData.append('quantity', details.quantity);
-      bodyFormData.append('serving_desc_id', details.serving_desc_id);
-      bodyFormData.append('desc_num_food_tbl', details.desc_num_food_tbl);
+      bodyFormData.append('food_id', food.id);
+      bodyFormData.append('taken_weight', details.selectedWeight);
+      bodyFormData.append('quantity', details.multiplication);
+      bodyFormData.append('serving_desc_id', details.id);
+      bodyFormData.append('desc_num_food_tbl', details.id);
+
       api({
         method: 'post',
         url: `update_diet_data`,
@@ -422,16 +323,54 @@ const MealContextProvider: React.FC = ({children}) => {
         headers: {'Content-Type': 'multipart/form-data'},
       })
         .then(function (response) {
-          //handle success
-          console.log(response.data, 'successfully updated updated added db');
+          // Handle success
+          console.log(response.data, 'successfully updated in the database');
+          const currentDate = new Date();
+          const formattedDate = `${currentDate.getFullYear()}-${String(
+            currentDate.getMonth() + 1,
+          ).padStart(2, '0')}-${String(currentDate.getDate()).padStart(
+            2,
+            '0',
+          )}`;
+          const apiUrl = `get_diet_list_wrt_date/${customerId}/${formattedDate}`;
+          // Make the API request to get data
+          api
+            .get(apiUrl)
+            .then((response) => {
+              const responseData = response.data;
+              const transformedData = mapApiDataToDesiredFormat(responseData);
+
+              console.log(transformedData.breakfastItems, 'breakfast adding');
+              // Assuming transformedData contains the breakfast data
+              if (transformedData.breakfastItems) {
+                const itemToAdd = transformedData.breakfastItems.find(
+                  (item) => item.id === food.id,
+                );
+                // Map and add each item to breakfastItems
+                console.log(itemToAdd, 'the data i want');
+                if (itemToAdd) {
+                  console.log(itemToAdd, 'added');
+                  // Add the item to breakfastItems
+                  const updatedItems = [...breakfastItems];
+                  updatedItems[existingIndex] = {
+                    ...food,
+                    details: itemToAdd.details,
+                  };
+                  setBreakfastItems(updatedItems);
+                }
+              }
+            })
+            .catch(function (error) {
+              // Handle error when fetching data from the API
+              console.error('Error fetching data from the API:', error);
+            });
         })
-        .catch(function (response) {
-          //handle error
-          console.log(response.message, 'error');
+        .catch(function (error) {
+          // Handle error
+          console.error(error, 'error');
         });
     } else {
-      console.log( 'existing account');
-      setBreakfastItems([...breakfastItems, {...food, details}]);
+      // Now, you can update the API with the newly added data
       var bodyFormData = new FormData();
       bodyFormData.append('customer_id', details.customer_id);
       bodyFormData.append('meal_type', details.meal_type);
@@ -441,6 +380,7 @@ const MealContextProvider: React.FC = ({children}) => {
       bodyFormData.append('serving_desc_id', details.serving_desc_id);
       bodyFormData.append('desc', details.desc);
       bodyFormData.append('added_date', details.added_date);
+
       api({
         method: 'post',
         url: `add_diet_data`,
@@ -448,16 +388,57 @@ const MealContextProvider: React.FC = ({children}) => {
         headers: {'Content-Type': 'multipart/form-data'},
       })
         .then(function (response) {
-          //handle success
-          console.log(response.data, 'success added db');
+          // Handle success
+          console.log(response.data, 'successfully added to the database');
+
+          const currentDate = new Date();
+          const formattedDate = `${currentDate.getFullYear()}-${String(
+            currentDate.getMonth() + 1,
+          ).padStart(2, '0')}-${String(currentDate.getDate()).padStart(
+            2,
+            '0',
+          )}`;
+
+          const apiUrl = `get_diet_list_wrt_date/${customerId}/${formattedDate}`;
+
+          // Make the API request to get data
+          api
+            .get(apiUrl)
+            .then((response) => {
+              const responseData = response.data;
+              const transformedData = mapApiDataToDesiredFormat(responseData);
+
+              console.log(transformedData.breakfastItems, 'breakfast adding');
+              // Assuming transformedData contains the breakfast data
+              if (transformedData.breakfastItems && details.food_id) {
+                const itemToAdd = transformedData.breakfastItems.find(
+                  (item) => item.id === details.food_id,
+                );
+                // Map and add each item to breakfastItems
+                console.log(itemToAdd, 'the data i want');
+                if (itemToAdd) {
+                  console.log(itemToAdd, 'added');
+                  // Add the item to breakfastItems
+                  setBreakfastItems((prevItems) => [
+                    ...prevItems,
+                    {...food, details: itemToAdd.details},
+                  ]);
+                }
+              }
+            })
+            .catch(function (error) {
+              // Handle error when fetching data from the API
+              console.error('Error fetching data from the API:', error);
+            });
         })
-        .catch(function (response) {
-          //handle error
-          console.log(response, 'error');
+        .catch(function (error) {
+          // Handle error when adding data to the database
+          console.error('Error adding data to the database:', error);
         });
     }
     // setTotalCalories(totalCalories + food.calories);
   };
+
   const addMorningSnackItem = (food: any, details: any) => {
     const formData = new FormData();
     formData.append('details', JSON.stringify(details));
@@ -811,7 +792,6 @@ const MealContextProvider: React.FC = ({children}) => {
       };
       setBreakfastItems(updatedItems);
       console.log('updated');
-      
     }
   };
 

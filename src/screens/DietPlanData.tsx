@@ -36,7 +36,7 @@ const DietPlanData = ({route, navigation}) => {
   // new items for adding food to db
   const [servingId, setServingId] = useState('');
   // console.log(servingId);
-  
+
   const [servingDesc, setServingDesc] = useState('');
 
   const [selectedDropDown, setSelectedDropDown] = useState('');
@@ -116,7 +116,7 @@ const DietPlanData = ({route, navigation}) => {
   const IMAGE_MARGIN = (sizes.width - IMAGE_SIZE * 3 - sizes.padding * 2) / 2;
   const IMAGE_VERTICAL_MARGIN =
     (sizes.width - (IMAGE_VERTICAL_SIZE + sizes.sm) * 2) / 2;
-    const [isLoadingServingGrams ,setIsLoadingServingGrams ] =useState(false);
+  const [isLoadingServingGrams, setIsLoadingServingGrams] = useState(false);
   useEffect(() => {
     setIsLoadingServingGrams(true);
     axios
@@ -227,7 +227,7 @@ const DietPlanData = ({route, navigation}) => {
   const handleGramChange = (value) => {
     // Parse the input value as an integer
     const parsedValue = parseInt(value, 10);
-  
+
     if (!isNaN(parsedValue) && parsedValue > 0) {
       // Set the valid value
       setMultiplication(parsedValue);
@@ -238,7 +238,7 @@ const DietPlanData = ({route, navigation}) => {
     }
   };
   // console.log(multiplication,"count");
-  
+
   useEffect(() => {
     if (multiplication) {
       setTotalCalorie((multiplication * calorieAmount).toFixed(2));
@@ -342,8 +342,8 @@ const DietPlanData = ({route, navigation}) => {
     switch (mealType) {
       case 'breakfast':
       case 'breakfast':
-        // console.log(responseData, mealDetails , "from device breakfast");
-        
+        console.log(responseData, "from device breakfast");
+
         addBreakfastItem(responseData, mealDetails);
         break;
       case 'morningSnackItems':
@@ -368,10 +368,10 @@ const DietPlanData = ({route, navigation}) => {
         break;
     }
     console.log(servingId);
-    
+
     if (servingId !== null) {
       // console.log(servingId);
-      
+
       // console.log(mealDetails.customer_id, 'demo');
 
       // navigation.navigate('tabNavigator', {
@@ -397,84 +397,80 @@ const DietPlanData = ({route, navigation}) => {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{paddingBottom: sizes.padding}}>
             <Block marginTop={20}>
-              <Block card  padding={0}>
-                
-                <Image 
+              <Block card padding={0}>
+                <Image
                   background
                   padding={15}
                   blurRadius={10}
                   resizeMode="cover"
                   source={require('../assets/images/bg111.jpg')}
-                  radius={sizes.cardRadius}
-                >
+                  radius={sizes.cardRadius}>
                   <Block row>
-
-                
-                {responseData.image ===
-                'https://admin.fitaraise.com/storage/uploads/app_images/no_image.png' ? (
-                  // <Image
-                  //   resizeMode="contain"
-                  //   source={assets.dosa}
-                  //   style={{height: 114, width: 114}}
-                  // />
-                  <View
-                    style={{
-                      width: sizes.xxl,
-                      backgroundColor: 'rgb(245,232,250)',
-                      borderRadius: sizes.s,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Text style={{fontSize: 50, color: '#fff'}} bold primary>
-                      {responseData.food_name.charAt(0)}
-                    </Text>
-                  </View>
-                ) : (
-                  <Image
-                    resizeMode="contain"
-                    source={{
-                      uri: `${responseData.image}`,
-                    }}
-                    style={{height: 114, width: 114}}
-                  />
-                )}
-
-                <Block padding={sizes.s} justify="space-between">
-                  <Block row style={{justifyContent: 'space-around'}}>
-                    <Block paddingBottom={10} paddingLeft={10}>
-                      <Text p bold color={colors.primary}>
-                        {responseData.food_name}
-                      </Text>
-                    </Block>
-
-                    <TouchableOpacity onPress={toggleFavorite}>
-                      <Icon
-                        name={isFavorite ? 'heart' : 'heart-o'}
-                        size={30}
-                        color="green"
+                    {responseData.image ===
+                    'https://admin.fitaraise.com/storage/uploads/app_images/no_image.png' ? (
+                      // <Image
+                      //   resizeMode="contain"
+                      //   source={assets.dosa}
+                      //   style={{height: 114, width: 114}}
+                      // />
+                      <View
+                        style={{
+                          width: sizes.xxl,
+                          backgroundColor: 'rgb(245,232,250)',
+                          borderRadius: sizes.s,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
+                        <Text
+                          style={{fontSize: 50, color: '#fff'}}
+                          bold
+                          primary>
+                          {responseData.food_name.charAt(0)}
+                        </Text>
+                      </View>
+                    ) : (
+                      <Image
+                        resizeMode="contain"
+                        source={{
+                          uri: `${responseData.image}`,
+                        }}
+                        style={{height: 114, width: 114}}
                       />
-                    </TouchableOpacity>
-                  </Block>
+                    )}
 
-                  <TouchableOpacity>
-                    <Block row paddingBottom={10} paddingLeft={10}>
-                      <Text
-                        p
-                        semibold
-                        marginRight={sizes.s}
-                        color={colors.secondary}>
-                         Selected Gram : {multiplication * selectedWeight}g
-                      </Text>
+                    <Block padding={sizes.s} justify="space-between">
+                      <Block row style={{justifyContent: 'space-around'}}>
+                        <Block paddingBottom={10} paddingLeft={10}>
+                          <Text p bold color={colors.primary}>
+                            {responseData.food_name}
+                          </Text>
+                        </Block>
 
-                      {/* <Image source={assets.arrow} color={colors.link} /> */}
+                        <TouchableOpacity onPress={toggleFavorite}>
+                          <Icon
+                            name={isFavorite ? 'heart' : 'heart-o'}
+                            size={30}
+                            color="green"
+                          />
+                        </TouchableOpacity>
+                      </Block>
+
+                      <TouchableOpacity>
+                        <Block row paddingBottom={10} paddingLeft={10}>
+                          <Text
+                            p
+                            semibold
+                            marginRight={sizes.s}
+                            color={colors.secondary}>
+                            Selected Gram : {multiplication * selectedWeight}g
+                          </Text>
+
+                          {/* <Image source={assets.arrow} color={colors.link} /> */}
+                        </Block>
+                      </TouchableOpacity>
                     </Block>
-                  </TouchableOpacity>
-                </Block>
-              
-             
-             
-             </Block>
-              </Image>
+                  </Block>
+                </Image>
               </Block>
             </Block>
             {/* <Block card style={{alignSelf:'center' , width:400 , justifyContent:'space-around'}} row marginTop={10} paddingHorizontal={sizes.s}>
@@ -608,7 +604,7 @@ const DietPlanData = ({route, navigation}) => {
                     align="center"
                     paddingTop={sizes.m}>
                     {responseData.food_name} - Nutrition Facts of{' '}
-                   {multiplication * selectedWeight} g
+                    {multiplication * selectedWeight} g
                   </Text>
                   <Block
                     row

@@ -104,7 +104,7 @@ const FoodPage = ({route, navigation}) => {
     morningSnackItems,
     addBreakfastItem,
   } = useContext(MealContext);
-  console.log(breakfastItems[0] ,"first one");
+  // console.log(breakfastItems[0] ,"first one");
 
   const {assets, colors, gradients, sizes, fonts, user} = useTheme();
   const [selectedValue, setSelectedValue] = useState(245);
@@ -379,7 +379,7 @@ const FoodPage = ({route, navigation}) => {
     mealType,
     meal_type,
   };
-  console.log(id, 'db id ');
+  // console.log(id, 'db id ');
 
   const handleAddFood = async (item) => {
     setIsLoading(true);
@@ -388,7 +388,7 @@ const FoodPage = ({route, navigation}) => {
       case 'breakfast':
         try {
           setIsLoading(false);
-          await addBreakfastItem(item, mealDetails);
+          await addBreakfastItem(item ,mealDetails);
           console.log('Breakfast item added successfully');
           console.log(mealDetails, 'dark');
           // Handle any post-addition logic or navigation here
@@ -572,6 +572,7 @@ const FoodPage = ({route, navigation}) => {
                           style={{fontSize: 50, color: '#fff'}}
                           bold
                           primary>
+                          {/* {item.food_name} */}
                           {item.food_name.charAt(0)}
                         </Text>
                       </Block>

@@ -20,7 +20,7 @@ import ProgressBar from 'react-native-progress-step-bar';
 
 import * as Progress from 'react-native-progress';
 
-import {log} from 'react-native-reanimated';
+// import {log} from 'react-native-reanimated';
 import {MealContext} from '../hooks/useMeal';
 import Axios from 'axios';
 import PreviousDietDetails from './foodPage/PreviousDietDetails';
@@ -100,7 +100,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     mealItems1,
     mealItems2,
   } = useContext(MealContext);
-  console.log(breakfastItems, 'breakfast from device distribution');
+  // console.log(breakfastItems, 'breakfast from device distribution');
 
   // Calculate total protein, carbs, fat, and kcal for breakfast items
   const calculateTotalCalories = (items) => {
@@ -252,7 +252,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     totalMeal2Calorie;
   const ProgressCalorie = totalCaloriesOfAllFoods;
   const ProgressCalories = ProgressCalorie.toFixed(0);
-  console.log(ProgressCalories, 'total Calories');
+  // console.log(ProgressCalories, 'total Calories');
 
   const totalProteinfAllFoods =
     totalBreakfastProtein +
@@ -264,7 +264,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     totalMeal2Protein;
   const ProgressProtein = totalProteinfAllFoods;
   const ProgressProteins = ProgressProtein.toFixed(0);
-  console.log(ProgressProteins, 'total Protein');
+  // console.log(ProgressProteins, 'total Protein');
 
   const totalFatfAllFoods =
     totalBreakfastFat +
@@ -276,7 +276,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     totalMeal2Fat;
   const ProgressFat = totalFatfAllFoods;
   const ProgressFats = ProgressFat.toFixed(0);
-  console.log(ProgressFats, 'total fat');
+  // console.log(ProgressFats, 'total fat');
 
   const totalCarbfAllFoods =
     totalBreakfastCarb +
@@ -288,7 +288,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     totalMeal2Carb;
   const ProgressCarb = totalCarbfAllFoods;
   const ProgressCarbs = ProgressCarb.toFixed(0);
-  console.log(ProgressCarbs, 'total Carbs');
+  // console.log(ProgressCarbs, 'total Carbs');
 
   const initialValueWithoutDecimals = Math.floor(
     data.calories - totalCaloriesOfAllFoods >= 1
@@ -394,13 +394,13 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
   //   setSelectedDate(newSelectedDate);
 
   // };
-  console.log(selectedDate, 'selected date');
+  // console.log(selectedDate, 'selected date');
   const currentDate = new Date().toISOString().slice(0, 10);
   const [apiData, setApiData] = useState(null);
-  console.log(apiData, 'the data of diet');
+  // console.log(apiData, 'the data of diet');
 
   const handleScrollCalendarDateChange = async (selectedDate) => {
-    console.log(selectedDate, 'hai');
+    // console.log(selectedDate, 'hai');
     setSelectedDate(selectedDate);
 
     setApiData(null); // Clear previous API data when selecting a new date
@@ -415,7 +415,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
           `get_diet_list_wrt_date/${formDataCopy.customer_id}/${selectedDate}`,
         );
         const responseData = response.data.data;
-        console.log(responseData, 'diet data');
+        // console.log(responseData, 'diet data');
         setApiData(responseData);
       } catch (error) {
         console.log(error);
