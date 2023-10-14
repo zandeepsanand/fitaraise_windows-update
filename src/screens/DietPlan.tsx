@@ -29,6 +29,7 @@ const isAndroid = Platform.OS === 'android';
 
 import {useRoute} from '@react-navigation/native';
 import api from '../../api';
+import { ActivityIndicator } from 'react-native';
 // import { colors } from '../../app/res/colors';
 // import AnimatableProgressBar from 'animateprogress';
 
@@ -56,15 +57,36 @@ const VerticalProgressBar = ({progress}) => {
 
 const DietPlan = ({navigation, text, maxLines = 3}) => {
   const route = useRoute();
+  const {
+    breakfastItems,
+    lunchItems,
+    eveningSnackItems,
+    dinnerItems,
+    deleteItem,
+    morningSnackItems,
+    mealItems1,
+    mealItems2,
+    isLoading,
+  } = useContext(MealContext);
+  
 
   const {data, dietPlan, formDataCopy} = route.params;
 
   useEffect(() => {
-    // Navigate to the "Screens" screen when the Menu component is first loaded
-    // console.log(data , "updatess diet plan");
+    const checkDataLoading = async () => {
+      if (isLoading) {
+        // Perform your data loading logic here
+        // ...
+
+        // Once data is loaded, you can update the context values
+      }
+    };
+
+    checkDataLoading();
     
    
-  }, [data , dietPlan, formDataCopy]);
+  }, [isLoading, data , dietPlan, formDataCopy]);
+
 
   console.log(data, 'check 2');
 
@@ -90,17 +112,14 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     setExpandedItems(updatedExpandedItems);
   };
 
-  const {
-    breakfastItems,
-    lunchItems,
-    eveningSnackItems,
-    dinnerItems,
-    deleteItem,
-    morningSnackItems,
-    mealItems1,
-    mealItems2,
-  } = useContext(MealContext);
-  // console.log(breakfastItems, 'breakfast from device distribution');
+ 
+  console.log(breakfastItems, 'breakfast from device distribution');
+
+  if (!breakfastItems || !lunchItems || !eveningSnackItems) {
+    // Render a loading indicator while data is being fetched
+    return <ActivityIndicator size="large" color="blue" />;
+  }
+  
 
   // Calculate total protein, carbs, fat, and kcal for breakfast items
   const calculateTotalCalories = (items) => {
@@ -424,7 +443,13 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
   };
 
   return (
+
     <Block paddingTop={10}>
+        {isLoading ? (
+      // While data is loading, you can display a loading indicator
+      <ActivityIndicator size="large" color="green" />
+    ) : (
+      <>
       {/* search input */}
       <Block color={colors.card} flex={0}>
         {/* <Input icon  placeholder={t('common.search')} /> */}
@@ -2512,7 +2537,11 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
       {/* toggle products list */}
 
       {/* products list */}
+      </>
+    )}
     </Block>
+  
+  
   );
 };
 const styles = StyleSheet.create({

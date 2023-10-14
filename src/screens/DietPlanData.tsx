@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {MealContext} from '../hooks/useMeal';
 import {FOOD_IMAGE, BASE_URL} from '@env';
 import SelectDropdown from 'react-native-select-dropdown';
+import {ActivityIndicator} from 'react-native';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -79,6 +80,7 @@ const DietPlanData = ({route, navigation}) => {
   const [totalVitaminD, setTotalVitaminD] = useState(0);
   const [totalCalcium, setTotalCalcium] = useState(0);
   const [totalIron, setTotalIron] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const {
     addBreakfastItem,
@@ -339,10 +341,11 @@ const DietPlanData = ({route, navigation}) => {
   };
 
   const handleAddFood = () => {
+    setLoading(true);
     switch (mealType) {
       case 'breakfast':
       case 'breakfast':
-        console.log(responseData, "from device breakfast");
+        console.log(responseData, 'from device breakfast');
 
         addBreakfastItem(responseData, mealDetails);
         break;
@@ -382,6 +385,7 @@ const DietPlanData = ({route, navigation}) => {
         formDataCopy, // Pass your parameters here
       });
     }
+    setLoading(false);
   };
   return (
     <Block safe>
@@ -868,15 +872,15 @@ const DietPlanData = ({route, navigation}) => {
         </Block>
       </Block>
       <Block center style={styles.buttonContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            // setSelectedFood(responseData.food_name);
-            handleAddFood();
-          }}>
-          <Text style={styles.buttonText} bold>
-            Add
-          </Text>
-        </TouchableOpacity>
+        {loading ? ( // Show loading indicator if loading is true
+          <ActivityIndicator size="large" color="blue" />
+        ) : (
+          <TouchableOpacity onPress={handleAddFood}>
+            <Text style={styles.buttonText} bold>
+              Add
+            </Text>
+          </TouchableOpacity>
+        )}
       </Block>
     </Block>
   );

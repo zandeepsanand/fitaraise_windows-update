@@ -27,7 +27,9 @@ interface MealContextType {
   addMealItem1: (food: any) => void;
   addMealItem2: (food: any) => void;
   deleteItem: (items: any[], mealType: string) => void;
+  clearContextData: () => void;
   totalCalories: number;
+   isLoading: boolean;
   updateBreakfastItem: (id: number, updatedDetails: any) => void;
 }
 
@@ -47,6 +49,8 @@ export const MealContext = createContext<MealContextType>({
   addMealItem1: () => {},
   addMealItem2: () => {},
   deleteItem: () => {},
+  clearContextData:()=>{},
+  isLoading: false, 
   totalCalories: 0,
   updateBreakfastItem: (id: number, updatedDetails: any) => {},
 });
@@ -234,19 +238,23 @@ const MealContextProvider: React.FC = ({children}) => {
     // Return an empty array if there is no dinner data
     return result;
   }
+ 
   useEffect(() => {
-    const checkAuthenticationStatus = async () => {
+    console.log('Effect is running');
+    console.log('Effect is running 0');
+    const fetchData = async () => {
       try {
         const authDataJSON = await AsyncStorage.getItem('authData');
-
+        console.log(authDataJSON ,"auth data effect");
         if (authDataJSON) {
           const authData = JSON.parse(authDataJSON);
           const authToken = authData.token;
-
+          
+    
           if (authToken) {
             const formDataCopy = authData.formData;
             setCustomerId(formDataCopy.customer_id);
-
+    
             const currentDate = new Date();
             const formattedDate = `${currentDate.getFullYear()}-${String(
               currentDate.getMonth() + 1,
@@ -254,44 +262,39 @@ const MealContextProvider: React.FC = ({children}) => {
               2,
               '0',
             )}`;
-
+    
             const apiUrl = `get_diet_list_wrt_date/${formDataCopy.customer_id}/${formattedDate}`;
             // Make the API request to get data
-            api
-              .get(apiUrl)
-              .then((response) => {
-                const responseData = response.data;
-                const transformedData = mapApiDataToDesiredFormat(responseData);
-
-                if (transformedData.breakfastItems) {
-                  setBreakfastItems(transformedData.breakfastItems);
-                }
-                if (transformedData.dinnerItems) {
-                  setDinnerItems(transformedData.dinnerItems);
-                }
-                setIsLoading(false); // Data is loaded
-              })
-              .catch((error) => {
-                console.error('Error fetching data:', error);
-                if (error.response && error.response.data) {
-                  console.error('Server Error Details:', error.response.data);
-                }
-                setIsLoading(false); // Handle error and still set isLoading to false
-              });
+            const response = await api.get(apiUrl);
+            const responseData = response.data;
+            const transformedData = mapApiDataToDesiredFormat(responseData);
+    
+            if (transformedData.breakfastItems) {
+              console.log('Effect is running 2');
+              setBreakfastItems(transformedData.breakfastItems);
+            }
+            if (transformedData.dinnerItems) {
+              setDinnerItems(transformedData.dinnerItems);
+            }
           }
         }
       } catch (error) {
-        console.error('Error retrieving authData:', error);
-        setIsLoading(false); // Handle error and still set isLoading to false
+        console.error('Error:', error);
+        if (error.response && error.response.data) {
+          console.error('Server Error Details:', error.response.data);
+          // You can set an error state or show an error message to the user here.
+        }
+      } finally {
+        setIsLoading(false);
       }
     };
-
-    // Call the authentication check function only if data is not already loaded
+    
+    // Call the data fetch function only if data is not already loaded
     if (isLoading) {
-      checkAuthenticationStatus();
+      fetchData();
     }
-  }, []);
-
+  }, [isLoading]);
+  
 
  
   const addBreakfastItem = (food: any, details: any) => {
@@ -794,6 +797,16 @@ const MealContextProvider: React.FC = ({children}) => {
       console.log('updated');
     }
   };
+  const clearContextData = () => {
+    setBreakfastItems([]);
+    setLunchItems([]);
+    setMorningSnackItems([]);
+    setEveningSnackItems([]);
+    setDinnerItems([]);
+    setMealItems1([]);
+    setMealItems2([]);
+    // Reset other state variables as needed
+  };
 
   const value: MealContextType = {
     breakfastItems,
@@ -810,8 +823,10 @@ const MealContextProvider: React.FC = ({children}) => {
     addDinnerItem,
     addMealItem1,
     addMealItem2,
+    clearContextData,
     deleteItem,
     updateBreakfastItem,
+    isLoading,
   };
 
   return <MealContext.Provider value={value}>{children}</MealContext.Provider>;

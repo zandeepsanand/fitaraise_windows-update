@@ -6,6 +6,7 @@ import {Block, Image, Text} from '../../components';
 import {TouchableOpacity} from 'react-native';
 import LoginContext from '../../hooks/LoginContext';
 import { CommonActions } from '@react-navigation/native';
+import { MealContext } from '../../hooks/useMeal';
 
 export default function Account({route ,navigation}) {
   const {formData} = route.params ?? {};
@@ -16,17 +17,23 @@ export default function Account({route ,navigation}) {
     token,
     logout, // You can access the logout function
   } = useContext(LoginContext);
+
+  const {
+    clearContextData,
+  }=useContext(MealContext);
+  
   const handleLogout = () => {
     console.log('clicked');
 
     // Call the logout function to log the user out
-    logout();
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: 'loginNew' }],
-      })
-    );
+    // logout();
+    clearContextData();
+    // navigation.dispatch(
+    //   CommonActions.reset({
+    //     index: 0,
+    //     routes: [{ name: 'loginNew' }],
+    //   })
+    // );
   };
   return (
     <Block safe marginTop={15}>
