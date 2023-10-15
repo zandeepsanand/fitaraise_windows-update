@@ -30,6 +30,7 @@ const isAndroid = Platform.OS === 'android';
 import {useRoute} from '@react-navigation/native';
 import api from '../../api';
 import { ActivityIndicator } from 'react-native';
+import LoginContext from '../hooks/LoginContext';
 // import { colors } from '../../app/res/colors';
 // import AnimatableProgressBar from 'animateprogress';
 
@@ -68,6 +69,9 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     mealItems2,
     isLoading,
   } = useContext(MealContext);
+  const { authenticated} = useContext(LoginContext);
+ 
+  const shouldRenderDietPlan = authenticated && isLoading ;
   
 
   const {data, dietPlan, formDataCopy} = route.params;
@@ -445,7 +449,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
   return (
 
     <Block paddingTop={10}>
-        {isLoading ? (
+        {shouldRenderDietPlan ? (
       // While data is loading, you can display a loading indicator
       <ActivityIndicator size="large" color="green" />
     ) : (

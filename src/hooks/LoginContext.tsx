@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
-import {createContext, useState} from 'react';
+import {createContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setAuthToken } from '../../api'; // Import the setAuthToken function
 
 type LoginContextValue = {
-  customerId: string | null;
+  customerId: number | null;
   isLoggedIn: boolean;
+  authenticated: boolean; // Add authenticated state
   formData: {
     // Define formData structure
     first_name: string;
@@ -21,6 +22,7 @@ type LoginContextValue = {
 
 const LoginContext = createContext<LoginContextValue>({
   customerId: null,
+  authenticated: false, // Initialize authenticated state
   isLoggedIn: false,
   formData: null,
   token: null,
@@ -33,20 +35,58 @@ export const LoginProvider = ({children}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [formData, setFormData] = useState(null); // Initialize formData state
   const [token, setToken] = useState(null); // Initialize token state
+  const [authenticated, setAuthenticated] = useState(false); // Initialize authenticated state
 
-  const loginSuccess = async (customerId, formData, token) => {
+  useEffect(() => {
+    // Check for authentication status in AsyncStorage and update the authenticated state
+    const checkAuthenticationStatus = async () => {
+      try {
+        const authDataJSON = await AsyncStorage.getItem('authData');
+        if (authDataJSON) {
+          const authData = JSON.parse(authDataJSON);
+          const authToken = authData.token;
+  
+          if (authToken) {
+            // User is authenticated
+            setAuthenticated(true);
+            setToken(authToken);
+            setAuthToken(authToken);
+  
+            // You can also set other states like customerId and formData if needed
+            // ...
+          }
+        } else {
+          // User is not authenticated
+          setAuthenticated(false);
+        }
+      } catch (error) {
+        console.error('Error checking authentication status:', error);
+        setAuthenticated(false);
+      }
+    };
+  
+    checkAuthenticationStatus();
+  }, []);
+   // Empty dependency array to run only once
+
+
+   const loginSuccess = async (customerId, formData, token) => {
     try {
-      await AsyncStorage.setItem('customerId', customerId);
+      // Convert customerId to a string before saving to AsyncStorage
+      const customerIdString = customerId.toString();
+  
+      await AsyncStorage.setItem('customerId', customerIdString);
       await AsyncStorage.setItem('isLoggedIn', 'true');
       await AsyncStorage.setItem('formData', JSON.stringify(formData));
       await AsyncStorage.setItem('token', token);
   
-      // Update state variables as before
-      setCustomerId(customerId);
+      setCustomerId(customerIdString);
       setIsLoggedIn(true);
       setFormData(formData);
       setToken(token);
       setAuthToken(token);
+      setAuthenticated(true);
+  
     } catch (error) {
       console.error('Error saving data to AsyncStorage:', error);
     }
@@ -67,6 +107,9 @@ export const LoginProvider = ({children}) => {
   
       // Set the user as logged out
       setIsLoggedIn(false);
+      // After logout, set authenticated to false
+      setAuthenticated(false);
+      
     } catch (error) {
       console.error('Logout Error:', error);
     }
@@ -76,6 +119,7 @@ export const LoginProvider = ({children}) => {
     <LoginContext.Provider
       value={{
         customerId,
+        authenticated,
         isLoggedIn,
         formData,
         token,

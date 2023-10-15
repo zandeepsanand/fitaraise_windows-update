@@ -1,10 +1,11 @@
 /* eslint-disable prettier/prettier */
-import React, {createContext, useEffect, useState} from 'react';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import axios from 'axios';
 import {BASE_URL} from '@env';
 import api from '../../api';
+import LoginContext from './LoginContext';
 
 interface FoodItem {
   name: string;
@@ -67,6 +68,9 @@ const MealContextProvider: React.FC = ({children}) => {
   const [totalCalories, setTotalCalories] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [customerId, setCustomerId] = useState('');
+  const {authenticated}=useContext(LoginContext);
+  console.log(authenticated , "loged in or not");
+  
   console.log(customerId, 'useMeal customer id ');
 
   console.log(transformedData, 'log dinner ');
@@ -240,60 +244,64 @@ const MealContextProvider: React.FC = ({children}) => {
   }
  
   useEffect(() => {
-    console.log('Effect is running');
-    console.log('Effect is running 0');
-    const fetchData = async () => {
-      try {
-        const authDataJSON = await AsyncStorage.getItem('authData');
-        console.log(authDataJSON ,"auth data effect");
-        if (authDataJSON) {
-          const authData = JSON.parse(authDataJSON);
-          const authToken = authData.token;
-          
-    
-          if (authToken) {
-            const formDataCopy = authData.formData;
-            setCustomerId(formDataCopy.customer_id);
-    
-            const currentDate = new Date();
-            const formattedDate = `${currentDate.getFullYear()}-${String(
-              currentDate.getMonth() + 1,
-            ).padStart(2, '0')}-${String(currentDate.getDate()).padStart(
-              2,
-              '0',
-            )}`;
-    
-            const apiUrl = `get_diet_list_wrt_date/${formDataCopy.customer_id}/${formattedDate}`;
-            // Make the API request to get data
-            const response = await api.get(apiUrl);
-            const responseData = response.data;
-            const transformedData = mapApiDataToDesiredFormat(responseData);
-    
-            if (transformedData.breakfastItems) {
-              console.log('Effect is running 2');
-              setBreakfastItems(transformedData.breakfastItems);
-            }
-            if (transformedData.dinnerItems) {
-              setDinnerItems(transformedData.dinnerItems);
+    if (authenticated) { // Only run the effect if authenticated is true
+      console.log('Effect is running');
+   
+      const fetchData = async () => {
+        try {
+          const authDataJSON = await AsyncStorage.getItem('authData');
+          console.log(authDataJSON, "auth data effect");
+          if (authDataJSON) {
+            const authData = JSON.parse(authDataJSON);
+            const authToken = authData.token;
+
+            if (authToken) {
+              const formDataCopy = authData.formData;
+              setCustomerId(formDataCopy.customer_id);
+
+              const currentDate = new Date();
+              const formattedDate = `${currentDate.getFullYear()}-${String(
+                currentDate.getMonth() + 1,
+              ).padStart(2, '0')}-${String(currentDate.getDate()).padStart(
+                2,
+                '0',
+              )}`;
+
+              const apiUrl = `get_diet_list_wrt_date/${formDataCopy.customer_id}/${formattedDate}`;
+              // Make the API request to get data
+              const response = await api.get(apiUrl);
+              const responseData = response.data;
+              const transformedData = mapApiDataToDesiredFormat(responseData);
+
+              if (transformedData.breakfastItems) {
+                console.log('Effect is running 2');
+                setBreakfastItems(transformedData.breakfastItems);
+                console.log(transformedData.breakfastItems ,'useEffect breakfast');
+                
+              }
+              if (transformedData.dinnerItems) {
+                setDinnerItems(transformedData.dinnerItems);
+              }
             }
           }
+        } catch (error) {
+          console.error('Error:', error);
+          if (error.response && error.response.data) {
+            console.error('Server Error Details:', error.response.data);
+            // You can set an error state or show an error message to the user here.
+          }
+        } finally {
+          setIsLoading(false);
         }
-      } catch (error) {
-        console.error('Error:', error);
-        if (error.response && error.response.data) {
-          console.error('Server Error Details:', error.response.data);
-          // You can set an error state or show an error message to the user here.
-        }
-      } finally {
-        setIsLoading(false);
+      };
+
+      // Call the data fetch function only if data is not already loaded
+      if (isLoading) {
+        fetchData();
       }
-    };
-    
-    // Call the data fetch function only if data is not already loaded
-    if (isLoading) {
-      fetchData();
     }
-  }, [isLoading]);
+  }, [authenticated, isLoading]); // Include authenticated in the dependency array
+
   
 
  
