@@ -30,6 +30,7 @@ import * as Animatable from 'react-native-animatable';
 import Lottie from 'lottie-react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
+
 const isAndroid = Platform.OS === 'android';
 interface IRegistration {
   name: string;
@@ -47,6 +48,8 @@ interface IRegistrationValidation {
 }
 
 const LoginScreenNew = ({navigation, route}) => {
+ 
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [email, setEmail] = useState('');
   const [lastName, setLastName] = useState('');
   const [name, setName] = useState('');
@@ -57,9 +60,11 @@ const LoginScreenNew = ({navigation, route}) => {
   const [emailShow, setEmailShow] = useState(false);
   const [formShow, setFormShow] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const blockRef = useRef(null);
+  const [phoneNumber, setPhoneNumber] = useState('');8606783324
   const [isLoading, setIsLoading] = useState(false);
+  const blockRef = useRef(null);
+
+
 
   // Function to start the animation
   const animateBlock = () => {
@@ -100,7 +105,7 @@ const LoginScreenNew = ({navigation, route}) => {
     try {
       // Make the login request
       const response = await api.post('login', {email, password});
-      console.log(response.data);
+      console.log(response.data , "data of login");
 
       if (response.data.success === false) {
         // If the server responds with a failed login message
@@ -113,8 +118,6 @@ const LoginScreenNew = ({navigation, route}) => {
           setUserId(user_id);
         }
       } else {
-        console.log(response.data.data);
-
         const {first_name, id, last_name} = response.data.data;
 
         // Create an object that combines token and formData
@@ -127,17 +130,23 @@ const LoginScreenNew = ({navigation, route}) => {
             // Add other formData properties here
           },
         };
+        const customerId = authData.formData.customer_id;
         const formData = authData.formData;
-        // console.log(formData);
-
+        const token = authData.token;
         // Store the authData object as a JSON string in AsyncStorage
         await AsyncStorage.setItem('authData', JSON.stringify(authData));
 
         // Use the loginSuccess method from LoginContext
         setAuthToken(authData.token); // Set the token for future requests
-
+        // loginSuccess(customerId, formData, token);
         // You can navigate to another screen or perform other actions here
-        navigation.dispatch(StackActions.replace('Loading', {formData}));
+        // navigation.navigate('Loading', {
+        //   formData: authData.formData,
+        // });
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Frstpage', params: { formData: authData.formData } }],
+        });
       }
     } catch (error) {
       // Handle login errors here

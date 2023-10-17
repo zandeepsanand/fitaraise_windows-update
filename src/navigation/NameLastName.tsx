@@ -219,8 +219,12 @@ console.log(token , "form");
         console.log(response.data);
         setIsLoading(false); // Stop loading
         navigation.setParams({ formData: formDataCopy });
-        navigation.navigate('Loading', {
-          formData: formDataCopy,
+        // navigation.navigate('Loading', {
+        //   formData: formDataCopy,
+        // });
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Frstpage', params: { formData: formDataCopy } }],
         });
       })
       .catch((error) => {

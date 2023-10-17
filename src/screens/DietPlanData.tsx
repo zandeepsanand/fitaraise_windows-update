@@ -695,7 +695,7 @@ const DietPlanData = ({route, navigation}) => {
               {/* Nutrition full details card*/}
 
               {isFullBlock ? (
-                <Block flex={2} style={{height: 1000}}>
+                <Block flex={2} style={{height: 900}}>
                   <Block
                     card
                     row
@@ -798,14 +798,14 @@ const DietPlanData = ({route, navigation}) => {
                             {totalVitaminAIU}
                           </Text>
                         </Block>
-                        <Block style={styles.row} flex={0} card margin={1}>
+                        {/* <Block style={styles.row} flex={0} card margin={1}>
                           <Text style={styles.data} center semibold>
                             Vitamin A Retinol Activity Equivalents (RAE) :
                           </Text>
                           <Text style={styles.data} center>
                             {totalVitaminARAE}
                           </Text>
-                        </Block>
+                        </Block> */}
                         <Block style={styles.row} flex={0} card margin={1}>
                           <Text style={styles.data} center semibold>
                             Vitamin C :

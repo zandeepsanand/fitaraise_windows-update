@@ -1,15 +1,17 @@
 /* eslint-disable prettier/prettier */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import api, { setAuthToken } from '../../api';
 import {Animated, Easing} from 'react-native';
 import Lottie from 'lottie-react-native';
+import LoginContext from '../hooks/LoginContext';
 
 const LoadingScreen = () => {
   const navigation = useNavigation();
+  const {loginSuccess} = useContext(LoginContext);
   const [isLoading, setIsLoading] = useState(true); // State to track loading status
 console.log(api , "api check");
 
@@ -31,6 +33,15 @@ console.log(api , "api check");
            
             
             const authToken = authData.token;
+            const customerId = authData.formData.customer_id;
+            const formData = authData.formData;
+            const token = authData.token;
+            // Store the authData object as a JSON string in AsyncStorage
+            // await AsyncStorage.setItem('authData', JSON.stringify(authData));
+    
+            // Use the loginSuccess method from LoginContext
+            // setAuthToken(authData.token); // Set the token for future requests
+            loginSuccess(customerId, formData, token);
             console.log(authToken , "auth Data");
             if (authToken) {
               setAuthToken(authToken);

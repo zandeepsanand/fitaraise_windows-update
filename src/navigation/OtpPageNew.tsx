@@ -134,13 +134,15 @@ const OtpPageNew = ({
                   },
 
                 };
+                const token = authData.token
 
 
             
 
                 AsyncStorage.setItem('authData', JSON.stringify(authData));
                 setAuthToken(authData.token);
-
+                
+                loginSuccess(customerId, formData, token);
                 navigation.navigate('NameLastName', { formData : authData.formData , token : response.data.data.token  });
               } else {
                 formData = personalDataRes.data.data;
@@ -162,7 +164,11 @@ const OtpPageNew = ({
                 
                 // setAuthenticated(true);
                 loginSuccess(customerId, formData, token);
-                navigation.navigate('Loading', { formData: authData.formData });
+                // navigation.navigate('Loading', { formData: authData.formData });
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: 'Frstpage', params: { formData: authData.formData } }],
+                });
               }
             })
             .catch((personalDataError) => {

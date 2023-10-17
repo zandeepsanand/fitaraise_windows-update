@@ -88,6 +88,7 @@ import DemoAlert from '../screens/alert/DemoAlert';
 import Account from '../screens/account/Account';
 import HomeWorkoutLoadingScreen from '../screens/workout/home workout/HomeWorkoutLoadingScreen';
 import NameLastName from './NameLastName';
+import { AuthProvider } from '../hooks/AuthData';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
@@ -145,6 +146,7 @@ export default () => {
   };
 
   return (
+    <AuthProvider>
     <MealContextProvider>
       <TranslationProvider>
         <ThemeProvider theme={theme} setTheme={setTheme}>
@@ -670,5 +672,6 @@ export default () => {
         </ThemeProvider>
       </TranslationProvider>
     </MealContextProvider>
+    </AuthProvider>
   );
 };

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -14,11 +14,14 @@ import {Block, Button, Image, Input, Text} from '../components';
 import {useTheme} from '../hooks';
 import InputField from '../components/inputField';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoginContext from '../hooks/LoginContext';
 
 const isAndroid = Platform.OS === 'android';
 
 const LoginScreenNewRegister = ({navigation, route}) => {
+  const {loginSuccess} = useContext(LoginContext);
   const [email, setEmail] = useState('');
+
   console.log(email, 'email');
 
   const [lastName, setLastName] = useState('');
@@ -89,16 +92,22 @@ const LoginScreenNewRegister = ({navigation, route}) => {
             // Add other formData properties here
           },
         };
-
+        const customerId = authData.formData.customer_id;
+        const formData = authData.formData;
+        const token = authData.token;
         // Store the authData object as a JSON string in AsyncStorage
         await AsyncStorage.setItem('authData', JSON.stringify(authData));
 
         // Use the loginSuccess method from LoginContext
         setAuthToken(authData.token); // Set the token for future requests
-
+        loginSuccess(customerId, formData, token);
         // You can navigate to another screen or perform other actions here
-        navigation.navigate('Frstpage', {
-          formData: authData.formData,
+        // navigation.navigate('Loading', {
+        //   formData: authData.formData,
+        // });
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Frstpage', params: { formData: authData.formData } }],
         });
       }
     } catch (error) {
@@ -136,10 +145,7 @@ const LoginScreenNewRegister = ({navigation, route}) => {
             style={{alignSelf: 'center'}}
           />
         </Block>
-<Block>
-
-</Block>
-
+        <Block></Block>
 
         <Block paddingHorizontal={sizes.sm}>
           <View style={styles.inputContainer}>
@@ -155,7 +161,6 @@ const LoginScreenNewRegister = ({navigation, route}) => {
               onChangeText={(text) => setEmail(text)}
               placeholder="Email"
             />
-          
           </View>
           <View style={styles.inputContainer}>
             <Image
@@ -205,7 +210,7 @@ const LoginScreenNewRegister = ({navigation, route}) => {
           <TouchableOpacity onPress={() => navigation.navigate('country')}>
             <Text primary bold style={{color: 'green', fontWeight: '700'}}>
               {' '}
-              Register 
+              Register
             </Text>
           </TouchableOpacity>
         </View>

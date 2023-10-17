@@ -12,6 +12,7 @@ type LoginContextValue = {
     first_name: string;
     last_name: string;
     id: number;
+    customer_id:number;
     password: string;
     // ... other properties
   } | null;
@@ -36,6 +37,7 @@ export const LoginProvider = ({children}) => {
   const [formData, setFormData] = useState(null); // Initialize formData state
   const [token, setToken] = useState(null); // Initialize token state
   const [authenticated, setAuthenticated] = useState(false); // Initialize authenticated state
+console.log(customerId , "login context");
 
   useEffect(() => {
     // Check for authentication status in AsyncStorage and update the authenticated state
@@ -95,11 +97,9 @@ export const LoginProvider = ({children}) => {
   const logout = async () => {
     try {
       // Clear the stored authentication data from AsyncStorage
-      await AsyncStorage.removeItem('authData');
-      await AsyncStorage.removeItem('workoutData');
-      await AsyncStorage.removeItem('homeWorkout');
+      await AsyncStorage.multiRemove(['authData', 'workoutData', 'homeWorkout', 'customerId', 'formData']);
 
-
+      setCustomerId(null);
       // Clear any other necessary data or states
   
       // Optionally, you can clear the token if you have a setAuthToken function

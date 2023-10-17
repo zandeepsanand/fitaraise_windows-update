@@ -11,6 +11,7 @@ import TabNavigator from './TabNavigator';
 import DemoAlert from '../screens/alert/DemoAlert';
 import Account from '../screens/account/Account';
 import NotFoundPage from '../screens/error/ErrorPage';
+import Frstpage from './Frstpage';
 
 const Stack = createStackNavigator();
 
@@ -39,6 +40,13 @@ export default ({data, formDataCopy, dietPlan}) => {
         // options={screenOptions.components}
         options={{title: ''}}
         initialParams={{data, formDataCopy, dietPlan}}
+      />
+         <Stack.Screen
+        name="FrstPage"
+        component={Frstpage}
+        // options={screenOptions.components}
+        options={{title: ''}}
+        initialParams={{data, formData :formDataCopy, dietPlan}}
       />
        <Stack.Screen
         name="Demo"

@@ -176,6 +176,7 @@ const DrawerContent = (
   // screen list for Drawer menu
   const screens = [
     {name: 'Home', to: 'Tab', icon: assets.home},
+    {name: 'Main Menu', to: 'FrstPage', icon: assets.components},
     {
       name: 'Edit Goal',
       to: 'Demo',

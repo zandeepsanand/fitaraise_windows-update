@@ -96,7 +96,7 @@ const DietPlanDynamic = ({route, navigation}) => {
               marginTop={sizes.m}
               marginHorizontal={10}
               card
-              color="rgb(245,232,250)"
+              color="white"
               center>
               <Block row align="center">
                 <Block flex={0}>
@@ -137,8 +137,8 @@ const DietPlanDynamic = ({route, navigation}) => {
                   <Block flex={0} style={{alignSelf: 'center'}}>
                     <Image
                       radius={0}
-                      width={25}
-                      height={25}
+                      width={30}
+                      height={30}
                       color={'#c58bf2'}
                       source={assets.plus}
                       transform={[{rotate: '360deg'}]}

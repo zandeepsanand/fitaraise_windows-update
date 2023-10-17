@@ -28,6 +28,9 @@ import {
 } from 'react-native';
 import {BlurView} from 'expo-blur';
 import LoginContext from '../hooks/LoginContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import api,{setAuthToken} from '../../api';
+
 
 const {height, width} = Dimensions.get('window');
 
@@ -40,12 +43,14 @@ export default function Frstpage({
   },
 }) {
   console.log(formData);
+  const {loginSuccess} = useContext(LoginContext);
   
   const {assets, colors, fonts, gradients, sizes} = useTheme();
   const {t} = useTranslation();
   const [tab, setTab] = useState<number>(0);
   const {following, trending} = useData();
   const [products, setProducts] = useState(following);
+  const [isLoading , setIsLoading]=useState(false);
   const {
     customerId,
     isLoggedIn,
@@ -62,58 +67,7 @@ export default function Frstpage({
     logout();
     navigation.navigate('loginNew');
   };
-  // const [formData, setFormData] = useState({
-  //   first_name: 'sandeep',
-  //   last_name: '',
-  //   email: '',
-  //   mobile_number: '',
-  //   height: '',
-  //   height_unit: '',
-  //   weight: '',
-  //   weight_unit: '',
-  //   acitivity_level: '',
-  //   weekly_goal: '',
-  //   is_vegetarian:'',
-  //   age: '',
-  //   dob: '',
-  //   gender: '',
-  //   device_token: '',
-  //   image: '',
-  //   customer_id:'',
-  //   weight_want_to:'',
 
-  // });
-  // const [parsedData] = useState({
-  //   first_name: 'sandeep',
-  //   last_name: '',
-  //   email: '',
-  //   mobile_number: '',
-  //   height: '',
-  //   height_unit: '',
-  //   weight: '',
-  //   weight_unit: '',
-  //   acitivity_level: '',
-  //   weekly_goal: '',
-  //   is_vegetarian:'',
-  //   age: '',
-  //   dob: '',
-  //   gender: '',
-  //   device_token: '',
-  //   image: '',
-  //   customer_id:'',
-  //   weight_want_to:'',
-
-  // });
-  const [workoutData] = useState({
-    height: '',
-    height_unit: '',
-    weight: '',
-    weight_unit: '',
-    workout_level: '',
-    weekly_goal: '',
-    gender: '',
-    customer_id: '14',
-  });
 
   const handleProducts = useCallback(
     (tab: number) => {
@@ -122,6 +76,83 @@ export default function Frstpage({
     },
     [following, trending, setTab, setProducts],
   );
+ const redirectTo =async ()=>{
+  
+    try {
+      const authDataJSON = await AsyncStorage.getItem('authData');
+      if (authDataJSON) {
+        const authData = JSON.parse(authDataJSON);
+       
+        
+        const authToken = authData.token;
+        const customerId = authData.formData.customer_id;
+        const formData = authData.formData;
+        const token = authData.token;
+        // Store the authData object as a JSON string in AsyncStorage
+        // await AsyncStorage.setItem('authData', JSON.stringify(authData));
+
+        // Use the loginSuccess method from LoginContext
+        // setAuthToken(authData.token); // Set the token for future requests
+        loginSuccess(customerId, formData, token);
+        console.log(authToken , "auth Data");
+        if (authToken) {
+          setAuthToken(authToken);
+          const requiredCalorieResponse = await api.get(`get_daily_required_calories/${formData.customer_id}`);
+          const diet_List = await api.get(`get_recommended_diet/${formData.customer_id}`);
+
+
+          const requiredCalorie = requiredCalorieResponse.data.data;
+          
+          const dietPlan = diet_List.data.data.recommended_diet_list;
+          console.log(requiredCalorie , "calorie required");
+          console.log(authData.formData , "for workout example");
+          
+          if ((requiredCalorieResponse.data.success === true) && (authData.formData)) {
+            // Reset the navigation stack and navigate to 'Menu'
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'Menu', params: { data: requiredCalorie, formDataCopy: authData.formData , dietPlan } }],
+            });
+          } else if (authData.formData) {
+            // Reset the navigation stack and navigate to 'Frstpage'
+            navigation.navigate({
+              
+              routes: [{ name: 'Details', params: { formData: authData.formData } }],
+            });
+          } else {
+            // Reset the navigation stack and navigate to 'loginNew'
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'loginNew' }],
+            });
+          }
+        } else {
+          // No authToken, navigate to 'loginNew'
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'loginNew' }],
+          });
+        }
+      } else {
+        // authData JSON doesn't exist, navigate to 'loginNew'
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'loginNew' }],
+        });
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Authentication Status Error:', error);
+      setIsLoading(false);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'loginNew' }],
+      });
+    }
+ 
+ }
+
+
   const animationProgress = useRef(new Animated.Value(0));
 
   useEffect(() => {
@@ -151,8 +182,10 @@ export default function Frstpage({
         <TouchableWithoutFeedback
           // onPress={() => navigation.navigate('Details')}
           activeOpacity={0.1}
-          onPress={() => handleProducts(2)}
-          onPressOut={() => navigation.navigate('Details', {formData})}>
+          onPress={() => {handleProducts(2);
+          redirectTo();}}
+          // onPressOut={() => navigation.navigate('Details', {formData})}
+          >
           <Block
             style={styles.mainCardView}
             flex={0}

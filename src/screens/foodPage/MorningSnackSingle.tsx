@@ -5,10 +5,11 @@ import {useTheme, useTranslation} from '../../hooks';
 import {Block, Button, Image, Input, Text} from '../../components/';
 import {
   Platform,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
   SectionList,
   StyleSheet,
   View,
+  ActivityIndicator,
 } from 'react-native';
 import Axios from 'axios';
 import {FlatList} from 'react-native';
@@ -19,7 +20,6 @@ import SelectDropdown from 'react-native-select-dropdown';
 import {log} from 'react-native-reanimated';
 import _ from 'lodash'; // Import Lodash
 import api from '../../../api';
-import {TouchableWithoutFeedback} from 'react-native';
 
 type Movie = {
   id: string;
@@ -30,8 +30,7 @@ type Movie = {
 const isAndroid = Platform.OS === 'android';
 const MorningSnackSingle = ({route, navigation}) => {
   const {data, formDataCopy} = route.params;
-  // console.log(data);
-  const {addBreakfastItem} = useContext(MealContext);
+  // console.log(formDataCopy);
   const [initialGram, setInitialGram] = useState(0);
   const [selectedWeight, setSelectedWeight] = useState(initialGram);
   useEffect(() => {
@@ -87,26 +86,27 @@ const MorningSnackSingle = ({route, navigation}) => {
   const [foodItems, setFoodItems] = useState([]);
   const [editItemId, setEditItemId] = useState(null);
   const [editItemName, setEditItemName] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const handleEditButtonClick = (itemId) => {
     console.log(itemId);
     setEditItemId(itemId.details.id);
     setEditItemName(itemId.id);
   };
 
-  // console.log(mealType,"this is meal type id ");
-
   const [isEditFormVisible, setIsEditFormVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
   const {
-    updateBreakfastItem,
+    
     breakfastItems,
     deleteItem,
     morningSnackItems,
+    addBreakfastItem,
     addMorningSnackItem,
   } = useContext(MealContext);
-  console.log('morning snack ', morningSnackItems);
+  // console.log(breakfastItems[0] ,"first one");
+
   const {assets, colors, gradients, sizes, fonts, user} = useTheme();
   const [selectedValue, setSelectedValue] = useState(245);
   const [count, setCount] = useState(1);
@@ -135,20 +135,25 @@ const MorningSnackSingle = ({route, navigation}) => {
   const IMAGE_VERTICAL_MARGIN =
     (sizes.width - (IMAGE_VERTICAL_SIZE + sizes.sm) * 2) / 2;
 
-  // console.log('id', id);
+  console.log('id', id);
   const debouncedHandleEdit = _.debounce(handleEdit, 500);
 
   const toggleEdit = (item) => {
-    // This function will be called when the touch icon is pressed
     setIsEditMode(true); // Set isEditMode to true to hide the touch icon and show the block
+    debouncedHandleEdit.cancel();
     debouncedHandleEdit(item);
   };
 
+  const [isLoadingServingGrams, setIsLoadingServingGrams] = useState(false);
+
   function handleEdit(item) {
     setIsEditMode(true);
+    setIsLoadingServingGrams(true);
     api
       .get(`get_serving_desc_by_food_id/${item.id}`)
       .then((response) => {
+        console.log(response.data.data, 'the food details');
+
         setServingDetailsFull(response.data.data.serving_desc);
         const servingNames = response.data.data.serving_desc.map(
           (serving) => serving.name,
@@ -171,12 +176,21 @@ const MorningSnackSingle = ({route, navigation}) => {
         setInitialGram(item.details.selectedWeight);
         servingGrams.unshift('100 g');
         setSelectedDropDown(item.details.selectedDropDown);
+        setIsLoadingServingGrams(false);
       })
       .catch((error) => {
         console.error(error);
         setIsEditMode(false);
       });
   }
+
+  // Define another function to be executed if food_id is available
+  function anotherFunction(foodData) {
+    // Your code to handle foodData goes here
+    console.log('Executing anotherFunction with foodData:', foodData);
+  }
+
+  // Replace the code inside anotherFunction with your specific logic for handling foodData
 
   function nutritionCalculation(item, selectedWeight1) {
     // without selecting the dropdown menu for calculation
@@ -363,24 +377,41 @@ const MorningSnackSingle = ({route, navigation}) => {
     mealType,
     meal_type,
   };
-  const handleAddFood = async (item) => {
+  // console.log(id, 'db id ');
+  const handleAddFood = (item) => {
+    setIsLoading(true);
     setIsEditMode(false);
     switch (mealType) {
-      case 'morningSnackItems':
-        try {
-          await addMorningSnackItem(item, mealDetails);
+      case 'breakfast':
+      case 'breakfast':
+        // console.log(responseData, 'from device breakfast');
 
-          console.log(item, mealDetails, 'morng snack added successfully');
-          // Handle any post-addition logic or navigation here
-        } catch (error) {
-          console.error('Error adding breakfast item:', error);
-          // Handle the error, if necessary
-        }
+        addBreakfastItem(item, mealDetails);
+        break;
+      case 'morningSnackItems':
+        addMorningSnackItem(item, mealDetails);
+        break;
+      case 'lunch':
+        addLunchItem(item, mealDetails);
+        break;
+      case 'evening':
+        addEveningSnackItem(item, mealDetails);
+        break;
+      case 'dinner':
+        addDinnerItem(item, mealDetails);
+        break;
+      case 'meal1':
+        addMealItem1(item, mealDetails);
+        break;
+      case 'meal2':
+        addMealItem2(item, mealDetails);
         break;
       default:
         break;
     }
+  
   };
+
   const handleDelete = (itemIndex: number, mealType: string) => {
     switch (mealType) {
       case 'breakfast':
@@ -426,6 +457,18 @@ const MorningSnackSingle = ({route, navigation}) => {
         break;
     }
   };
+  const handleDeleteApi = (item) => {
+    console.log(item, 'deleteditem');
+
+    api
+      .get(`delete_diet_list/${item.details.id}`)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch(function (error) {
+        console.error('Error deleteing using api:', error);
+      });
+  };
   const handleSave = (id) => {
     updateBreakfastItem(id, mealDetails);
     // navigation.goBack();
@@ -443,7 +486,7 @@ const MorningSnackSingle = ({route, navigation}) => {
     setExpanded(!expanded);
     setSelectedItemId(itemId);
   };
-  const totalBreakfastCalorie = breakfastItems.reduce(
+  const totalMorningSnackItemsCalorie = morningSnackItems.reduce(
     (acc, item) => acc + parseFloat(item.details.totalCalorie),
     0,
   );
@@ -463,16 +506,18 @@ const MorningSnackSingle = ({route, navigation}) => {
         }}>
         {mealType === 'breakfast' ? (
           <Text bold padding={10}>
+            {' '}
             Breakfast
           </Text>
         ) : (
           <Text bold padding={10}>
-            Morning Snacks
+            {' '}
+            Morning Snack Items
           </Text>
         )}
 
         <CircularProgress
-          value={totalBreakfastCalorie}
+          value={totalMorningSnackItemsCalorie}
           radius={55}
           duration={2000}
           activeStrokeWidth={12}
@@ -482,7 +527,7 @@ const MorningSnackSingle = ({route, navigation}) => {
           circleBackgroundColor={'#353353'}
           title={
             // totalCaloriesOfAllFoods >= data.calories ? 'REACHED 🔥' : 'KCAL LEFT 🔥'
-            'Snacks'
+            'KCAL'
           }
           titleColor={'white'}
           titleStyle={{fontWeight: 'bold', fontSize: 15}}
@@ -498,7 +543,7 @@ const MorningSnackSingle = ({route, navigation}) => {
           <TouchableWithoutFeedback
             onPress={() =>
               navigation.navigate('searchfood', {
-                mealType: 'morningSnackItems',
+                mealType: 'breakfast',
                 meal_type,
                 formDataCopy,
               })
@@ -516,8 +561,7 @@ const MorningSnackSingle = ({route, navigation}) => {
                 backgroundColor: '#94a9fe',
               }}>
               <Text center white semibold>
-                {' '}
-                ADD MORE FOODS{' '}
+                ADD MORE FOODS
               </Text>
             </Block>
           </TouchableWithoutFeedback>
@@ -526,29 +570,89 @@ const MorningSnackSingle = ({route, navigation}) => {
               <Block
                 radius={sizes.sm}
                 shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
-                marginTop={sizes.s}
+                marginTop={sizes.m}
                 marginHorizontal={0}
                 card
-                color="#eaefff"
+               
                 flex={0.5}>
                 <Block row align="center">
                   <Block flex={0}>
-                    <Image
-                      source={{
-                        uri: `${item.image}`,
-                      }}
-                      style={{
-                        width: sizes.xl,
-                        height: sizes.xl,
-                      }}
-                      marginLeft={sizes.s}
-                    />
+                    {item.image ===
+                    'https://admin.fitaraise.com/storage/uploads/app_images/no_image.png' ? (
+                      <Block
+                        flex={0}
+                        style={{
+                          width: 50,
+                          height: 50,
+                          backgroundColor: '#fff',
+                          borderRadius: sizes.s,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                        marginLeft={sizes.s}>
+                        <Text
+                          style={{fontSize: 50, color: '#fff'}}
+                          bold
+                          primary>
+                          {/* {item.food_name} */}
+                          {item.food_name.charAt(0)}
+                        </Text>
+                      </Block>
+                    ) : (
+                      <Image
+                        source={{uri: `${item.image}`}}
+                        style={{
+                          width: 50,
+                          height: 50,
+                        }}
+                        marginLeft={sizes.s}
+                      />
+                    )}
                   </Block>
                   <Block flex={3} style={{alignSelf: 'center'}}>
                     <Text p black semibold center padding={10}>
                       {item.food_name} ({item.details.totalCalorie}kcal)
                     </Text>
-                    <Block row flex={0} align="center" justify="center">
+                    {/* <Block row flex={0} align="center" justify="center">
+                      <Block
+                        flex={0}
+                        height={1}
+                        width="50%"
+                        end={[1, 0]}
+                        start={[0, 1]}
+                        gradient={gradients.divider}
+                      />
+                      <Text center marginHorizontal={sizes.s}></Text>
+                      <Block
+                        flex={0}
+                        height={1}
+                        width="50%"
+                        end={[0, 1]}
+                        start={[1, 0]}
+                        gradient={gradients.divider}
+                      />
+                    </Block> */}
+                  </Block>
+
+                  <Block flex={0}>
+                    <TouchableWithoutFeedback
+                      onPress={() => {
+                        handleDelete(index, 'breakfast');
+                        handleDeleteApi(item);
+                      }}>
+                      <Image
+                        source={require('../../assets/icons/close1.png')}
+                        color={'#fa9579'}
+                        style={
+                          (styles.data,
+                          {width: 20, height: 20, alignContent: 'center'})
+                        }
+                        //  marginTop={sizes.s}
+                      />
+                    </TouchableWithoutFeedback>
+                  </Block>
+                </Block>
+                <Block row flex={0} align="center" justify="center" marginTop={5}>
                       <Block
                         flex={0}
                         height={1}
@@ -567,23 +671,6 @@ const MorningSnackSingle = ({route, navigation}) => {
                         gradient={gradients.divider}
                       />
                     </Block>
-                  </Block>
-
-                  <Block flex={0}>
-                    <TouchableOpacity
-                      onPress={() => handleDelete(index, 'morningSnackItems')}>
-                      <Image
-                        source={require('../../assets/icons/close1.png')}
-                        color={'#fa9579'}
-                        style={
-                          (styles.data,
-                          {width: 20, height: 20, alignContent: 'center'})
-                        }
-                        //  marginTop={sizes.s}
-                      />
-                    </TouchableOpacity>
-                  </Block>
-                </Block>
                 <Block margin={0}>
                   <Block margin={0} paddingTop={10} paddingLeft={10}>
                     {isEditMode &&
@@ -630,7 +717,11 @@ const MorningSnackSingle = ({route, navigation}) => {
                               borderRadius: 20,
                               marginLeft: 10,
                             }}
-                            data={servingGrams}
+                            data={
+                              isLoadingServingGrams
+                                ? ['Loading...']
+                                : servingGrams
+                            }
                             onSelect={(selectedItem, index) => {
                               // console.log(servingGrams, 'ok bie ');
                               const item1 = servingGrams.find((item1) =>
@@ -692,14 +783,14 @@ const MorningSnackSingle = ({route, navigation}) => {
                             position: 'relative',
                             top: -12,
                           }}>
-                          <TouchableOpacity
+                          <TouchableWithoutFeedback
                             onPress={() => {
                               // setSelectedFood(item.food_name);
 
                               handleAddFood(item);
                             }}>
                             <Text bold>Update</Text>
-                          </TouchableOpacity>
+                          </TouchableWithoutFeedback>
                         </Block>
                       </Block>
                     ) : (
@@ -727,7 +818,7 @@ const MorningSnackSingle = ({route, navigation}) => {
                           <Block flex={3}>
                             <Text center>{item.details.selectedDropDown}</Text>
                           </Block>
-                          <TouchableOpacity
+                          <TouchableWithoutFeedback
                             key={item.details.id}
                             onPress={() => {
                               debouncedHandleEdit(item);
@@ -740,18 +831,36 @@ const MorningSnackSingle = ({route, navigation}) => {
                                 marginRight={10}
                                 marginTop={1}
                                 source={require('../../assets/icons/edit1.png')}
-                                //  color={'#fa9579'}
+                                 color={'gray'}
                                 style={
-                                  (styles.data, {width: 25, height: 25})
+                                  (styles.data, {width: 30, height: 30})
                                 }></Image>
                             </Block>
-                          </TouchableOpacity>
+                          </TouchableWithoutFeedback>
                         </Block>
                       </Block>
                     )}
-
+                    <Block row flex={0} align="center" justify="center" marginTop={15}>
+                      <Block
+                        flex={0}
+                        height={1}
+                        width="50%"
+                        end={[1, 0]}
+                        start={[0, 1]}
+                        gradient={gradients.divider}
+                      />
+                      <Text center marginHorizontal={sizes.s}></Text>
+                      <Block
+                        flex={0}
+                        height={1}
+                        width="50%"
+                        end={[0, 1]}
+                        start={[1, 0]}
+                        gradient={gradients.divider}
+                      />
+                    </Block>
                     <Block>
-                      <TouchableOpacity
+                      <TouchableWithoutFeedback
                         onPress={() => {
                           handleToggleDetails(item.details.id);
                           console.log(item.details.id, 'sandeep idd');
@@ -763,7 +872,7 @@ const MorningSnackSingle = ({route, navigation}) => {
                             <Text>Full Details </Text>
                           )}
                         </Block>
-                      </TouchableOpacity>
+                      </TouchableWithoutFeedback>
                       {expanded && selectedItemId === item.details.id && (
                         <Block flex={2} style={{height: 900}}>
                           <Block
@@ -908,7 +1017,7 @@ const MorningSnackSingle = ({route, navigation}) => {
                                     {item.details.totalVitaminAIU}
                                   </Text>
                                 </Block>
-                                {/*  */}
+
                                 <Block
                                   style={styles.row}
                                   flex={0}

@@ -320,6 +320,7 @@ const OtpPage = ({
                                 });
                               } else {
                                 // "first_name" and "last_name" properties are missing, navigate to FillPage
+                                setCustomerId(customerId);
                                 navigation.navigate('NameLastName',{formData,token});
                               }
                             })

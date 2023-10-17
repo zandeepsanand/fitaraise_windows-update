@@ -143,47 +143,44 @@ const FoodPage = ({route, navigation}) => {
     debouncedHandleEdit(item);
   };
 
- 
-  const [isLoadingServingGrams ,setIsLoadingServingGrams ] =useState(false);
+  const [isLoadingServingGrams, setIsLoadingServingGrams] = useState(false);
 
   function handleEdit(item) {
     setIsEditMode(true);
     setIsLoadingServingGrams(true);
-          api
-            .get(`get_serving_desc_by_food_id/${item.id}`)
-            .then((response) => {
-              console.log(response.data.data, 'the food details');
+    api
+      .get(`get_serving_desc_by_food_id/${item.id}`)
+      .then((response) => {
+        console.log(response.data.data, 'the food details');
 
-              setServingDetailsFull(response.data.data.serving_desc);
-              const servingNames = response.data.data.serving_desc.map(
-                (serving) => serving.name,
-              );
-              const servingId = response.data.data.serving_desc.map(
-                (serving) => serving.id,
-              );
-              servingId.unshift(4792);
-              const servingInitialGram = response.data.data.serving_desc.map(
-                (serving) => serving.weight,
-              );
-              const servingGrams = response.data.data.serving_desc.map(
-                (serving) => `${serving.name} (${serving.weight} g)`,
-              );
-              servingInitialGram.unshift(100);
-              setServingId(servingId[0]);
-              setServingDetails(servingNames);
-              nutritionCalculation(item);
-              setServingGrams(servingGrams);
-              setInitialGram(item.details.selectedWeight);
-              servingGrams.unshift('100 g');
-              setSelectedDropDown(item.details.selectedDropDown);
-              setIsLoadingServingGrams(false);
-            })
-            .catch((error) => {
-              console.error(error);
-              setIsEditMode(false);
-            });
-       
-     
+        setServingDetailsFull(response.data.data.serving_desc);
+        const servingNames = response.data.data.serving_desc.map(
+          (serving) => serving.name,
+        );
+        const servingId = response.data.data.serving_desc.map(
+          (serving) => serving.id,
+        );
+        servingId.unshift(4792);
+        const servingInitialGram = response.data.data.serving_desc.map(
+          (serving) => serving.weight,
+        );
+        const servingGrams = response.data.data.serving_desc.map(
+          (serving) => `${serving.name} (${serving.weight} g)`,
+        );
+        servingInitialGram.unshift(100);
+        setServingId(servingId[0]);
+        setServingDetails(servingNames);
+        nutritionCalculation(item);
+        setServingGrams(servingGrams);
+        setInitialGram(item.details.selectedWeight);
+        servingGrams.unshift('100 g');
+        setSelectedDropDown(item.details.selectedDropDown);
+        setIsLoadingServingGrams(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setIsEditMode(false);
+      });
   }
 
   // Define another function to be executed if food_id is available
@@ -388,7 +385,7 @@ const FoodPage = ({route, navigation}) => {
       case 'breakfast':
         try {
           setIsLoading(false);
-          await addBreakfastItem(item ,mealDetails);
+          await addBreakfastItem(item, mealDetails);
           console.log('Breakfast item added successfully');
           console.log(mealDetails, 'dark');
           // Handle any post-addition logic or navigation here
@@ -446,6 +443,18 @@ const FoodPage = ({route, navigation}) => {
       default:
         break;
     }
+  };
+  const handleDeleteApi = (item) => {
+    console.log(item, 'deleteditem');
+
+    api
+      .get(`delete_diet_list/${item.details.id}`)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch(function (error) {
+        console.error('Error deleteing using api:', error);
+      });
   };
   const handleSave = (id) => {
     updateBreakfastItem(id, mealDetails);
@@ -548,10 +557,10 @@ const FoodPage = ({route, navigation}) => {
               <Block
                 radius={sizes.sm}
                 shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
-                marginTop={sizes.s}
+                marginTop={sizes.m}
                 marginHorizontal={0}
                 card
-                color="#eaefff"
+               
                 flex={0.5}>
                 <Block row align="center">
                   <Block flex={0}>
@@ -591,7 +600,46 @@ const FoodPage = ({route, navigation}) => {
                     <Text p black semibold center padding={10}>
                       {item.food_name} ({item.details.totalCalorie}kcal)
                     </Text>
-                    <Block row flex={0} align="center" justify="center">
+                    {/* <Block row flex={0} align="center" justify="center">
+                      <Block
+                        flex={0}
+                        height={1}
+                        width="50%"
+                        end={[1, 0]}
+                        start={[0, 1]}
+                        gradient={gradients.divider}
+                      />
+                      <Text center marginHorizontal={sizes.s}></Text>
+                      <Block
+                        flex={0}
+                        height={1}
+                        width="50%"
+                        end={[0, 1]}
+                        start={[1, 0]}
+                        gradient={gradients.divider}
+                      />
+                    </Block> */}
+                  </Block>
+
+                  <Block flex={0}>
+                    <TouchableWithoutFeedback
+                      onPress={() => {
+                        handleDelete(index, 'breakfast');
+                        handleDeleteApi(item);
+                      }}>
+                      <Image
+                        source={require('../../assets/icons/close1.png')}
+                        color={'#fa9579'}
+                        style={
+                          (styles.data,
+                          {width: 20, height: 20, alignContent: 'center'})
+                        }
+                        //  marginTop={sizes.s}
+                      />
+                    </TouchableWithoutFeedback>
+                  </Block>
+                </Block>
+                <Block row flex={0} align="center" justify="center" marginTop={5}>
                       <Block
                         flex={0}
                         height={1}
@@ -610,23 +658,6 @@ const FoodPage = ({route, navigation}) => {
                         gradient={gradients.divider}
                       />
                     </Block>
-                  </Block>
-
-                  <Block flex={0}>
-                    <TouchableWithoutFeedback
-                      onPress={() => handleDelete(index, 'breakfast')}>
-                      <Image
-                        source={require('../../assets/icons/close1.png')}
-                        color={'#fa9579'}
-                        style={
-                          (styles.data,
-                          {width: 20, height: 20, alignContent: 'center'})
-                        }
-                        //  marginTop={sizes.s}
-                      />
-                    </TouchableWithoutFeedback>
-                  </Block>
-                </Block>
                 <Block margin={0}>
                   <Block margin={0} paddingTop={10} paddingLeft={10}>
                     {isEditMode &&
@@ -673,8 +704,12 @@ const FoodPage = ({route, navigation}) => {
                               borderRadius: 20,
                               marginLeft: 10,
                             }}
-                            data={isLoadingServingGrams ? ['Loading...'] : servingGrams}
-                              onSelect={(selectedItem, index) => {
+                            data={
+                              isLoadingServingGrams
+                                ? ['Loading...']
+                                : servingGrams
+                            }
+                            onSelect={(selectedItem, index) => {
                               // console.log(servingGrams, 'ok bie ');
                               const item1 = servingGrams.find((item1) =>
                                 item1.includes(selectedItem),
@@ -783,16 +818,34 @@ const FoodPage = ({route, navigation}) => {
                                 marginRight={10}
                                 marginTop={1}
                                 source={require('../../assets/icons/edit1.png')}
-                                //  color={'#fa9579'}
+                                 color={'gray'}
                                 style={
-                                  (styles.data, {width: 25, height: 25})
+                                  (styles.data, {width: 30, height: 30})
                                 }></Image>
                             </Block>
                           </TouchableWithoutFeedback>
                         </Block>
                       </Block>
                     )}
-
+                    <Block row flex={0} align="center" justify="center" marginTop={15}>
+                      <Block
+                        flex={0}
+                        height={1}
+                        width="50%"
+                        end={[1, 0]}
+                        start={[0, 1]}
+                        gradient={gradients.divider}
+                      />
+                      <Text center marginHorizontal={sizes.s}></Text>
+                      <Block
+                        flex={0}
+                        height={1}
+                        width="50%"
+                        end={[0, 1]}
+                        start={[1, 0]}
+                        gradient={gradients.divider}
+                      />
+                    </Block>
                     <Block>
                       <TouchableWithoutFeedback
                         onPress={() => {
