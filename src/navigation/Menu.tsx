@@ -24,6 +24,7 @@ import {
   Toast,
 } from 'react-native-alert-notification';
 import LoginContext from '../hooks/LoginContext';
+import { MealContext } from '../hooks/useMeal';
 
 const Drawer = createDrawerNavigator();
 
@@ -128,11 +129,15 @@ const DrawerContent = (
     token,
     logout, // You can access the logout function
   } = useContext(LoginContext);
+  const {
+    clearContextData,
+  }=useContext(MealContext);
 
   const handleLogout = () => {
     // console.log('clicked');
 
     // Call the logout function to log the user out
+    clearContextData();
     logout();
     navigation.dispatch(
       CommonActions.reset({

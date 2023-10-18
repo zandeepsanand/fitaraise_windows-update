@@ -28,12 +28,13 @@ export default function Account({route ,navigation}) {
     // Call the logout function to log the user out
     // logout();
     clearContextData();
-    // navigation.dispatch(
-    //   CommonActions.reset({
-    //     index: 0,
-    //     routes: [{ name: 'loginNew' }],
-    //   })
-    // );
+    logout();
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'loginNew' }],
+      })
+    );
   };
   return (
     <Block safe marginTop={15}>

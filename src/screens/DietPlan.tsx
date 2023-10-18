@@ -31,6 +31,7 @@ import {useRoute} from '@react-navigation/native';
 import api from '../../api';
 import {ActivityIndicator} from 'react-native';
 import LoginContext from '../hooks/LoginContext';
+import { TouchableWithoutFeedback } from 'react-native';
 // import { colors } from '../../app/res/colors';
 // import AnimatableProgressBar from 'animateprogress';
 
@@ -68,7 +69,13 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     mealItems1,
     mealItems2,
     isLoading,
+    addWater,
+    water
   } = useContext(MealContext);
+  
+  const waterTracker = water.water_tracker;
+  console.log(waterTracker ,"water track new");
+  
 
 
   const {authenticated} = useContext(LoginContext);
@@ -96,15 +103,24 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
   const [expandedItems, setExpandedItems] = useState([]); // To keep track of expanded items
   const [waterAmount, setWaterAmount] = React.useState(0);
+  const waterProgress = ((waterTracker.todays_consumed_water_count_ml) /  (waterTracker.normal_water_count_ml));
+  console.log(waterProgress , "progress water");
+  
 
   const increaseWater = () => {
-    setWaterAmount(Math.min(waterAmount + 0.1, 1.0));
+    const plus = 'plus'
+    // setWaterAmount(Math.min(waterAmount + 0.1, 1.0));
+    addWater(plus);
   };
 
   const decreaseWater = () => {
-    setWaterAmount(Math.max(waterAmount - 0.1, 0.0));
+    const plus = 'minus'
+    // setWaterAmount(Math.max(waterAmount - 0.1, 0.0));
+    addWater(plus);
   };
+  const handleAddFood = () => {
 
+  }
   // Function to toggle the expanded state of an item
   const toggleItemExpansion = (index) => {
     const updatedExpandedItems = [...expandedItems];
@@ -674,7 +690,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                   marginTop={-sizes.l}
                   marginHorizontal="8%"
                   color="rgba(255,255,255,0.2)">
-                  <TouchableOpacity
+                  <TouchableWithoutFeedback
                     onPress={() => {
                       if (dietPlan) {
                         navigation.navigate('unlockDiet', {
@@ -700,7 +716,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                       </Block>
                     </Block>
                     {/* </Image> */}
-                  </TouchableOpacity>
+                  </TouchableWithoutFeedback>
                 </Block>
 
                 {/* profile: about me */}
@@ -1401,8 +1417,9 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                     semibold
                                     size={12}>
                                     <TouchableOpacity
-                                      onPress={() =>
-                                        handleDelete(index, 'lunch')
+                                      onPress={() =>{
+                                        handleDelete(index, 'lunch');
+                                        handleDeleteApi(item);}
                                       }>
                                       <Image
                                         source={require('../assets/icons/close1.png')}
@@ -1662,8 +1679,9 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                     semibold
                                     size={12}>
                                     <TouchableOpacity
-                                      onPress={() =>
-                                        handleDelete(index, 'evening')
+                                      onPress={() =>{
+                                        handleDelete(index, 'evening');
+                                        handleDeleteApi(item);}
                                       }>
                                       <Image
                                         source={require('../assets/icons/close1.png')}
@@ -1922,8 +1940,9 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                     semibold
                                     size={12}>
                                     <TouchableOpacity
-                                      onPress={() =>
-                                        handleDelete(index, 'dinner')
+                                      onPress={() =>{
+                                        handleDelete(index, 'dinner');
+                                        handleDeleteApi(item);}
                                       }>
                                       <Image
                                         source={require('../assets/icons/close1.png')}
@@ -1990,8 +2009,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                               padding={10}
                               onPress={() =>
                                 navigation.navigate('searchfood', {
-                                  mealType: 'evening',
-                                  meal_type: 5,
+                                  mealType: 'dinner',
+                                  meal_type: 6,
                                   formDataCopy,
                                 })
                               }>
@@ -2184,8 +2203,9 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                     semibold
                                     size={12}>
                                     <TouchableOpacity
-                                      onPress={() =>
-                                        handleDelete(index, 'meal1')
+                                      onPress={() =>{
+                                        handleDelete(index, 'meal1');
+                                        handleDeleteApi(item);}
                                       }>
                                       <Image
                                         source={require('../assets/icons/close1.png')}
@@ -2432,8 +2452,9 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                     semibold
                                     size={12}>
                                     <TouchableOpacity
-                                      onPress={() =>
-                                        handleDelete(index, 'meal2')
+                                      onPress={() =>{
+                                        handleDelete(index, 'meal2');
+                                        handleDeleteApi(item);}
                                       }>
                                       <Image
                                         source={require('../assets/icons/close1.png')}
@@ -2537,19 +2558,19 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                         blurRadius={10}>
                         <Block flex={0}>
                           <Image source={{uri: user?.avatar}} />
-                          <Lottie
+                          {/* <Lottie
                             width={64}
                             height={64}
                             marginBottom={sizes.sm}
                             source={require('../assets/json/water.json')}
                             progress={animationProgress.current}
-                          />
+                          /> */}
                           <Text h5 center white>
                             {/* {user?.name} */}
                             Water Tracker
                           </Text>
                           <Text p center white>
-                            {/* Target */}
+                            Target {waterTracker.normal_water_count_ml} ml
                           </Text>
                           {/* <Block flex={0} align="center" padding={sizes.xl}>
                         <ProgressBar
@@ -2616,7 +2637,9 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                               </Block>
                               <Block flex={0} marginLeft={30}>
                                 <Text center info h5 bold>
-                                  {Math.round(waterAmount * 100)}%
+                                  {/* {Math.round(waterAmount * 100)}% */}
+                                  {/* {data.water_datas.todays_consumed_water_count_ml} */}
+                                  {waterTracker.todays_consumed_water_count_ml} ml
                                 </Text>
                                 <Text center semibold secondary>
                                   Water intake
@@ -2651,7 +2674,9 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                   source={require('../assets/icons/glass.png')}
                                   height={40}
                                   width={40}></Image>
+                                 
                               </Block>
+                              <Text center white>(250 ml per cup)</Text>
                               <Block row center marginTop={10}>
                                 <Block flex={0} marginRight={5}>
                                   <Button info onPress={decreaseWater}>
@@ -2689,10 +2714,12 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
                             </Lottie> */}
                                 <Progress.Bar
-                                  progress={waterAmount}
-                                  width={100}
-                                  height={10}
-                                  color="skyblue"></Progress.Bar>
+                                  progress={waterProgress}
+                                  width={120}
+                                  height={15}
+                                  color="skyblue">
+
+                                  </Progress.Bar>
                               </Block>
                             </Block>
                           </Block>

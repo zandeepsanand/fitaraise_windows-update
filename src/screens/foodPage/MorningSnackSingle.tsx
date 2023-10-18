@@ -637,7 +637,7 @@ const MorningSnackSingle = ({route, navigation}) => {
                   <Block flex={0}>
                     <TouchableWithoutFeedback
                       onPress={() => {
-                        handleDelete(index, 'breakfast');
+                        handleDelete(index, 'morningSnackItems');
                         handleDeleteApi(item);
                       }}>
                       <Image

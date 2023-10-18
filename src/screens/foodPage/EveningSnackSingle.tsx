@@ -658,7 +658,7 @@ const EveningSingle = ({route, navigation}) => {
                   <Block flex={0}>
                     <TouchableWithoutFeedback
                       onPress={() => {
-                        handleDelete(index, 'breakfast');
+                        handleDelete(index, 'evening');
                         handleDeleteApi(item);
                       }}>
                       <Image

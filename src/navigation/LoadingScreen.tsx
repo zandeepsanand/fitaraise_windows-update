@@ -59,7 +59,8 @@ console.log(api , "api check");
                 // Reset the navigation stack and navigate to 'Menu'
                 navigation.reset({
                   index: 0,
-                  routes: [{ name: 'Menu', params: { data: requiredCalorie, formDataCopy: authData.formData , dietPlan } }],
+                  routes: [{ name: 'Frstpage', params: { formData: authData.formData } }],
+                  // routes: [{ name: 'Menu', params: { data: requiredCalorie, formDataCopy: authData.formData , dietPlan } }],
                 });
               } else if (authData.formData) {
                 // Reset the navigation stack and navigate to 'Frstpage'

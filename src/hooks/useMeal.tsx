@@ -21,6 +21,7 @@ interface MealContextType {
   dinnerItems: any[];
   mealItems1: any[];
   mealItems2: any[];
+  water:any[];
   addBreakfastItem: (food: any) => void;
   addMorningSnackItem: (food: any) => void;
   addEveningSnackItem: (food: any) => void;
@@ -28,6 +29,7 @@ interface MealContextType {
   addDinnerItem: (food: any) => void;
   addMealItem1: (food: any) => void;
   addMealItem2: (food: any) => void;
+  addWater: (plus:any) => void;
   deleteItem: (items: any[], mealType: string) => void;
   clearContextData: () => void;
   totalCalories: number;
@@ -43,6 +45,7 @@ export const MealContext = createContext<MealContextType>({
   dinnerItems: [],
   mealItems1: [],
   mealItems2: [],
+  water:[],
   addBreakfastItem: () => {},
   addMorningSnackItem: () => {},
   addEveningSnackItem: () => {},
@@ -50,6 +53,7 @@ export const MealContext = createContext<MealContextType>({
   addDinnerItem: () => {},
   addMealItem1: () => {},
   addMealItem2: () => {},
+  addWater: () => {},
   deleteItem: () => {},
   clearContextData: () => {},
   isLoading: false,
@@ -67,6 +71,7 @@ const MealContextProvider: React.FC = ({children}) => {
   const [dinnerItems, setDinnerItems] = useState([]);
   const [mealItems1, setMealItems1] = useState<any[]>([]);
   const [mealItems2, setMealItems2] = useState<any[]>([]);
+  const [water, setWater] = useState<any[]>([]);
   const [transformedData, setTransformedData] = useState([]);
   const [totalCalories, setTotalCalories] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -95,85 +100,7 @@ const MealContextProvider: React.FC = ({children}) => {
     const meal2Data = dietDetails.find((meal) => meal.meal_type_id === 8);
 
     const result = {};
-    if (dinnerData) {
-      const mappedDinnerData = dinnerData.diet_list.map((item) => {
-        return {
-          added_by: null,
-          cal_weight_200: item.calories, // Map calories from the item
-          calcium_in_mg: item.calcium,
-          calories: item.calories,
-          carb_in_g: item.carb,
-          cholestrol_in_mg: item.cholestrol,
-          details: {
-            id: item.id,
-            selectedWeight: item.taken_weight,
-            multiplication: item.quantity,
-            quantity: item.quantity,
-            taken_weight: item.final_weight,
-            totalCalorie: item.calories,
-            totalCarb: item.carb,
-            totalCholesterol: item.cholestrol,
-            totalFat: item.fat,
-            totalFiber: item.fiber,
-            totalIron: item.iron,
-            totalMonounsaturatedFat: item.monounsaturated_fat,
-            totalPolyunsaturatedFat: item.polyunsaturated_fat,
-            totalPotassium: item.potassium,
-            totalProtein: item.protienes,
-            totalSodium: item.sodium,
-            totalTransFat: item.trans_fat,
-            totalVitaminARAE: item.vitamin_a_rae,
-            totalVitaminC: item.vitamin_c,
-            totalVitaminD: item.vitamin_d,
-            selectedDropDown: item.serving_description,
-            totalCalcium: item.calcium,
-            totalSaturatedFat: item.saturated_fat,
-            totalSugar: item.sugar,
-            totalVitaminAIU: item.vitamin_a,
-          },
-          fat_in_g: item.fat,
-          fiber_in_g: item.fiber,
-          food_name: item.food_name,
-          id: item.id,
-          image: item.food_image,
-          iron_in_mg: item.iron,
-          monounsaturated_fat_in_g: item.monounsaturated_fat,
-          polyunsaturated_fat_in_g: item.polyunsaturated_fat,
-          serving_desc_1: '1 oz', // You can choose an appropriate serving description
-          serving_desc_2: '1 piece', // You can choose an appropriate serving description
-          serving_desc_3: '3 Piece', // You can choose an appropriate serving description          // ... Map other properties similarly
-          protein_in_g: item.protienes,
-          potassium_in_mg: item.potassium,
-          serving_desc_4: null,
-          serving_desc_5: null,
-          serving_desc_6: null,
-          serving_desc_7: null,
-          serving_desc_8: null,
-          serving_desc_9: null,
-          serving_size: item.taken_weight,
-          serving_weight_1: 28,
-          serving_weight_2: 50,
-          serving_weight_3: 180,
-          serving_weight_4: null,
-          serving_weight_5: null,
-          serving_weight_6: null,
-          serving_weight_7: null,
-          serving_weight_8: null,
-          serving_weight_9: null,
-          sodium_in_mg: item.sodium,
-          sugar_in_g: item.sugar,
-          trans_fat_in_g: item.trans_fat,
-          vitamin_a_in_mg: item.vitamin_a,
-          vitamin_a_iu: item.vitamin_a,
-          vitamin_a_rae_mg: item.vitamin_a_rae,
-          vitamin_c_in_mg: item.vitamin_c,
-          vitamin_d_mg: item.vitamin_d,
-          weight_in_g: item.taken_weight,
-        };
-      });
-
-      result.dinnerItems = mappedDinnerData;
-    }
+  
     if (breakfastData) {
       const mappedBreakfastData = breakfastData.diet_list.map((item) => {
         return {
@@ -642,6 +569,84 @@ const MealContextProvider: React.FC = ({children}) => {
       });
       result.mealItems2 = mappedmeal2Data;
     }
+    if (dinnerData) {
+      const mappedDinnerData = dinnerData.diet_list.map((item) => {
+        return {
+          added_by: null,
+          cal_weight_200: item.calories, // Map calories from the item
+          calcium_in_mg: item.calcium,
+          calories: item.calories,
+          carb_in_g: item.carb,
+          cholestrol_in_mg: item.cholestrol,
+          details: {
+            id: item.id,
+            selectedWeight: item.taken_weight,
+            multiplication: item.quantity,
+            quantity: item.quantity,
+            taken_weight: item.final_weight,
+            totalCalorie: item.calories,
+            totalCarb: item.carb,
+            totalCholesterol: item.cholestrol,
+            totalFat: item.fat,
+            totalFiber: item.fiber,
+            totalIron: item.iron,
+            totalMonounsaturatedFat: item.monounsaturated_fat,
+            totalPolyunsaturatedFat: item.polyunsaturated_fat,
+            totalPotassium: item.potassium,
+            totalProtein: item.protienes,
+            totalSodium: item.sodium,
+            totalTransFat: item.trans_fat,
+            totalVitaminARAE: item.vitamin_a_rae,
+            totalVitaminC: item.vitamin_c,
+            totalVitaminD: item.vitamin_d,
+            selectedDropDown: item.serving_description,
+            totalCalcium: item.calcium,
+            totalSaturatedFat: item.saturated_fat,
+            totalSugar: item.sugar,
+            totalVitaminAIU: item.vitamin_a,
+          },
+          fat_in_g: item.fat,
+          fiber_in_g: item.fiber,
+          food_name: item.food_name,
+          id: item.food_id,
+          image: item.food_image,
+          iron_in_mg: item.iron,
+          monounsaturated_fat_in_g: item.monounsaturated_fat,
+          polyunsaturated_fat_in_g: item.polyunsaturated_fat,
+          serving_desc_1: '1 oz', // You can choose an appropriate serving description
+          serving_desc_2: '1 piece', // You can choose an appropriate serving description
+          serving_desc_3: '3 Piece', // You can choose an appropriate serving description          // ... Map other properties similarly
+          protein_in_g: item.protienes,
+          potassium_in_mg: item.potassium,
+          serving_desc_4: null,
+          serving_desc_5: null,
+          serving_desc_6: null,
+          serving_desc_7: null,
+          serving_desc_8: null,
+          serving_desc_9: null,
+          serving_size: item.taken_weight,
+          serving_weight_1: 28,
+          serving_weight_2: 50,
+          serving_weight_3: 180,
+          serving_weight_4: null,
+          serving_weight_5: null,
+          serving_weight_6: null,
+          serving_weight_7: null,
+          serving_weight_8: null,
+          serving_weight_9: null,
+          sodium_in_mg: item.sodium,
+          sugar_in_g: item.sugar,
+          trans_fat_in_g: item.trans_fat,
+          vitamin_a_in_mg: item.vitamin_a,
+          vitamin_a_iu: item.vitamin_a,
+          vitamin_a_rae_mg: item.vitamin_a_rae,
+          vitamin_c_in_mg: item.vitamin_c,
+          vitamin_d_mg: item.vitamin_d,
+          weight_in_g: item.taken_weight,
+        };
+      });
+      result.dinnerItems = mappedDinnerData;
+    }
 
     // Return an empty array if there is no dinner data
     return result;
@@ -670,12 +675,14 @@ const MealContextProvider: React.FC = ({children}) => {
           // Make the API request to get data
           const response = await api.get(apiUrl);
           const responseData = response.data;
+          // console.log(responseData.data.water_tracker , 'for water');
+          setWater(responseData.data);
           const transformedData = mapApiDataToDesiredFormat(responseData);
 
           if (transformedData.breakfastItems) {
             console.log('Effect is running 2');
             setBreakfastItems(transformedData.breakfastItems);
-            console.log(transformedData.breakfastItems, 'useEffect breakfast');
+            // console.log(transformedData.breakfastItems, 'useEffect breakfast');
           }
           if (transformedData.dinnerItems) {
             setDinnerItems(transformedData.dinnerItems);
@@ -695,6 +702,7 @@ const MealContextProvider: React.FC = ({children}) => {
           if (transformedData.mealItems2) {
             setMealItems2(transformedData.mealItems2);
           }
+          // setWater
         } catch (error) {
           console.error('Error:', error);
           if (error.response && error.response.data) {
@@ -709,7 +717,7 @@ const MealContextProvider: React.FC = ({children}) => {
 
       // Check if data is not already loaded (isLoading is true) and if authenticated
       // Call the data fetch function
-      if (breakfastItems.length === 0 && isLoading) {
+      if ( isLoading) {
         fetchData();
       }
     }
@@ -1335,8 +1343,11 @@ const MealContextProvider: React.FC = ({children}) => {
     }
     // setTotalCalories(totalCalories + food.calories);
   };
+
   const addDinnerItem = (food: any, details: any) => {
-    const existingIndex = dinnerItems.findIndex((item) => item.id === food.id);
+    const existingIndex = dinnerItems.findIndex(
+      (item) => item.id === food.id,
+    );
 
     if (existingIndex !== -1) {
       if (food.details && food.details.id !== undefined) {
@@ -1380,7 +1391,7 @@ const MealContextProvider: React.FC = ({children}) => {
                 const responseData = response.data;
                 const transformedData = mapApiDataToDesiredFormat(responseData);
 
-                console.log(transformedData.dinnerItems, 'breakfast adding');
+                console.log(transformedData.dinnerItems, 'dinner adding');
                 // Assuming transformedData contains the breakfast data
                 if (transformedData.dinnerItems) {
                   const itemToAdd = transformedData.dinnerItems.find(
@@ -1417,8 +1428,6 @@ const MealContextProvider: React.FC = ({children}) => {
         return; // Exit the function
       }
     } else {
-      console.log(food, 'id from db to update food');
-      console.log(details, 'details id from db to update');
       // Now, you can update the API with the newly added data
       var bodyFormData = new FormData();
       bodyFormData.append('customer_id', details.customer_id);
@@ -1457,7 +1466,7 @@ const MealContextProvider: React.FC = ({children}) => {
               const responseData = response.data;
               const transformedData = mapApiDataToDesiredFormat(responseData);
 
-              // console.log(transformedData.morning, 'breakfast adding');
+              console.log(transformedData.dinnerItems, 'breakfast adding');
               // Assuming transformedData contains the breakfast data
               if (transformedData.dinnerItems && details.food_id) {
                 const itemToAdd = transformedData.dinnerItems.find(
@@ -1487,6 +1496,8 @@ const MealContextProvider: React.FC = ({children}) => {
     }
     // setTotalCalories(totalCalories + food.calories);
   };
+
+ 
   const addMealItem1 = (food: any, details: any) => {
     const existingIndex = mealItems1.findIndex((item) => item.id === food.id);
 
@@ -1639,9 +1650,6 @@ const MealContextProvider: React.FC = ({children}) => {
     }
     // setTotalCalories(totalCalories + food.calories);
   };
-
- 
-
   const addMealItem2 = (food: any, details: any) => {
     const existingIndex = mealItems2.findIndex((item) => item.id === food.id);
 
@@ -1794,6 +1802,48 @@ const MealContextProvider: React.FC = ({children}) => {
     }
     // setTotalCalories(totalCalories + food.calories);
   };
+  const addWater =(plus)=>{
+    // console.log(food, 'water data');
+    // var bodyFormData = new FormData();
+    // bodyFormData.append('customer_id', details.customer_id);
+    // bodyFormData.append('meal_type', details.meal_type);
+    api({
+      method: 'get',
+      url: `update_water_tracker/${customerId}/${plus}`,
+      // data: bodyFormData,
+      // headers: {'Content-Type': 'multipart/form-data'},
+    }).then(function (response) {
+      console.log(response.data.data , "set water");
+
+      const currentDate = new Date();
+      const formattedDate = `${currentDate.getFullYear()}-${String(
+        currentDate.getMonth() + 1,
+      ).padStart(2, '0')}-${String(currentDate.getDate()).padStart(
+        2,
+        '0',
+      )}`;
+
+      const apiUrl = `get_diet_list_wrt_date/${customerId}/${formattedDate}`;
+      api
+      .get(apiUrl)
+      .then((response) => {
+        const responseData = response.data;
+        console.log(responseData.data,"track data");
+
+        setWater(responseData.data);
+      }
+       
+        
+        )
+
+      // setWater(response.data.data)
+      
+    }).catch(function (error) {
+      // Handle error when fetching data from the API
+      console.error('Error fetching data from the API:', error);
+    });
+
+  }
   const deleteItem = (items: any[], mealType: string) => {
     switch (mealType) {
       case 'breakfast':
@@ -1852,6 +1902,7 @@ const MealContextProvider: React.FC = ({children}) => {
     dinnerItems,
     mealItems1,
     mealItems2,
+    water,
     addBreakfastItem,
     addMorningSnackItem,
     addEveningSnackItem,
@@ -1859,6 +1910,7 @@ const MealContextProvider: React.FC = ({children}) => {
     addDinnerItem,
     addMealItem1,
     addMealItem2,
+    addWater,
     clearContextData,
     deleteItem,
     updateBreakfastItem,
