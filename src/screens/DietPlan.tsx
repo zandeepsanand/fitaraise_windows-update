@@ -33,6 +33,7 @@ import {ActivityIndicator} from 'react-native';
 import LoginContext from '../hooks/LoginContext';
 import {TouchableWithoutFeedback} from 'react-native';
 import Loader from './alert/loader/Loader';
+import Calendar from './calendar/Calendar';
 // import { colors } from '../../app/res/colors';
 // import AnimatableProgressBar from 'animateprogress';
 
@@ -59,6 +60,7 @@ const VerticalProgressBar = ({progress}) => {
 };
 
 const DietPlan = ({navigation, text, maxLines = 3}) => {
+  // const [selectedDate, setSelectedDate] = useState(null);
   const route = useRoute();
   const {
     breakfastItems,
@@ -736,16 +738,18 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
                 <Block card padding={0} marginTop={sizes.sm}>
                   <Block
-                    row
+                    // row
                     blur
-                    flex={0}
+                    flex={1}
                     intensity={100}
                     radius={sizes.sm}
                     overflow="hidden"
                     tint={colors.blurTint}
                     justify="space-evenly"
                     paddingVertical={sizes.sm}
-                    renderToHardwareTextureAndroid>
+                    renderToHardwareTextureAndroid
+                    // height={800}
+                    >
                     {isLoadingScroll ? (
                       <>
                       {/* <Text>sandeep</Text> */}
@@ -762,10 +766,14 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                          
                             </>
                     ) : (
-                      <ScrollCalender
-                        formDataCopy={formDataCopy}
-                        onDateChange={handleScrollCalendarDateChange}
-                      />
+                      <>
+                       {/* <ScrollCalender
+                       formDataCopy={formDataCopy}
+                      onDateChange={handleScrollCalendarDateChange}
+                      />  */}
+
+                      <Calendar onSelectDate={setSelectedDate} selected={selectedDate} />
+                      </>
                     )}
                   </Block>
                 </Block>
