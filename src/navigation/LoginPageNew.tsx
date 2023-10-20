@@ -29,7 +29,7 @@ import {Animated, Easing} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Lottie from 'lottie-react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-
+import {Linking} from 'react-native';
 
 const isAndroid = Platform.OS === 'android';
 interface IRegistration {
@@ -48,7 +48,6 @@ interface IRegistrationValidation {
 }
 
 const LoginScreenNew = ({navigation, route}) => {
- 
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [email, setEmail] = useState('');
   const [lastName, setLastName] = useState('');
@@ -60,11 +59,11 @@ const LoginScreenNew = ({navigation, route}) => {
   const [emailShow, setEmailShow] = useState(false);
   const [formShow, setFormShow] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState('');8606783324
+  const [phoneNumber, setPhoneNumber] = useState('');
+  8606783324;
   const [isLoading, setIsLoading] = useState(false);
   const blockRef = useRef(null);
-
-
+  const handleWebLink = useCallback((url) => Linking.openURL(url), []);
 
   // Function to start the animation
   const animateBlock = () => {
@@ -105,7 +104,7 @@ const LoginScreenNew = ({navigation, route}) => {
     try {
       // Make the login request
       const response = await api.post('login', {email, password});
-      console.log(response.data , "data of login");
+      console.log(response.data, 'data of login');
 
       if (response.data.success === false) {
         // If the server responds with a failed login message
@@ -145,7 +144,7 @@ const LoginScreenNew = ({navigation, route}) => {
         // });
         navigation.reset({
           index: 0,
-          routes: [{ name: 'Frstpage', params: { formData: authData.formData } }],
+          routes: [{name: 'Frstpage', params: {formData: authData.formData}}],
         });
       }
     } catch (error) {
@@ -282,12 +281,12 @@ const LoginScreenNew = ({navigation, route}) => {
               position: 'absolute',
             }}>
             <Block padding={20}>
-              <Text center h4 primary bold>
+              {/* <Text center h4 primary bold>
                 Welcome Back !
               </Text>
               <Text center secondary semibold size={14}>
                 We missed you
-              </Text>
+              </Text> */}
 
               {formShow ? (
                 <>
@@ -352,6 +351,30 @@ const LoginScreenNew = ({navigation, route}) => {
                             Login
                           </Text>
                         </Button>
+                      
+                        <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      marginBottom: 30,
+                    }}>
+                    <Text>Forget password ?</Text>
+                    <TouchableOpacity
+                        onPress={() =>
+                          handleWebLink(
+                            'https://admin.fitaraise.com/password/reset',
+                          )
+                        }
+                      >
+                      <Text
+                       info
+                        bold
+                        style={{color: 'green', fontWeight: '700'}}>
+                        {' '}
+                        Reset
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                       </Block>
 
                       <Block
@@ -360,6 +383,7 @@ const LoginScreenNew = ({navigation, route}) => {
                         align="center"
                         justify="center"
                         marginBottom={sizes.sm}
+                        marginTop={10}
                         paddingHorizontal={sizes.xxl}>
                         <Block
                           flex={0}
@@ -367,10 +391,10 @@ const LoginScreenNew = ({navigation, route}) => {
                           width="50%"
                           end={[1, 0]}
                           start={[0, 1]}
-                          gradient={gradients.divider}
+                          // gradient={gradients.divider}
                         />
                         <Text center marginHorizontal={sizes.s}>
-                          or
+                          {/* or */}
                         </Text>
                         <Block
                           flex={0}
@@ -378,7 +402,7 @@ const LoginScreenNew = ({navigation, route}) => {
                           width="50%"
                           end={[0, 1]}
                           start={[1, 0]}
-                          gradient={gradients.divider}
+                          // gradient={gradients.divider}
                         />
                       </Block>
                       <Block padding={10} margin={10} flex={0} height={100}>

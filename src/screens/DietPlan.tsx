@@ -31,7 +31,8 @@ import {useRoute} from '@react-navigation/native';
 import api from '../../api';
 import {ActivityIndicator} from 'react-native';
 import LoginContext from '../hooks/LoginContext';
-import { TouchableWithoutFeedback } from 'react-native';
+import {TouchableWithoutFeedback} from 'react-native';
+import Loader from './alert/loader/Loader';
 // import { colors } from '../../app/res/colors';
 // import AnimatableProgressBar from 'animateprogress';
 
@@ -70,13 +71,21 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     mealItems2,
     isLoading,
     addWater,
-    water
+    water,
   } = useContext(MealContext);
-  
-  const waterTracker = water.water_tracker;
-  console.log(waterTracker ,"water track new");
-  
+  const [isLoadingScroll, setIsLoadingScroll] = useState(true);
 
+  const waterTracker = water ? water.water_tracker : null;
+  console.log(waterTracker, 'water track new');
+  useEffect(() => {
+    const loadingTimeout = setTimeout(() => {
+      setIsLoadingScroll(false);
+    }, 2500); // Replace 2000 with the desired loading duration (in milliseconds)
+  
+    // To clear the timeout when the component unmounts
+    return () => clearTimeout(loadingTimeout);
+  }, []);
+  
 
   const {authenticated} = useContext(LoginContext);
 
@@ -103,24 +112,23 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
   const [expandedItems, setExpandedItems] = useState([]); // To keep track of expanded items
   const [waterAmount, setWaterAmount] = React.useState(0);
-  const waterProgress = ((waterTracker.todays_consumed_water_count_ml) /  (waterTracker.normal_water_count_ml));
-  console.log(waterProgress , "progress water");
-  
+  const waterProgress =
+    waterTracker.todays_consumed_water_count_ml /
+    waterTracker.normal_water_count_ml;
+  console.log(waterProgress, 'progress water');
 
   const increaseWater = () => {
-    const plus = 'plus'
+    const plus = 'plus';
     // setWaterAmount(Math.min(waterAmount + 0.1, 1.0));
     addWater(plus);
   };
 
   const decreaseWater = () => {
-    const plus = 'minus'
+    const plus = 'minus';
     // setWaterAmount(Math.max(waterAmount - 0.1, 0.0));
     addWater(plus);
   };
-  const handleAddFood = () => {
-
-  }
+  const handleAddFood = () => {};
   // Function to toggle the expanded state of an item
   const toggleItemExpansion = (index) => {
     const updatedExpandedItems = [...expandedItems];
@@ -287,7 +295,12 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     totalEveningSnackCalorie +
     totalMeal1Calorie +
     totalMeal2Calorie;
+  console.log(totalCaloriesOfAllFoods, 'total calorie');
+  const totalCaloriesRounded = totalCaloriesOfAllFoods.toFixed(2);
+  console.log(totalCaloriesRounded, 'total calorie');
+
   const ProgressCalorie = totalCaloriesOfAllFoods;
+
   const ProgressCalories = ProgressCalorie.toFixed(0);
   // console.log(ProgressCalories, 'total Calories');
 
@@ -380,8 +393,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     }
   };
   const handleDeleteApi = (item) => {
-    console.log(item , "deleteditem");
-    
+    console.log(item, 'deleteditem');
+
     api
       .get(`delete_diet_list/${item.details.id}`)
       .then((res) => {
@@ -536,7 +549,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                       circleBackgroundColor={'#353353'}
                       title={
                         totalCaloriesOfAllFoods >= data.calories
-                          ? 'Excess 🔥'
+                          ? 'KCAL OVER'
                           : `${data.calories - totalCaloriesOfAllFoods}`
                       }
                       titleColor={'white'}
@@ -733,10 +746,27 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                     justify="space-evenly"
                     paddingVertical={sizes.sm}
                     renderToHardwareTextureAndroid>
-                    <ScrollCalender
-                      formDataCopy={formDataCopy}
-                      onDateChange={handleScrollCalendarDateChange}
-                    />
+                    {isLoadingScroll ? (
+                      <>
+                      {/* <Text>sandeep</Text> */}
+                      <Block center height={100}>
+                      <Lottie
+                             source={require('../assets/json/loader.json')} // Replace with the path to your fill animation JSON file
+                             autoPlay={true}
+                             loop={true}
+                             style={{alignSelf:'center',width:300,height:150}}
+                            >
+
+                            </Lottie> 
+                      </Block>
+                         
+                            </>
+                    ) : (
+                      <ScrollCalender
+                        formDataCopy={formDataCopy}
+                        onDateChange={handleScrollCalendarDateChange}
+                      />
+                    )}
                   </Block>
                 </Block>
                 {selectedDate === '' || selectedDate === currentDate ? (
@@ -1156,11 +1186,13 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                     semibold
                                     size={12}>
                                     <TouchableOpacity
-                                      onPress={() =>
-                                       { handleDelete(index, 'morningSnackItems');
-                                      handleDeleteApi(item);
-                                      }
-                                      }>
+                                      onPress={() => {
+                                        handleDelete(
+                                          index,
+                                          'morningSnackItems',
+                                        );
+                                        handleDeleteApi(item);
+                                      }}>
                                       <Image
                                         source={require('../assets/icons/close1.png')}
                                         color={'#fa9579'}
@@ -1417,10 +1449,10 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                     semibold
                                     size={12}>
                                     <TouchableOpacity
-                                      onPress={() =>{
+                                      onPress={() => {
                                         handleDelete(index, 'lunch');
-                                        handleDeleteApi(item);}
-                                      }>
+                                        handleDeleteApi(item);
+                                      }}>
                                       <Image
                                         source={require('../assets/icons/close1.png')}
                                         color={'#fa9579'}
@@ -1679,10 +1711,10 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                     semibold
                                     size={12}>
                                     <TouchableOpacity
-                                      onPress={() =>{
+                                      onPress={() => {
                                         handleDelete(index, 'evening');
-                                        handleDeleteApi(item);}
-                                      }>
+                                        handleDeleteApi(item);
+                                      }}>
                                       <Image
                                         source={require('../assets/icons/close1.png')}
                                         color={'#fa9579'}
@@ -1940,10 +1972,10 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                     semibold
                                     size={12}>
                                     <TouchableOpacity
-                                      onPress={() =>{
+                                      onPress={() => {
                                         handleDelete(index, 'dinner');
-                                        handleDeleteApi(item);}
-                                      }>
+                                        handleDeleteApi(item);
+                                      }}>
                                       <Image
                                         source={require('../assets/icons/close1.png')}
                                         color={'#fa9579'}
@@ -2203,10 +2235,10 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                     semibold
                                     size={12}>
                                     <TouchableOpacity
-                                      onPress={() =>{
+                                      onPress={() => {
                                         handleDelete(index, 'meal1');
-                                        handleDeleteApi(item);}
-                                      }>
+                                        handleDeleteApi(item);
+                                      }}>
                                       <Image
                                         source={require('../assets/icons/close1.png')}
                                         color={'#fa9579'}
@@ -2452,10 +2484,10 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                     semibold
                                     size={12}>
                                     <TouchableOpacity
-                                      onPress={() =>{
+                                      onPress={() => {
                                         handleDelete(index, 'meal2');
-                                        handleDeleteApi(item);}
-                                      }>
+                                        handleDeleteApi(item);
+                                      }}>
                                       <Image
                                         source={require('../assets/icons/close1.png')}
                                         color={'#fa9579'}
@@ -2639,7 +2671,9 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                 <Text center info h5 bold>
                                   {/* {Math.round(waterAmount * 100)}% */}
                                   {/* {data.water_datas.todays_consumed_water_count_ml} */}
-                                  {waterTracker.todays_consumed_water_count_ml} ml
+                                  {waterTracker.todays_consumed_water_count_ml
+    ? `${waterTracker.todays_consumed_water_count_ml} ml`
+    : '0 ml'}
                                 </Text>
                                 <Text center semibold secondary>
                                   Water intake
@@ -2674,12 +2708,19 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                   source={require('../assets/icons/glass.png')}
                                   height={40}
                                   width={40}></Image>
-                                 
                               </Block>
-                              <Text center white>(250 ml per cup)</Text>
+                              <Text center white>
+                                (250 ml per cup)
+                              </Text>
                               <Block row center marginTop={10}>
                                 <Block flex={0} marginRight={5}>
-                                  <Button info onPress={decreaseWater}>
+                                  <Button
+                                    info
+                                    onPress={decreaseWater}
+                                    disabled={
+                                      waterTracker.todays_consumed_water_count_ml <=
+                                      0
+                                    }>
                                     <Text bold white p>
                                       -
                                     </Text>
@@ -2717,9 +2758,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                   progress={waterProgress}
                                   width={120}
                                   height={15}
-                                  color="skyblue">
-
-                                  </Progress.Bar>
+                                  color="skyblue"></Progress.Bar>
                               </Block>
                             </Block>
                           </Block>

@@ -87,6 +87,7 @@ const MealContextProvider: React.FC = ({children}) => {
   // Mapping function to transform API data into the desired format
   function mapApiDataToDesiredFormat(apiResponse) {
     const dietDetails = apiResponse.data.diet_details;
+    const waterData = apiResponse.data.water_tracker;
     const dinnerData = dietDetails.find((meal) => meal.meal_type_id === 6);
     const breakfastData = dietDetails.find((meal) => meal.meal_type_id === 1);
     const morningSnackData = dietDetails.find(
@@ -98,6 +99,7 @@ const MealContextProvider: React.FC = ({children}) => {
     const lunchData = dietDetails.find((meal) => meal.meal_type_id === 4);
     const meal1Data = dietDetails.find((meal) => meal.meal_type_id === 7);
     const meal2Data = dietDetails.find((meal) => meal.meal_type_id === 8);
+    
 
     const result = {};
   
@@ -646,6 +648,9 @@ const MealContextProvider: React.FC = ({children}) => {
         };
       });
       result.dinnerItems = mappedDinnerData;
+    }
+    if(waterData){
+      result.water = waterData;
     }
 
     // Return an empty array if there is no dinner data

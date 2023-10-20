@@ -30,6 +30,7 @@ import {BlurView} from 'expo-blur';
 import LoginContext from '../hooks/LoginContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api,{setAuthToken} from '../../api';
+import Loader from '../screens/alert/loader/Loader';
 
 
 const {height, width} = Dimensions.get('window');
@@ -44,6 +45,7 @@ export default function Frstpage({
 }) {
   console.log(formData);
   const {loginSuccess} = useContext(LoginContext);
+
   
   const {assets, colors, fonts, gradients, sizes} = useTheme();
   const {t} = useTranslation();
@@ -88,15 +90,12 @@ export default function Frstpage({
         const customerId = authData.formData.customer_id;
         const formData = authData.formData;
         const token = authData.token;
-        // Store the authData object as a JSON string in AsyncStorage
-        // await AsyncStorage.setItem('authData', JSON.stringify(authData));
-
-        // Use the loginSuccess method from LoginContext
-        // setAuthToken(authData.token); // Set the token for future requests
+    
         loginSuccess(customerId, formData, token);
         console.log(authToken , "auth Data");
         if (authToken) {
           setAuthToken(authToken);
+          setIsLoading(true);
           const requiredCalorieResponse = await api.get(`get_daily_required_calories/${formData.customer_id}`);
           const diet_List = await api.get(`get_recommended_diet/${formData.customer_id}`);
 
@@ -107,25 +106,25 @@ export default function Frstpage({
           console.log(requiredCalorie , "calorie required");
           console.log(authData.formData , "for workout example");
           
-          if ((requiredCalorieResponse.data.success === true) && (authData.formData)) {
-            // Reset the navigation stack and navigate to 'Menu'
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'Menu', params: { data: requiredCalorie, formDataCopy: authData.formData , dietPlan } }],
-            });
-          } else if (authData.formData) {
-            // Reset the navigation stack and navigate to 'Frstpage'
-            navigation.navigate({
-              
-              routes: [{ name: 'Details', params: { formData: authData.formData } }],
-            });
-          } else {
-            // Reset the navigation stack and navigate to 'loginNew'
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'loginNew' }],
-            });
-          }
+        
+            setIsLoading(false);
+  
+            if ((requiredCalorieResponse.data.success === true) && (authData.formData)) {
+                navigation.reset({
+                index: 0,
+                routes: [{ name: 'Menu', params: { data: requiredCalorie, formDataCopy: authData.formData, dietPlan } }],
+              });
+            } else if (authData.formData) {
+              navigation.navigate({
+                routes: [{ name: 'Details', params: { formData: authData.formData } }],
+              });
+            } else {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'loginNew' }],
+              });
+            }
+          // Replace 2000 with the desired loading duration (in milliseconds)
         } else {
           // No authToken, navigate to 'loginNew'
           navigation.reset({
@@ -151,6 +150,7 @@ export default function Frstpage({
     }
  
  }
+ 
 
 
   const animationProgress = useRef(new Animated.Value(0));
@@ -164,7 +164,9 @@ export default function Frstpage({
     }).start();
   }, []);
   return (
-    <Block>
+    <>
+    {isLoading ? <Loader /> : (
+      <Block>
       <Block style={styles.container1} gradient={gradients.success}>
         <Text bold font="Pacifico" style={{top: 40, padding: 16}}>
           Welcome {formData.first_name}
@@ -341,9 +343,16 @@ export default function Frstpage({
         </TouchableWithoutFeedback>
       </View>
     </Block>
+    )}
+   </>
   );
 }
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   text1: {
     fontFamily: 'Pacifico',
     fontSize: 26,

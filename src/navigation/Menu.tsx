@@ -148,35 +148,9 @@ const DrawerContent = (
   };
 
   const handleEditGoalPress = () => {
-    // console.log('clicked');
-    
- 
-    // Alert.alert(
-    //   'Edit Goal',
-    //   'Do you want to edit your goal?',
-    //   [
-    //     {
-    //       text: 'Cancel',
-    //       onPress: () => console.log('Cancel Pressed'),
-    //       style: 'cancel',
-    //     },
-    //     {
-    //       text: 'Edit',
-    //       onPress: () => {
-    //         // Handle the logic to navigate to the "Edit Goal" screen here
-    //         navigation.navigate('Details'); // Replace 'Details' with the correct screen name
-    //       },
-    //     },
-    //   ],
-    //   {cancelable: false},
-    // );
+  
   };
-  // const [active, setActive] = useState('Tab'); // Initialize with the default screen name
 
-  // Use the useFocusEffect hook to set the initial screen when the component receives focus
-  // useFocusEffect(() => {
-  //   setActive('Tab'); // Set it to the default screen name ('Tab' in this case)
-  // });
 
   // screen list for Drawer menu
   const screens = [
@@ -274,10 +248,10 @@ const DrawerContent = (
           justify="flex-start"
           marginTop={sizes.sm}
           marginBottom={sizes.s}
-          // onPress={() =>
-          //   handleWebLink('https://github.com/creativetimofficial')
+          onPress={() =>
+            handleWebLink('https://github.com/creativetimofficial')
 
-          // }
+          }
           onPress={() => {
             handleLogout();
           }}
