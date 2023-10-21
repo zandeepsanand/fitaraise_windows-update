@@ -25,14 +25,10 @@ const Date1 = ({ date, onSelectDate, selected }) => {
         {day}
       </Text>
       <View style={{ height: 10 }} />
-      {/* <View style={{width:10,height:10,alignItems:'center',position:'relative'}}>
-      <Image source={require('../../assets/icons/check.png')} style={{padding:10,width:10,height:10,alignItems:'center',position:'relative'}}/>
-      </View> */}
-      
       <Text
         style={[
           styles.medium,
-          selected === fullDate && { color: "#fff", fontWeight: 'bold', fontSize: 18 },
+          selected === fullDate && { color: "#fff", fontWeight: 'bold', fontSize: 24 },
         ]}
       >
         {dayNumber}
@@ -40,23 +36,7 @@ const Date1 = ({ date, onSelectDate, selected }) => {
     </TouchableOpacity>
   )
 }
-export const generateDates = () => {
-    const currentDate = moment();
-    const previous15Days = [];
-    const next15Days = [];
-  
-    // Add dates for the previous 15 days
-    for (let i = 15; i > 0; i--) {
-      previous15Days.push(currentDate.clone().subtract(i, 'days'));
-    }
-  
-    // Add dates for the next 15 days
-    for (let i = 0; i < 15; i++) {
-      next15Days.push(currentDate.clone().add(i, 'days'));
-    }
-  
-    return [...previous15Days,  ...next15Days];
-  };
+
 
 export default Date1
 
@@ -68,16 +48,17 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 10,
     alignItems: 'center',
-    height: 80,
-    width: 60,
+    height: 70,
+    width: 58,
     marginHorizontal: 5,
   },
   big: {
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 13,
   },
   medium: {
-    fontSize: 18,
+    fontSize: 12,
+    fontWeight: 'bold',
     // paddingTop:10
   },
 })

@@ -114,6 +114,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
   const [expandedItems, setExpandedItems] = useState([]); // To keep track of expanded items
   const [waterAmount, setWaterAmount] = React.useState(0);
+  
   const waterProgress =
     waterTracker.todays_consumed_water_count_ml /
     waterTracker.normal_water_count_ml;
@@ -450,9 +451,13 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
   const toggleExpand = () => {
     setExpanded(!expanded);
   };
+  const currentDate = new Date().toISOString().slice(0, 10);
+  console.log(currentDate , "date check");
 
   // State to hold the selected date and response data
-  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedDate, setSelectedDate] = useState(currentDate);
+  console.log(selectedDate, "selected date");
+  
 
   // Callback function to handle date change in ScrollCalendar
   //  const handleScrollCalendarDateChange = (newSelectedDate, newResponseData) => {
@@ -460,7 +465,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
   // };
   // console.log(selectedDate, 'selected date');
-  const currentDate = new Date().toISOString().slice(0, 10);
+  
+  
   const [apiData, setApiData] = useState(null);
   // console.log(apiData, 'the data of diet');
 
@@ -571,7 +577,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                       // disableAnimation={totalCaloriesOfAllFoods >= data.calories}
                     />
 
-                    <Block row marginVertical={sizes.m}>
+                    <Block row marginVertical={0} padding={0} marginTop={-10}>
                       <Button
                         white
                         outlined
@@ -736,9 +742,12 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
                 {/* profile: about me */}
 
-                <Block card padding={0} marginTop={sizes.sm}>
+                <Block card padding={0}
+                 marginTop={sizes.sm}
+                >
                   <Block
                     // row
+                    paddingTop={10}
                     blur
                     flex={1}
                     intensity={100}
@@ -746,15 +755,12 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                     overflow="hidden"
                     tint={colors.blurTint}
                     justify="space-evenly"
-                    paddingVertical={sizes.sm}
+                    // paddingVertical={sizes.sm}
                     renderToHardwareTextureAndroid
                     // height={800}
                     >
-                    {isLoadingScroll ? (
-                      <>
-                      {/* <Text>sandeep</Text> */}
-                      <Block center height={100}>
-                      <Lottie
+                  
+                      {/* <Lottie
                              source={require('../assets/json/loader.json')} // Replace with the path to your fill animation JSON file
                              autoPlay={true}
                              loop={true}
@@ -762,19 +768,18 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                             >
 
                             </Lottie> 
-                      </Block>
+                      */}
                          
-                            </>
-                    ) : (
-                      <>
+                        
                        {/* <ScrollCalender
                        formDataCopy={formDataCopy}
                       onDateChange={handleScrollCalendarDateChange}
                       />  */}
 
-                      <Calendar onSelectDate={setSelectedDate} selected={selectedDate} />
-                      </>
-                    )}
+                     
+                   
+                  
+                     <Calendar onSelectDate={handleScrollCalendarDateChange} selected={selectedDate}  />
                   </Block>
                 </Block>
                 {selectedDate === '' || selectedDate === currentDate ? (
