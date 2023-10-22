@@ -45,7 +45,7 @@ export default ({data, formDataCopy, dietPlan}) => {
         name="FrstPage"
         component={Frstpage}
         // options={screenOptions.components}
-        options={{title: ''}}
+        options={{headerShown: false}}
         initialParams={{data, formData :formDataCopy, dietPlan}}
       />
        <Stack.Screen

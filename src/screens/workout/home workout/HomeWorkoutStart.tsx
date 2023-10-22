@@ -161,6 +161,8 @@ const HomeWorkoutStart = () => {
   const completed_date = new Date().toISOString().slice(0, 10);
   // console.log(workoutData.customer_id ,"LOG ID ");
   const customer_id = workoutData.customer_id;
+  console.log(customer_id, "check id");
+  
   const workout_id = currentWorkout.workout_id;
   const excercise_id = currentWorkout.excercise;
   const home_workout_excercise = currentWorkout.id;
@@ -188,6 +190,8 @@ const HomeWorkoutStart = () => {
       .then((response) => {
         console.log(response.data);
         if (response.data.success) {
+          console.log("success workout");
+          
           setShowNextButton(true);
           setCompletedDate([completed_date]);
         }

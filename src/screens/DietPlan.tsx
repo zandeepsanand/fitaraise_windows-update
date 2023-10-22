@@ -6,6 +6,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import {DataTable} from 'react-native-paper';
+
 import {ProgressBarAndroid} from 'react-native-elements';
 import {BASE_URL} from '@env';
 import {useData, useTheme, useTranslation} from '../hooks/';
@@ -77,17 +79,18 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
   } = useContext(MealContext);
   const [isLoadingScroll, setIsLoadingScroll] = useState(true);
 
+
   const waterTracker = water ? water.water_tracker : null;
   console.log(waterTracker, 'water track new');
+
   useEffect(() => {
     const loadingTimeout = setTimeout(() => {
       setIsLoadingScroll(false);
     }, 2500); // Replace 2000 with the desired loading duration (in milliseconds)
-  
+
     // To clear the timeout when the component unmounts
     return () => clearTimeout(loadingTimeout);
   }, []);
-  
 
   const {authenticated} = useContext(LoginContext);
 
@@ -114,10 +117,11 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
   const [expandedItems, setExpandedItems] = useState([]); // To keep track of expanded items
   const [waterAmount, setWaterAmount] = React.useState(0);
-  
+
   const waterProgress =
     waterTracker.todays_consumed_water_count_ml /
     waterTracker.normal_water_count_ml;
+    
   console.log(waterProgress, 'progress water');
 
   const increaseWater = () => {
@@ -143,7 +147,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     setExpandedItems(updatedExpandedItems);
   };
 
-  console.log(breakfastItems, 'breakfast from device distribution');
+  // console.log(breakfastItems, 'breakfast from device distribution');
 
   if (!breakfastItems || !lunchItems || !eveningSnackItems) {
     // Render a loading indicator while data is being fetched
@@ -452,12 +456,11 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     setExpanded(!expanded);
   };
   const currentDate = new Date().toISOString().slice(0, 10);
-  console.log(currentDate , "date check");
+  console.log(currentDate, 'date check');
 
   // State to hold the selected date and response data
   const [selectedDate, setSelectedDate] = useState(currentDate);
-  console.log(selectedDate, "selected date");
-  
+  console.log(selectedDate, 'selected date');
 
   // Callback function to handle date change in ScrollCalendar
   //  const handleScrollCalendarDateChange = (newSelectedDate, newResponseData) => {
@@ -465,8 +468,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
   // };
   // console.log(selectedDate, 'selected date');
-  
-  
+
   const [apiData, setApiData] = useState(null);
   // console.log(apiData, 'the data of diet');
 
@@ -742,9 +744,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
                 {/* profile: about me */}
 
-                <Block card padding={0}
-                 marginTop={sizes.sm}
-                >
+                <Block card padding={0} marginTop={sizes.sm}>
                   <Block
                     // row
                     paddingTop={10}
@@ -758,9 +758,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                     // paddingVertical={sizes.sm}
                     renderToHardwareTextureAndroid
                     // height={800}
-                    >
-                  
-                      {/* <Lottie
+                  >
+                    {/* <Lottie
                              source={require('../assets/json/loader.json')} // Replace with the path to your fill animation JSON file
                              autoPlay={true}
                              loop={true}
@@ -769,17 +768,16 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
                             </Lottie> 
                       */}
-                         
-                        
-                       {/* <ScrollCalender
+
+                    {/* <ScrollCalender
                        formDataCopy={formDataCopy}
                       onDateChange={handleScrollCalendarDateChange}
                       />  */}
 
-                     
-                   
-                  
-                     <Calendar onSelectDate={handleScrollCalendarDateChange} selected={selectedDate}  />
+                    <Calendar
+                      onSelectDate={handleScrollCalendarDateChange}
+                      selected={selectedDate}
+                    />
                   </Block>
                 </Block>
                 {selectedDate === '' || selectedDate === currentDate ? (
@@ -2386,7 +2384,12 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                               </TouchableOpacity>
                             )}
 
-                            <Block row flex={0} align="center" justify="center">
+                            <Block
+                              row
+                              flex={0}
+                              align="center"
+                              justify="center"
+                              paddingBottom={0}>
                               <Block
                                 flex={0}
                                 height={1}
@@ -2428,99 +2431,76 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                             </Block>
                           </TouchableOpacity>
                         </Block>
-                        <Block>
-                          <Block style={styles.container}>
-                            {/* Header */}
-                            <Block style={styles.row} flex={1}>
-                              <Text
-                                style={styles.header2}
-                                size={12}
-                                bold></Text>
-                              <Text style={styles.header} bold size={12}>
-                                Protein
-                              </Text>
-                              <Text style={styles.header} bold size={12}>
-                                Carbs
-                              </Text>
-                              <Text style={styles.header} bold size={12}>
-                                Fat
-                              </Text>
-                              <Text style={styles.header} bold size={12}>
-                                KCAL
-                              </Text>
-                              <Text style={styles.header}></Text>
-                            </Block>
 
-                            {/* Data Rows */}
-
-                            <Block>
-                              {mealItems2.map((item, index) => (
-                                <View
-                                  key={index}
-                                  style={{flexDirection: 'row'}}>
-                                  <Text
-                                    style={styles.header2}
-                                    size={12}
-                                    bold
-                                    numberOfLines={
-                                      expandedItems.includes(index) ? 0 : 1
-                                    }>
-                                    {item.food_name}
-                                  </Text>
-
-                                  <Text
-                                    style={styles.header}
-                                    semibold
-                                    size={12}>
-                                    {item.details.totalProtein}
-                                  </Text>
-                                  <Text
-                                    style={styles.header}
-                                    semibold
-                                    size={12}>
-                                    {item.details.totalCarb}
-                                  </Text>
-                                  <Text
-                                    style={styles.header}
-                                    semibold
-                                    size={12}>
-                                    {item.details.totalFat}
-                                  </Text>
-                                  <Text
-                                    style={styles.header}
-                                    semibold
-                                    size={12}>
-                                    {item.details.totalCalorie}
-                                  </Text>
-                                  <Text
-                                    style={styles.header}
-                                    semibold
-                                    size={12}>
-                                    <TouchableOpacity
-                                      onPress={() => {
-                                        handleDelete(index, 'meal2');
-                                        handleDeleteApi(item);
-                                      }}>
-                                      <Image
-                                        source={require('../assets/icons/close1.png')}
-                                        color={'#fa9579'}
-                                        style={
-                                          (styles.data,
-                                          {
-                                            width: 20,
-                                            height: 20,
-                                            alignContent: 'center',
-                                          })
-                                        }
-                                        margin={sizes.s}
-                                      />
-                                    </TouchableOpacity>
-                                  </Text>
-                                </View>
-                              ))}
-                            </Block>
-                          </Block>
+                        {/* testing  */}
+                        <Block flex={1} center >
+                          <DataTable style={styles.container}>
+                            <DataTable.Header style={styles.tableHeader}>
+                              <DataTable.Cell
+                                style={{flex: 1.4}}></DataTable.Cell>
+                              <DataTable.Cell style={{flex: 1.3}}>
+                                Protien
+                              </DataTable.Cell>
+                              <DataTable.Cell style={{flex: 1.3}}>
+                                Carb
+                              </DataTable.Cell>
+                              <DataTable.Cell>Fat</DataTable.Cell>
+                              <DataTable.Cell>KCAL</DataTable.Cell>
+                              <DataTable.Cell></DataTable.Cell>
+                            </DataTable.Header>
+                            {mealItems2.map((item, index) => (
+                              <DataTable.Row key={index}>
+                                <DataTable.Cell
+                                  style={{flex: 1.4}}
+                                  numberOfLines={
+                                    expandedItems.includes(index) ? 0 : 1
+                                  }>
+                                  {item.food_name}
+                                </DataTable.Cell>
+                                <DataTable.Cell style={{flex: 1.3}}>
+                                  {item.details.totalProtein}
+                                </DataTable.Cell>
+                                <DataTable.Cell style={{flex: 1.3}}>
+                                  {item.details.totalCarb}
+                                </DataTable.Cell>
+                                <DataTable.Cell>
+                                  {item.details.totalFat}
+                                </DataTable.Cell>
+                                <DataTable.Cell>
+                                  {item.details.totalCalorie}
+                                </DataTable.Cell>
+                                <DataTable.Cell
+                                  style={{
+                                    alignSelf: 'center',
+                                    justifyContent: 'flex-end',
+                                  }}>
+                                  {' '}
+                                  <TouchableOpacity
+                                    onPress={() => {
+                                      handleDelete(index, 'meal2');
+                                      handleDeleteApi(item);
+                                    }}>
+                                    <Image
+                                      source={require('../assets/icons/close1.png')}
+                                      color={'#fa9579'}
+                                      style={
+                                        (styles.data,
+                                        {
+                                          width: 20,
+                                          height: 20,
+                                          alignContent: 'center',
+                                        })
+                                      }
+                                      margin={sizes.s}
+                                    />
+                                  </TouchableOpacity>
+                                </DataTable.Cell>
+                              </DataTable.Row>
+                            ))}
+                          </DataTable>
                         </Block>
+
+                        {/* test ends  */}
                       </Block>
                     ) : (
                       <Block
@@ -2592,7 +2572,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                     </Button>
 
                     {/* <Progress.Bar progress={0.3}  width={100}  /> */}
-                    <Block flex={0}>
+                    {water.length > 0 ? (<Block flex={0}>
                       <Image
                         background
                         resizeMode="cover"
@@ -2660,7 +2640,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                           </TouchableOpacity>
                         </Button>
                       </Block> */}
-                          <Block row marginTop={25} centerContent>
+                          <Block row  centerContent>
                             <Block
                               flex={0}
                               width={160}
@@ -2685,8 +2665,194 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                   {/* {Math.round(waterAmount * 100)}% */}
                                   {/* {data.water_datas.todays_consumed_water_count_ml} */}
                                   {waterTracker.todays_consumed_water_count_ml
-    ? `${waterTracker.todays_consumed_water_count_ml} ml`
-    : '0 ml'}
+                                    ? `${waterTracker.todays_consumed_water_count_ml} ml`
+                                    : '0 ml'}
+                                </Text>
+                                <Text center semibold secondary>
+                                  Water intake
+                                </Text>
+                              </Block>
+                            </Block>
+                            <Block
+                              flex={0}
+                              // card
+                              width={130}
+                              marginHorizontal={10}
+                              center
+                              padding={10}>
+                              <Block
+                                flex={1}
+                                centerContent
+                                center
+                                style={{
+                                  justifyContent: 'center',
+                                  alignSelf: 'center',
+                                }}>
+                                {/* <Block center marginBottom={10}>
+                            <Lottie
+                              width={64}
+                              height={64}
+                              source={require('../assets/json/water.json')}
+                              progress={animationProgress.current}
+                            />
+                          </Block> */}
+                                <Image
+                                  center
+                                  source={require('../assets/icons/glass.png')}
+                                  height={40}
+                                  width={40}></Image>
+                              </Block>
+                              <Text center white>
+                                (250 ml per cup)
+                              </Text>
+                              <Block row center marginTop={10}>
+                                <Block flex={0} marginRight={5}>
+                                  <Button
+                                    info
+                                    onPress={decreaseWater}
+                                    disabled={
+                                      waterTracker.todays_consumed_water_count_ml <=
+                                      0
+                                    }>
+                                    <Text bold white p>
+                                      -
+                                    </Text>
+                                  </Button>
+                                </Block>
+                                <Block flex={0}>
+                                  <Button
+                                    info
+                                    marginLeft={5}
+                                    onPress={increaseWater}>
+                                    <Text bold white>
+                                      {' '}
+                                      +{' '}
+                                    </Text>
+                                  </Button>
+                                </Block>
+                              </Block>
+                            </Block>
+                            <Block flex={1} center>
+                              <Block
+                                transform={[{rotate: '-90deg'}]}
+                                centerContent
+                                flex={0}
+                                width={100}
+                                margin={-20}>
+                                {/* <Lottie
+                             source={require('../assets/json/water2.json')} // Replace with the path to your fill animation JSON file
+                             autoPlay={false}
+                             loop={false}
+                             style={{ width: 50, height: 100, position: 'absolute', bottom: 0 }}
+                            >
+
+                            </Lottie> */}
+                                <Progress.Bar
+                                  progress={waterProgress}
+                                  width={120}
+                                  height={15}
+                                  color="skyblue"></Progress.Bar>
+                              </Block>
+                            </Block>
+                          </Block>
+                        </Block>
+                      </Image>
+                    </Block>):(
+                      <Block flex={0}>
+                      <Image
+                        background
+                        resizeMode="cover"
+                        padding={sizes.sm}
+                        paddingBottom={sizes.l}
+                        radius={sizes.cardRadius}
+                        source={assets.green}
+                        blurRadius={10}>
+                        <Block flex={0}>
+                          <Image source={{uri: user?.avatar}} />
+                          {/* <Lottie
+                            width={64}
+                            height={64}
+                            marginBottom={sizes.sm}
+                            source={require('../assets/json/water.json')}
+                            progress={animationProgress.current}
+                          /> */}
+                          <Text h5 center white>
+                            {/* {user?.name} */}
+                            Water Tracker
+                          </Text>
+                          <Text p center white>
+                            Target {waterTracker.normal_water_count_ml} ml
+                          </Text>
+                          {/* <Block flex={0} align="center" padding={sizes.xl}>
+                        <ProgressBar
+                          steps={6}
+                          ranges={[
+                            '0',
+                            '150',
+                            '400',
+                            '600',
+                            '800',
+                            '1000',
+                            '1200',
+                          ]}
+                          dotDiameter={10}
+                          width={325}
+                          height={3}
+                          currentStep={currentStep}
+                          stepToStepAnimationDuration={1000}
+                          withDots
+                        />
+                      </Block> */}
+                          {/* <Block
+                        row
+                        justify="space-between"
+                        marginBottom={sizes.base}
+                        marginTop={sizes.sm}>
+                        <Button
+                          flex={2}
+                          gradient={gradients.dark}
+                          marginHorizontal={sizes.s}>
+                          <TouchableOpacity onPress={handlePrevStep}>
+                            <Text white bold marginHorizontal={sizes.s}>
+                              -
+                            </Text>
+                          </TouchableOpacity>
+                        </Button>
+                        <Button flex={2} gradient={gradients.dark}>
+                          <TouchableOpacity onPress={handleNextStep}>
+                            <Text white bold marginHorizontal={sizes.sm}>
+                              +
+                            </Text>
+                          </TouchableOpacity>
+                        </Button>
+                      </Block> */}
+                          <Block row  centerContent>
+                            <Block
+                              flex={0}
+                              width={160}
+                              height={80}
+                              card
+                              center
+                              marginTop={30}>
+                              <Block
+                                center
+                                flex={0}
+                                marginBottom={10}
+                                marginRight={20}>
+                                <Lottie
+                                  width={44}
+                                  height={54}
+                                  source={require('../assets/json/water.json')}
+                                  progress={animationProgress.current}
+                                />
+                              </Block>
+                              <Block flex={0} marginLeft={30}>
+                                <Text center info h5 bold>
+                                  {/* {Math.round(waterAmount * 100)}% */}
+                                  {/* {data.water_datas.todays_consumed_water_count_ml} */}
+                                  {waterTracker.todays_consumed_water_count_ml
+                                    ? `${waterTracker.todays_consumed_water_count_ml} ml`
+                                    : '0 ml'}
                                 </Text>
                                 <Text center semibold secondary>
                                   Water intake
@@ -2778,6 +2944,8 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                         </Block>
                       </Image>
                     </Block>
+                    )}
+                    
                   </>
                 ) : (
                   <PreviousDietDetails data={apiData} />
@@ -2795,6 +2963,16 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
   );
 };
 const styles = StyleSheet.create({
+  boldTitle: {
+    fontWeight: 'bold',
+    // Other style properties you want to apply, such as fontSize, color, etc.
+  },
+  tableHeader: {
+    // borderBottomColor: 'gray',
+    // borderBottomWidth: 0.9,
+    //  marginTop:0,
+  },
+
   progressBar: {
     width: 10,
     height: 100,
@@ -2824,15 +3002,15 @@ const styles = StyleSheet.create({
   cover: {padding: 30, width: '50%', height: '10%'},
   text: {padding: 30},
   container: {
-    flex: 4,
-    flexDirection: 'row', // set elements horizontally, try column.
+    // flex: 1,
+    // flexDirection: 'row', // set elements horizontally, try column.
     padding: 10,
   },
-  container: {
-    flex: 3,
-    // backgroundColor: '#f9f6ee',
-    padding: 10,
-  },
+  // container: {
+  //   flex: 3,
+  //   // backgroundColor: '#f9f6ee',
+  //   padding: 10,
+  // },
   mainCardView: {
     height: 150,
     alignItems: 'center',

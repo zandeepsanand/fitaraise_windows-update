@@ -23,7 +23,7 @@ export default function PreviousDietDetails({data}) {
   return (
     <>
       <View>
-        {data.diet_details.map((mealType) => (
+        {data.diet_details.filter((mealType) => mealType.diet_list.length > 0).map((mealType) => (
           <>
             <Block
               radius={sizes.sm}
@@ -109,46 +109,7 @@ export default function PreviousDietDetails({data}) {
                     data={mealType.diet_list}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({item, index}) => (
-                      // <Block margin={0}>
-                      //   <View style={styles.item}>
-                      //     <Text
-                      //       style={
-                      //         (styles.data,
-                      //         {
-                      //           width: 70,
-                      //           padding: 5,
-                      //           alignSelf: 'center',
-                      //           alignContent: 'center',
-                      //         })
-                      //       }
-                      //       semibold>
-                      //       {item.food_name}
-                      //     </Text>
-                      //     <Text style={styles.data} center>
-                      //       {item.protienes}
-                      //     </Text>
-                      //     <Text style={styles.data} center>
-                      //       {item.carb}
-                      //     </Text>
-                      //     <Text style={styles.data} center>
-                      //       {item.fat}
-                      //     </Text>
-                      //     <Text style={styles.data} center>
-                      //       {item.calories}
-                      //     </Text>
-                      //     <TouchableOpacity>
-                      //       <Image
-                      //         source={require('../../assets/icons/close1.png')}
-                      //         color={'#9fa1a2'}
-                      //         style={
-                      //           (styles.data,
-                      //           {width: 20, height: 20, alignContent: 'center'})
-                      //         }
-                      //         marginTop={sizes.s}
-                      //       />
-                      //     </TouchableOpacity>
-                      //   </View>
-                      // </Block>
+                    
                       <View key={index} style={{flexDirection: 'row'}}>
                               <Text
                                 style={styles.header2}
@@ -172,24 +133,7 @@ export default function PreviousDietDetails({data}) {
                               <Text style={styles.header} semibold size={12}>
                                 {item.calories}
                               </Text>
-                              {/* <Text style={styles.header} semibold size={12}>
-                                <TouchableOpacity
-                                 >
-                                  <Image
-                                    source={require('../../assets/icons/close1.png')}
-                                    color={'#9fa1a2'}
-                                    style={
-                                      (styles.data,
-                                      {
-                                        width: 20,
-                                        height: 20,
-                                        alignContent: 'center',
-                                      })
-                                    }
-                                    margin={sizes.s}
-                                  />
-                                </TouchableOpacity>
-                              </Text> */}
+                         
                             </View>
                     )}
                   />

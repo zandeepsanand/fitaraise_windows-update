@@ -15,6 +15,7 @@ import HomeWorkoutCalender from './HomeWorkoutCalender';
 import axios from 'axios';
 import {BASE_URL} from '@env';
 import api from '../../../../api';
+import CalendarHomeWorkout from './calendar/Calendar';
 
 const HomeWorkoutMain = ({navigation, route}) => {
   const {t} = useTranslation();
@@ -32,6 +33,7 @@ const HomeWorkoutMain = ({navigation, route}) => {
     workoutData.workout_level,
   );
   const [data2, setData2] = useState(homeWorkout);
+  const [completedDates, setCompletedDates] = useState([]);
   console.log(data2, 'testing');
 
   const handleProducts = useCallback(
@@ -75,6 +77,27 @@ const HomeWorkoutMain = ({navigation, route}) => {
     }, 1000); // Simulate a 2-second loading time (adjust as needed)
   }, []);
 
+  const fetchData = async () => {
+    try {
+      const response = await api.get(`get_customer_done_home_workouts/${workoutData.customer_id}`);
+      if (response.data.success) {
+        // Handle the data and update your calendar with the results
+        const completedDates = response.data.data.map((item) => item.completed_date);
+
+        console.log(completedDates, "dates");
+        setCompletedDates(completedDates);
+        // Set completedDates in your state or props
+      } else {
+        // Handle the case when the API call is successful but data is not as expected
+      }
+    } catch (error) {
+      // Handle errors from the API call
+    }
+  };
+  
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <Block safe paddingTop={10}>
 
@@ -145,15 +168,11 @@ const HomeWorkoutMain = ({navigation, route}) => {
               </Block>
             </Block>
             <Block
-            // style={{
-            //   borderBottomColor: 'black',
-            //   borderBottomWidth: 0.11,
-            //   backgroundColor: 'white',
-            // }}
-            // paddingBottom={10}
+          
             ></Block>
             <View style={{paddingBottom: 20}}>
-              <HomeWorkoutCalender savedDate={savedDate} />
+              {/* <HomeWorkoutCalender savedDate={savedDate} /> */}
+              <CalendarHomeWorkout  savedDate={completedDates}/>
             </View>
 
             {data2.map((workout) => (

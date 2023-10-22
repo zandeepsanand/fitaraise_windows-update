@@ -155,7 +155,7 @@ const DrawerContent = (
   // screen list for Drawer menu
   const screens = [
     {name: 'Home', to: 'Tab', icon: assets.home},
-    {name: 'Main Menu', to: 'FrstPage', icon: assets.components},
+    // {name: 'Main Menu', to: 'FrstPage', icon: assets.components},
     {
       name: 'Edit Goal',
       to: 'Demo',
@@ -172,8 +172,8 @@ const DrawerContent = (
       scrollEnabled
       removeClippedSubviews
       renderToHardwareTextureAndroid
-      contentContainerStyle={{paddingBottom: sizes.padding}}>
-      <Block paddingHorizontal={sizes.padding}>
+      contentContainerStyle={{paddingBottom: sizes.padding}} >
+      <Block paddingHorizontal={sizes.padding} >
         <Block flex={0} row align="center" marginBottom={sizes.l}>
           <Image
             radius={0}

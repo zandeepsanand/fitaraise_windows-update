@@ -110,10 +110,11 @@ export default function Frstpage({
             setIsLoading(false);
   
             if ((requiredCalorieResponse.data.success === true) && (authData.formData)) {
-                navigation.reset({
-                index: 0,
-                routes: [{ name: 'Menu', params: { data: requiredCalorie, formDataCopy: authData.formData, dietPlan } }],
-              });
+              //   navigation.reset({
+              //   index: 0,
+              //   routes: [{ name: 'Menu', params: { data: requiredCalorie, formDataCopy: authData.formData, dietPlan } }],
+              // });
+              navigation.navigate('Menu', { data: requiredCalorie, formDataCopy: authData.formData, dietPlan });
             } else if (authData.formData) {
               navigation.navigate({
                 routes: [{ name: 'Details', params: { formData: authData.formData } }],
