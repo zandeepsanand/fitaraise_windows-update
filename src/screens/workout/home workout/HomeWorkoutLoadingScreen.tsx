@@ -82,21 +82,21 @@ const HomeWorkoutLoadingScreen = ({route}) => {
 
   //   checkAuthenticationStatus();
   // }, [navigation]);
-  const workoutData = {
-    customer_id: 68,
-    first_name: 'Sandeep S Anand',
-    last_name: 'S an',
+  // const workoutData = {
+  //   customer_id: 68,
+  //   first_name: 'Sandeep S Anand',
+  //   last_name: 'S an',
 
-    feet: '',
-    gender: 'male',
-    height: 10,
-    height_unit: 'cm',
-    inches: '',
+  //   feet: '',
+  //   gender: 'male',
+  //   height: 10,
+  //   height_unit: 'cm',
+  //   inches: '',
 
-    weight: '10',
-    weight_unit: 'lbs',
-    workout_level: 'beginner',
-  };
+  //   weight: '10',
+  //   weight_unit: 'lbs',
+  //   workout_level: 'beginner',
+  // };
   useEffect(() => {
     const checkAuthenticationStatus = async () => {
       try {
@@ -105,59 +105,44 @@ const HomeWorkoutLoadingScreen = ({route}) => {
         if (authDataJSON) {
           const authData = JSON.parse(authDataJSON);
           const authToken = authData.token;
-          console.log('token');
+          // console.log('token');
           
 
           if (authToken) {
             setIsLoading(true);
             setAuthToken(authToken);
-            console.log(authToken, "token preview");
+            // console.log(authToken, "token preview");
             
 
             try {
-              // const workoutDataJSON = await AsyncStorage.getItem('workoutData');
-              const workoutDataJSON = {
-                customer_id: 68,
-                first_name: 'Sandeep S Anand',
-                last_name: 'S an',
-            
-                feet: '',
-                gender: 'male',
-                height: 10,
-                height_unit: 'cm',
-                inches: '',
-            
-                weight: '10',
-                weight_unit: 'lbs',
-                workout_level: 'beginner',
-              };
-              const homeWorkout = await api.get(
-                `get_home_workouts?gender=${workoutData.gender}&level=${workoutData.workout_level}`,
-              );
-              const homeWorkoutJSON = homeWorkout.data.data;
-              console.log(workoutDataJSON);
-
-              // console.log(homeWorkoutJSON.data.data);
-
-              if (homeWorkoutJSON && workoutDataJSON) {
-                // const workoutData = JSON.parse(workoutDataJSON);
-                const homeWorkout = homeWorkoutJSON;
-
-                if (homeWorkout) {
+              const authData = JSON.parse(authDataJSON);
+              const workoutDataJSON = authData.formData;
+              if (workoutDataJSON.gender && workoutDataJSON.workout_level){
+                const homeWorkout = await api.get(
+                  `get_home_workouts?gender=${workoutDataJSON.gender}&level=${workoutDataJSON.workout_level}`,
+                );
+                const homeWorkoutJSON = homeWorkout.data.data;
+                console.log(homeWorkoutJSON);
+                if (homeWorkoutJSON) {
+                  
                   // Navigate to 'HomeTabNavigator' with homeWorkout and workoutData
                   navigation.navigate('HomeTabNavigator', {
                     screen: 'HomeWorkoutMain',
-                    params: { homeWorkout, workoutData },
+                    params: { homeWorkout, workoutData:homeWorkoutJSON },
                   });
-                } else {
-                  // Navigate to 'Gender' screen with workoutData
-                  navigation.navigate('Gender', {
-                    workoutData: authData.formData,
-                  });
-                }
-              } else {
-                console.log('Data not found in AsyncStorage');
+                } 
+              }else {
+                console.log('workout page');
+                // Navigate to 'Gender' screen with workoutData
+                navigation.navigate('Gender', {
+                  workoutData: workoutDataJSON,
+                });
               }
+              
+
+              // console.log(homeWorkoutJSON.data.data);
+
+            
             } catch (error) {
               console.error('Error fetching stored data:', error);
             } finally {

@@ -35,6 +35,8 @@ import { log } from 'react-native-reanimated';
   export default function AnimationPageWorkout({navigation, route}) {
     const {assets, fonts, sizes, gradients, colors} = useTheme();
     const {workoutData} = route.params;
+    console.log(workoutData);
+    
    
     
      const [dietPlan, setDietPlan] = useState('');
@@ -129,54 +131,56 @@ import { log } from 'react-native-reanimated';
         try {
           // First API call to set personal data
           const response = await api.post(`set_personal_datas`, workoutData);
-          
-          console.log(response.data);
-          
-  
-          if (response.data.success) {
-            // Call the second API to get home workouts
-            const secondApiResponse = await api.get(
-              `get_home_workouts?gender=${workoutData.gender}&level=${workoutData.workout_level}`
-            );
- 
-  
-            // Process the second API response
-            const homeWorkout = secondApiResponse.data.data;
-            console.log(homeWorkout , "response");
-            if (homeWorkout === null) {
-              alert('Network error occurred');
-            } else {
-              // Store workoutData and homeWorkout in AsyncStorage
-              await AsyncStorage.setItem('workoutData', JSON.stringify(workoutData));
-              // await AsyncStorage.setItem('homeWorkout', JSON.stringify(homeWorkout));
-  
-              console.log('success');
-              setTimeout(() => {
-                navigation.navigate('HomeTabNavigator', {
-                  screen: 'HomeWorkoutMain',
-                  params: { homeWorkout, workoutData },
-                });
-              }, 2000);
-            }
-          }
+          console.log(response.data, "post data use workout");
+    
+         
         } catch (error) {
           console.error(error, 'errorsss');
         }
       };
+      const nextPage =async ()=>{
+        
+        if (workoutData.workout_level) {
+          // Call the second API to get home workouts
+          const secondApiResponse = await api.get(
+            `get_home_workouts?gender=${workoutData.gender}&level=${workoutData.workout_level}`
+          );
   
+          // Process the second API response
+          const homeWorkout = secondApiResponse.data.data;
+          console.log(homeWorkout, "response");
+          if (homeWorkout === null) {
+            alert('Network error occurred');
+          } else {
+            // Store workoutData and homeWorkout in AsyncStorage
+            await AsyncStorage.setItem('workoutData', JSON.stringify(workoutData));
+            // await AsyncStorage.setItem('homeWorkout', JSON.stringify(homeWorkout));
+  
+            console.log('success');
+            setTimeout(() => {
+              navigation.navigate('HomeTabNavigator', {
+                screen: 'HomeWorkoutMain',
+                params: { homeWorkout, workoutData },
+              });
+            }, 2000);
+          }
+        }
+      }
+    
       if (workoutData.workout_level) {
         fetchData();
+        nextPage();
       } else {
         alert('Please enter all details');
       }
-  
+    
       Animated.timing(animationProgress.current, {
         toValue: 1,
         duration: 15000,
         easing: Easing.linear,
         useNativeDriver: false,
       }).start();
-  
+    
       // Wait for 5 seconds before navigating to the next page if dietPlan is not null
       if (dietPlan !== null) {
         const timeout = setTimeout(() => {
@@ -188,6 +192,8 @@ import { log } from 'react-native-reanimated';
         console.log("dietPlan is null");
       }
     }, []);
+    
+    
   
 // console.log(dietPlan , "new diet plan");
 

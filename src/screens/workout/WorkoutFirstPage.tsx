@@ -56,7 +56,7 @@ const WorkoutFirstPage = ({
           <View style={styles.container}>
             <TouchableWithoutFeedback
               onPress={() => {
-                navigation.navigate('HomeWorkoutLoadingScreen',{workoutData});
+                navigation.navigate('HomeWorkoutLoadingScreen',);
                 handleProducts(2);
               }}>
               <Block

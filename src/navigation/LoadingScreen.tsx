@@ -57,12 +57,15 @@ console.log(api , "api check");
               
               if ((requiredCalorieResponse.data.success === true) && (authData.formData)) {
                 // Reset the navigation stack and navigate to 'Menu'
+                // console.log("console ok");
+                
                 navigation.reset({
                   index: 0,
                   routes: [{ name: 'Frstpage', params: { formData: authData.formData } }],
                   // routes: [{ name: 'Menu', params: { data: requiredCalorie, formDataCopy: authData.formData , dietPlan } }],
                 });
               } else if (authData.formData) {
+                // console.log("console ok 1");
                 // Reset the navigation stack and navigate to 'Frstpage'
                 navigation.reset({
                   index: 0,

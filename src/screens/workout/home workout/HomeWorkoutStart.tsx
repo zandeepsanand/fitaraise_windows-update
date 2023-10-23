@@ -159,7 +159,7 @@ const HomeWorkoutStart = () => {
   }, [currentWorkout, timeLeft, isTimerPaused, showRestPopup, modalVisible]);
 
   const completed_date = new Date().toISOString().slice(0, 10);
-  // console.log(workoutData.customer_id ,"LOG ID ");
+  console.log(completed_date  ,"today date");
   const customer_id = workoutData.customer_id;
   console.log(customer_id, "check id");
   
