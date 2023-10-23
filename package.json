@@ -44,6 +44,7 @@
     "lodash": "^4.17.21",
     "lottie-ios": "3.4.1",
     "lottie-react-native": "5.1.4",
+    "moment-timezone": "^0.5.43",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.71.8",

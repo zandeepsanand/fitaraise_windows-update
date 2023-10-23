@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {useCallback, useEffect, useState} from 'react';
+import moment from 'moment-timezone';
 import axios from 'axios';
 import {BASE_URL} from '@env';
 import {
@@ -157,8 +158,10 @@ const HomeWorkoutStart = () => {
       return () => clearInterval(interval);
     }
   }, [currentWorkout, timeLeft, isTimerPaused, showRestPopup, modalVisible]);
+  const targetTimeZone = 'Asia/Kolkata'; // Change this to 'Asia/Kolkata' for Indian Standard Time
 
-  const completed_date = new Date().toISOString().slice(0, 10);
+  const completed_date = moment.tz(targetTimeZone).format('YYYY-MM-DD');
+  // const completed_date = new Date().toISOString().slice(0, 10);
   console.log(completed_date  ,"today date");
   const customer_id = workoutData.customer_id;
   console.log(customer_id, "check id");

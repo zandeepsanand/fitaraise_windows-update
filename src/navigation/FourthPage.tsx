@@ -131,17 +131,6 @@ const Buttons = () => {
   );
 };
 
-// texts example
-
-// inputs example
-
-
-// switch example
-
-// social example
-
-
-// cards example
 const Cards = ({route, navigation}) => {
   const {formData} = route.params;
   // console.log(formData ,"checking");
@@ -183,6 +172,9 @@ const Cards = ({route, navigation}) => {
   const [inputValue, setInputValue] = useState('');
   const [inputValueInch, setInputValueInch] = useState('');
   const [inputValueFeet, setInputValueFeet] = useState('');
+  const [inputValueCm,setInputValueCm] =useState('');
+  const [inputValueLbs , setInputValueLbs] =useState('');
+  const [inputValueKg , setInputValueKg] =useState('');
   const [isKg, setIsKg] = useState(true);
   const [selectedData, setSelectedData] = useState(''); // state to store selected data
   const [isCm, setIsCm] = useState(true); // state to track if CM is selected
@@ -221,50 +213,116 @@ const Cards = ({route, navigation}) => {
       console.log(updatedFormData);
     }
   };
+
   const handleInputChangeFeet = (value) => {
-    setInputValueFeet(value);
-    const updatedFormData = {
-      ...formData,
-      feet: value,
-      height: '',
-      height_unit: 'ft',
-    };
-    navigation.setParams({formData: updatedFormData});
-    console.log(updatedFormData);
+    const numericValue = value.replace(/[^0-9]/g, '');
+    if (numericValue >= 0 && numericValue <= 11) {
+      setInputValueFeet(numericValue);
+      const updatedFormData = {
+        ...formData,
+        feet: numericValue,
+        inches: formData.inches, // Preserve the existing inches value
+        height: numericValue + '.' + formData.inches, // Combine feet and inches
+        height_unit: 'ft',
+      };
+      navigation.setParams({ formData: updatedFormData });
+      console.log(updatedFormData);
+    }
   };
-  const handleInputChangeInches = (value) => {
-    setInputValueInch(value);
-    const updatedFormData = {
-      ...formData,
-      inches: value,
-      height: '',
-      height_unit: 'ft',
-    };
-    navigation.setParams({formData: updatedFormData});
-    console.log(updatedFormData, 'height unit check');
+  
+  const handleInputChangeInches = (text) => {
+    const numericValue = text.replace(/[^0-9]/g, '');
+    if (numericValue <= 9) {
+      setInputValueInch(numericValue);
+      const updatedFormData = {
+        ...formData,
+        feet: formData.feet, // Preserve the existing feet value
+        inches: numericValue,
+        height: formData.feet + '.' + numericValue, // Combine feet and inches
+        height_unit: 'ft',
+      };
+      navigation.setParams({ formData: updatedFormData });
+      console.log(updatedFormData, 'height unit check');
+    }
+  };
+  const handleInputChangeCm = (text) => {
+    // Remove any non-numeric characters from the input
+    const numericValue = text.replace(/[^0-9]/g, '');
+  
+    // Limit the value to a maximum of 220 cm
+    const maxCmValue = 220;
+    if (numericValue <= maxCmValue) {
+      setInputValueCm(numericValue);
+      const updatedFormData = {
+        ...formData,
+        inches: '',
+        feet: '',
+        height: numericValue,
+        height_unit: 'cm',
+      };
+      console.log(updatedFormData, 'height unit check');
+    } else {
+      // Handle when the input exceeds the maximum value, e.g., show an error message.
+    }
+  };
+  const MAX_POUNDS_LIMIT = 1000; // Set the maximum limit in pounds
+
+  const handleInputChangeLbs = (text) => {
+    // Remove any non-numeric characters from the input
+    const numericValue = text.replace(/[^0-9]/g, '');
+  
+    // Limit the value to the maximum pounds limit
+    if (numericValue <= MAX_POUNDS_LIMIT) {
+      setInputValueLbs(numericValue);
+      const updatedFormData = {
+        ...formData,
+        weight: numericValue,
+        weight_unit: 'lbs',
+      };
+      console.log(updatedFormData, 'weight unit check');
+    } else {
+      // Handle when the input exceeds the maximum limit, e.g., show an error message.
+    }
+  };
+  const MAX_KG_LIMIT = 500; // Set the maximum limit in kilograms
+
+  const handleInputChangeKg = (text) => {
+    // Remove any non-numeric characters from the input
+    const numericValue = text.replace(/[^0-9]/g, '');
+  
+    // Limit the value to the maximum kilograms limit
+    if (numericValue <= MAX_KG_LIMIT) {
+      setInputValueKg(numericValue);
+      const updatedFormData = {
+        ...formData,
+        weight: numericValue,
+        weight_unit: 'kg',
+      };
+      console.log(updatedFormData, 'weight unit check');
+    } else {
+      // Handle when the input exceeds the maximum limit, e.g., show an error message.
+    }
   };
 
-  const handlePrimaryPress = () => {
-    setIsKg(true); // set isKg state to true when primary button is pressed
-    const updatedFormData = {
-      ...formData,
-
-      weight_unit: 'kg',
-    };
-    navigation.setParams({formData: updatedFormData});
+ const handlePrimaryPress = () => {
+  setIsKg(true);
+  setInputValueKg(''); // Clear the kg input field
+  const updatedFormData = {
+    ...formData,
+    weight_unit: 'kg',
   };
+  navigation.setParams({ formData: updatedFormData });
+};
 
-  const handleSecondaryPress = () => {
-    setIsKg(false); // set isKg state to false when secondary button is pressed
-    const updatedFormData = {
-      ...formData,
-
-      weight_unit: 'lbs',
-    };
-    navigation.setParams({formData: updatedFormData});
-    console.log(updatedFormData, 'height unit check');
+const handleSecondaryPress = () => {
+  setIsKg(false);
+  setInputValueLbs(''); // Clear the lbs input field
+  const updatedFormData = {
+    ...formData,
+    weight_unit: 'lbs',
   };
-
+  navigation.setParams({ formData: updatedFormData });
+};
 
   const handleOptionSelect = (option) => {
     const updatedFormData = {
@@ -273,6 +331,7 @@ const Cards = ({route, navigation}) => {
     };
     setGender(option);
     navigation.setParams({formData: updatedFormData});
+    console.log(updatedFormData, 'height unit check');
     // navigation.navigate('Demo1', {formData: updatedFormData});
   };
   const handleActivitySelect = (option) => {
@@ -321,7 +380,6 @@ const Cards = ({route, navigation}) => {
     // navigation.setParams({formData: updatedFormData})
   };
 
-
   const handleKgSelect = (item) => {
     const updatedFormData = {
       ...formData,
@@ -332,83 +390,59 @@ const Cards = ({route, navigation}) => {
 
     // navigation.navigate('Demo1', {formData: updatedFormData});
   };
- 
-  async function checkPage() {
-    for (const key in formData) {
-      if (formData[key] === null) {
-        delete formData[key];
-      }
-    }
-  
-    if (
-      formData.gender &&
-      formData.weight &&
-      ((formData.feet && formData.inches) || formData.height) &&
-      formData.acitivity_level
-    ) {
-      // Create a copy of the formData object
-      const formDataCopy = { ...formData };
-      console.log(formDataCopy, 'form data');
-  
-      try {
-        // Retrieve the existing authData from AsyncStorage
-        const existingAuthDataString = await AsyncStorage.getItem('authData');
-        const existingAuthData = JSON.parse(existingAuthDataString) || {};
-  
-        // Add the conditions as fields to authData
-        const updatedAuthData = {
-          ...existingAuthData,
-          formData: {
-            ...existingAuthData.formData,
-            gender: formData.gender,
-            weight: formData.weight,
-            height: formData.feet && formData.inches ? `${formData.feet}'${formData.inches}"` : formData.height,
-            acitivity_level: formData.acitivity_level,
-          },
-        };
-  
-        // Store the updated authData object as a JSON string in AsyncStorage
-        await AsyncStorage.setItem('authData', JSON.stringify(updatedAuthData));
-  
-        const response = await api.post(`set_personal_datas`, formDataCopy);
-        console.log(formDataCopy, 'customer id ');
-        console.log(response.data, 'hello ');
-        alert(response.data.message);
-  
-        if (response.data.success) {
-          console.log('hai testing');
-  
-          // Call the second API
-          const secondApiResponse = await api.get(
-            `get_daily_required_calories/${formDataCopy.customer_id}`,
-          );
-          // Do something with the second API response
-          const data = secondApiResponse.data.data;
-          console.log(data, 'the data of second apifffff');
-          if (data === null) {
-            console.log('first click');
-            checkPage(); // This recursive call may not be necessary, please review if it's needed.
-          } else {
-            console.log('success');
-            navigation.navigate('AnimationPage', { data, formDataCopy });
-          }
+
+async function checkPage() {
+  // Check if required fields are filled
+  console.log(
+    formData.gender,
+    formData.weight,
+    formData.height,
+    formData.acitivity_level
+  );
+  if (
+    formData.gender &&
+    formData.weight &&
+    formData.height &&
+    formData.acitivity_level
+  ) {
+    // Create a copy of the formData object
+    const formDataCopy = { ...formData };
+    console.log(formDataCopy, 'form data');
+
+    try {
+      const response = await api.post('set_personal_datas', formDataCopy);
+      console.log(formDataCopy, 'customer id');
+      console.log(response.data, 'hello');
+      alert(response.data.message);
+
+      if (response.data.success) {
+        console.log('hai testing');
+
+        // Call the second API
+        const secondApiResponse = await api.get(
+          `get_daily_required_calories/${formDataCopy.customer_id}`
+        );
+        // Do something with the second API response
+        const data = secondApiResponse.data.data;
+        console.log(data, 'the data of second apifffff');
+        if (data === null) {
+          console.log('first click');
+          // Recursive call may not be necessary; please review if it's needed.
+          // checkPage();
+        } else {
+          console.log('success');
+          navigation.navigate('AnimationPage', { data, formDataCopy });
         }
-      } catch (error) {
-        console.error(error, 'errorsss');
       }
-    } else {
-      console.log(
-        formData.gender,
-        formData.weight,
-        formData.feet,
-        formData.inches,
-        formData.acitivity_level,
-        formData.height,
-      );
-  
-      alert('Please enter all details');
+    } catch (error) {
+      console.error(error, 'errorsss');
     }
+  } else {
+    // Alert the user to fill in all required fields
+    alert('Please enter all details');
   }
+}
+
   
 
   return (
@@ -421,8 +455,7 @@ const Cards = ({route, navigation}) => {
             blurRadius={10}
             resizeMode="cover"
             source={require('../assets/images/bg111.jpg')}
-            radius={sizes.cardRadius}
-            >
+            radius={sizes.cardRadius}>
             <Block flex={1} center>
               <Text center h5 bold paddingTop={10}>
                 Height & Weight
@@ -440,7 +473,6 @@ const Cards = ({route, navigation}) => {
                   onPress={() => setModalKg(true)}
                   marginRight={sizes.base}>
                   <Block row align="center" justify="space-around">
-                
                     <Input
                       placeholder={'Foot'}
                       keyboardType="numeric"
@@ -475,31 +507,57 @@ const Cards = ({route, navigation}) => {
                   </Block>
                 </Button>
               ) : (
+                // <Button
+                //   flex={2}
+                //   row
+                //   gradient={gradients.light}
+                //   onPress={() => setModalCm(true)}
+                //   marginRight={sizes.base}>
+                //   <Block
+                //     row
+                //     align="center"
+                //     justify="space-between"
+                //     paddingHorizontal={sizes.sm}>
+                //     <Text
+                //       dark
+                //       bold
+                //       transform="uppercase"
+                //       marginRight={sizes.sm}>
+                //       {selectedData} {isCm ? 'CM' : 'FEET'}
+                //     </Text>
+                //     <Image
+                //       source={assets.arrow}
+                //       color={colors.white}
+                //       transform={[{rotate: '90deg'}]}
+                //     />
+                //   </Block>
+                // </Button>
                 <Button
                   flex={2}
                   row
-                  gradient={gradients.light}
-                  onPress={() => setModalCm(true)}
-                  marginRight={sizes.base}>
-                  <Block
-                    row
-                    align="center"
-                    justify="space-between"
-                    paddingHorizontal={sizes.sm}>
-                    <Text
-                      dark
-                      bold
-                      transform="uppercase"
-                      marginRight={sizes.sm}>
-                      {selectedData} {isCm ? 'CM' : 'FEET'}
-                    </Text>
-                    <Image
-                      source={assets.arrow}
-                      color={colors.white}
-                      transform={[{rotate: '90deg'}]}
+                  onPress={() => setModalKg(true)}
+                  marginRight={sizes.base}
+                  >
+                  <Block row align="center">
+                  <Input
+                      placeholder={'Cm'}
+                      keyboardType="numeric"
+                      maxLength={5}
+                      value={inputValueCm}
+                      style={{
+                        height: 50,
+                        width: 125,
+                        flex: 1,
+                        borderRadius: 10,
+                        backgroundColor: 'white',
+                        borderWidth: 0,
+                      }}
+                      onChangeText={handleInputChangeCm}
                     />
                   </Block>
                 </Button>
+              
+                
               )}
 
               <Block
@@ -518,9 +576,11 @@ const Cards = ({route, navigation}) => {
                   primaryText="Cm"
                   secondaryText="Feet"
                   onPrimaryPress={() => {
-                    setModalCm(true);
-                    setIsCm(true);
+                    // setModalCm(true);
+                    // setIsCm(true);
                     setFeetView(false);
+                    setInputValueFeet('');
+                    setInputValueInch('');
                     const updatedFormData = {
                       ...formData,
 
@@ -532,6 +592,7 @@ const Cards = ({route, navigation}) => {
                     // setModalFeet(true);
                     setFeetView(true);
                     setIsCm(false);
+                    setInputValueCm('');
                     const updatedFormData = {
                       ...formData,
 
@@ -542,7 +603,7 @@ const Cards = ({route, navigation}) => {
                   TouchableComponent={Ripple}
                   primaryButtonStyle={{width: 125, height: 50}}
                   secondaryButtonStyle={{width: 90, height: 50}}
-                  primaryTextStyle={{marginRight: 32}}
+                  primaryTextStyle={{marginRight: 40}}
                   rippleColor="#fff"
                   rippleContainerBorderRadius={50}
                   activeColor="#5f9b4c"
@@ -573,26 +634,43 @@ const Cards = ({route, navigation}) => {
                   {/* <Text dark bold transform="uppercase" marginRight={sizes.sm}>
                 {kg} Kg
               </Text> */}
+              {isKg ? (
+                 <Input
+                 placeholder={'Kg'}
+                 keyboardType="numeric"
+                 maxLength={6}
+                 value={inputValueKg}
+                 style={{
+                   height: 50,
+                   width: 125,
+                   flex: 1,
+                   borderRadius: 10,
+                   backgroundColor: 'white',
+                   borderWidth: 0,
+                 }}
+                 onChangeText={handleInputChangeKg}
+              
+               />
+              ):(
+              
                   <Input
-                    placeholder={isKg ? 'Kg' : 'Lbs'}
-                    keyboardType="numeric"
-                    maxLength={6}
-                    value={inputValue}
-                    style={{
-                      height: 50,
-                      width: 125,
-                      flex: 1,
-                      borderRadius: 10,
-                      backgroundColor: 'white',
-                      borderWidth: 0,
-                    }}
-                    onChangeText={handleInputChange}
-                    // onChangeText={(value) => {
-                    //   {
-                    //     setCount(value);
-                    //   }
-                    // }}
-                  />
+                  placeholder={'Lbs'}
+                  keyboardType="numeric"
+                  maxLength={6}
+                  value={inputValueLbs}
+                  style={{
+                    height: 50,
+                    width: 125,
+                    flex: 1,
+                    borderRadius: 10,
+                    backgroundColor: 'white',
+                    borderWidth: 0,
+                  }}
+                  onChangeText={handleInputChangeLbs}
+                
+                />
+              )}
+                  
                 </Block>
               </Button>
               <Block
@@ -727,7 +805,7 @@ const Cards = ({route, navigation}) => {
             source={require('../assets/images/bg111.jpg')}
             radius={sizes.cardRadius}>
             <Text h5 bold marginTop={10} center>
-              Activity Level
+              How active you are?
             </Text>
 
             <Block marginTop={sizes.sm}>
@@ -745,10 +823,10 @@ const Cards = ({route, navigation}) => {
 
                 <Block flex={1}>
                   <Text p semibold marginTop={sizes.s}>
-                    Sedentary
+                    Not Very Active
                   </Text>
                   <Text p marginTop={sizes.s}>
-                    (little or no excercise)
+                    (Little or no exercise)
                   </Text>
                 </Block>
               </Block>
@@ -769,7 +847,7 @@ const Cards = ({route, navigation}) => {
                     Lightly Active
                   </Text>
                   <Text p marginTop={sizes.s}>
-                    (little or no excercise)
+                    (Light exercise/ sports 1-3 days/week)
                   </Text>
                 </Block>
               </Block>
@@ -790,7 +868,7 @@ const Cards = ({route, navigation}) => {
                     Active
                   </Text>
                   <Text p marginTop={sizes.s}>
-                    (Exercise 4-5 times/week/Standing work)
+                    (Moderate exercise/sports 3-5 days/week)
                   </Text>
                 </Block>
               </Block>
@@ -813,8 +891,7 @@ const Cards = ({route, navigation}) => {
                   </Text>
                   <Text p marginTop={sizes.s}>
                     {' '}
-                    (Exercise 5-6 times a week/Strenous work/highly leisure
-                    activity)
+                    (Hard exercise/Strenuous work /sports 6-7 days a week)
                   </Text>
                 </Block>
               </Block>

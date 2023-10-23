@@ -20,6 +20,18 @@ export default ({data, formDataCopy, dietPlan}) => {
   // console.log('ScreensStack Component - FormDataCopy:', formDataCopy);
   // console.log('ScreensStack Component - DietPlan:', dietPlan);
   const formData = formDataCopy;
+  console.log(formDataCopy, "data copu");
+  const modifiedFormData = {
+    ...formData,
+    // Clear specific fields by setting them to null or an empty value
+    // For example, if you want to clear the 'specificField', set it to null
+    gender: '',
+    height:'',
+    weight:'',
+    age:'',
+    // You can clear multiple fields as needed
+  };
+  
   // console.log(formData , "check");
   useEffect(() => {
     // Navigate to the "Screens" screen when the Menu component is first loaded
@@ -52,13 +64,13 @@ export default ({data, formDataCopy, dietPlan}) => {
         name="Demo"
         component={DemoAlert}
         options={{title: 'I Want to'}}
-        initialParams={{ formData }}
+        initialParams={{ formData:modifiedFormData }}
       />
     <Stack.Screen
         name="Details"
         component={SecondPage}
-        options={{title: t('navigation.home')}}
-        initialParams={{ formData }}
+        options={{ headerShown:true , title: 'I Want to'}}
+        initialParams={{ formData:modifiedFormData }}
       />
 
 

@@ -105,7 +105,7 @@ export default function DemoPage({navigation, route}) {
           <Block style={styles.mainCardView}
             flex={0}
             radius={46}
-            gradient={gradients?.[tab === 2 ? 'success' : '#fffff']}
+            color={'white'}
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View style={styles.subCardView} >
@@ -152,7 +152,7 @@ export default function DemoPage({navigation, route}) {
           <Block style={styles.mainCardView}
             flex={0}
             radius={46}
-            gradient={gradients?.[tab === 3 ? 'success' : '#fffff']}>
+            color={'white'}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View style={styles.subCardView}>
               <Lottie
@@ -203,12 +203,12 @@ export default function DemoPage({navigation, route}) {
             paddingRight:10
           }}>
 
-          <TouchableOpacity  >
+          {/* <TouchableOpacity  >
           <Image
             source={assets.Button}
          
           />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
     </Block>
   )

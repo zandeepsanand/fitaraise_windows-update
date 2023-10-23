@@ -286,7 +286,7 @@ export default () => {
               <Stack.Screen
                 name="Demo1"
                 component={DemoPage}
-                options={{title: 'Im a'}}
+                options={{title: 'I am a'}}
               />
               <Stack.Screen
                 name="TypingScreen"
@@ -312,7 +312,7 @@ export default () => {
               <Stack.Screen
                 name="dietcalculation"
                 component={FourthPage}
-                options={{title: 'Calorie'}}
+                options={{title: 'Calculate Daily Required Calories'}}
               />
               <Stack.Screen
                 name="goal"

@@ -130,7 +130,6 @@ export default function SecondPage({navigation, route}) {
 
                   resizeMode="contain"
                   style={{
-                    borderRadius:30 ,
                     height: 40,
                     width: 40,
                   }}
@@ -138,7 +137,7 @@ export default function SecondPage({navigation, route}) {
               </View>
               <Block style={{marginLeft: 42}}>
                 <Text p font={fonts.semibold}>
-                  {'LOSE WEIGHTS'}
+                  {'LOSE WEIGHT'}
                 </Text>
                 <View
                   style={{
