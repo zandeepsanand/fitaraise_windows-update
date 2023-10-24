@@ -23,11 +23,7 @@ import Timer from './Timer';
 import TimerIntermediatePage from './TimerIntermediatePage';
 import api from '../../../../api';
 
-const workoutData = [
-  {name: 'Workout 1', details: 'Details of Workout 1'},
-  {name: 'Workout 2', details: 'Details of Workout 2'},
-  // ... more workout data
-];
+
 const isAndroid = Platform.OS === 'android';
 function PopupPage() {
   // State to control whether the modal is visible or not
@@ -46,7 +42,7 @@ function PopupPage() {
 const HomeWorkoutStart = () => {
   const route = useRoute();
   const {exerciseData ,workoutData} = route.params;
-  // console.log(exerciseData);
+  console.log(workoutData , "formDAta");
 
   const {user} = useData();
   const {t} = useTranslation();

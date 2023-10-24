@@ -365,37 +365,37 @@ export default () => {
               <Stack.Screen
                 name="searchfoodData"
                 component={DietPlanData}
-                options={{title: 'Nutriotion', headerTitleAlign: 'left'}}
+                options={{title: 'Nutrition', headerTitleAlign: 'left'}}
               />
               <Stack.Screen
                 name="morngSnack"
                 component={MorningSnackSingle}
-                options={{title: 'Nutriotion', headerTitleAlign: 'left'}}
+                options={{title: 'Nutrition', headerTitleAlign: 'left'}}
               />
               <Stack.Screen
                 name="lunch"
                 component={LunchSingle}
-                options={{title: 'Nutriotion', headerTitleAlign: 'center'}}
+                options={{title: 'Nutrition', headerTitleAlign: 'center'}}
               />
               <Stack.Screen
                 name="evening"
                 component={EveningSingle}
-                options={{title: 'Nutriotion', headerTitleAlign: 'center'}}
+                options={{title: 'Nutrition', headerTitleAlign: 'center'}}
               />
               <Stack.Screen
                 name="dinner"
                 component={DinnerSingle}
-                options={{title: 'Nutriotion', headerTitleAlign: 'center'}}
+                options={{title: 'Nutrition', headerTitleAlign: 'center'}}
               />
               <Stack.Screen
                 name="meal1"
                 component={Meal1Single}
-                options={{title: 'Nutriotion', headerTitleAlign: 'center'}}
+                options={{title: 'Nutrition', headerTitleAlign: 'center'}}
               />
               <Stack.Screen
                 name="meal2"
                 component={Meal2Single}
-                options={{title: 'Nutriotion', headerTitleAlign: 'center'}}
+                options={{title: 'Nutrition', headerTitleAlign: 'center'}}
               />
               <Stack.Screen
                 name="unlockDiet"

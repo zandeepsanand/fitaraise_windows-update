@@ -1,17 +1,21 @@
 /* eslint-disable prettier/prettier */
 
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import {ActivityIndicator, View, StyleSheet} from 'react-native';
 import api, { setAuthToken } from '../../../../api';
 import {Animated, Easing} from 'react-native';
 import Lottie from 'lottie-react-native';
+import LoginContext from '../../../hooks/LoginContext';
 
 const HomeWorkoutLoadingScreen = ({route}) => {
   // const {workoutData} = route.params ;
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(true); // State to track loading status
+  const {authenticated,customerId} = useContext(LoginContext);
+  console.log(customerId);
+  
 
   const animationProgress = useRef(new Animated.Value(0));
   useEffect(() => {
@@ -25,6 +29,8 @@ const HomeWorkoutLoadingScreen = ({route}) => {
 
   useEffect(() => {
     const checkAuthenticationStatus = async () => {
+      console.log();
+      
       try {
         const authDataJSON = await AsyncStorage.getItem('authData');
       

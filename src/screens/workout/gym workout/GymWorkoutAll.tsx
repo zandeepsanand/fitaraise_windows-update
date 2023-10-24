@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {useCallback, useEffect, useState} from 'react';
 import {
   Platform,
@@ -13,6 +14,7 @@ import {BASE_URL} from '@env';
 import {Block, Button, Image, Text} from '../../../components';
 import {useData, useTheme, useTranslation} from '../../../hooks';
 import { View } from 'react-native';
+import api from '../../../../api';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -20,7 +22,7 @@ const GymWorkoutAll = ({route}) => {
   const {workout, completedWorkouts = []} = route.params;
   // const [exerciseData, setExerciseData] = useState([]);
 
-  console.log(workout, 'time');
+  console.log(workout.id, 'time');
 
   const [tab, setTab] = useState<number>(0);
 
@@ -58,25 +60,20 @@ const GymWorkoutAll = ({route}) => {
     [user],
   );
   useEffect(() => {
-    axios
-      .get(`${BASE_URL}get_gym_workout_excercises/${workout.id}`, {
-        headers: {
-          Authorization: `Bearer 477|F4h2p6ibB4FFhCwx0RJLNO6rPRXhPbMttg2x1iYT`,
-        },
-      })
+    api
+      .get(`get_gym_workout_excercises/${workout.id}`
+      )
       .then((response) => {
+        // console.log(response.data.data , "data");
+        
         setExerciseAll(response.data.data);
         // console.log(exerciseRecommended.id);
       })
       .catch((error) => {
         console.error('Error fetching exercise data:', error);
       });
-    axios
-      .get(`${BASE_URL}get_gym_workout_excercises_recommended/${workout.id}`, {
-        headers: {
-          Authorization: `Bearer 477|F4h2p6ibB4FFhCwx0RJLNO6rPRXhPbMttg2x1iYT`,
-        },
-      })
+    api
+      .get(`get_gym_workout_excercises_recommended/${workout.id}`)
       .then((response) => {
         const workoutIndex = workout.id;
         setExerciseRecommended(response.data.data);
@@ -347,14 +344,16 @@ const GymWorkoutAll = ({route}) => {
                     marginTop={5}
                     style={{
                       // Check if completedWorkouts is defined and contains the workout ID
-                      backgroundColor:
-                        completedWorkouts &&
-                        completedWorkouts.includes(exercise.excercise)
-                          ? '#92A3FD'
-                          : 'white',
+                      // backgroundColor:
+                      //   completedWorkouts &&
+                      //   completedWorkouts.includes(exercise.excercise)
+                      //     ? '#92A3FD'
+                      //     : 'white',
                       borderRadius: 15,
                       padding: 10,
-                    }}>
+                    }}
+                    color={exercise.completed_today ? '#92A3FD' : 'white'}
+                    >
                     <Image
                       width={75}
                       height={75}

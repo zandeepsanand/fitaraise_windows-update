@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {useData, useTheme, useTranslation} from '../../../hooks';
 import {Block, Button, Image, Input, Product, Text} from '../../../components/';
 import {StatusBar as ExpoStatusBar} from 'expo-status-bar';
@@ -16,10 +16,13 @@ import axios from 'axios';
 import {BASE_URL} from '@env';
 import api from '../../../../api';
 import CalendarHomeWorkout from './calendar/Calendar';
+import LoginContext from '../../../hooks/LoginContext';
 
 const HomeWorkoutMain = ({navigation, route}) => {
   const {t} = useTranslation();
   const { homeWorkout, workoutData, savedDate} = route.params;
+  const {authenticated,customerId} = useContext(LoginContext);
+
 
   // console.log(workoutData , "data in main page");
   
@@ -33,7 +36,7 @@ const HomeWorkoutMain = ({navigation, route}) => {
   const [products, setProducts] = useState(following);
   const {assets, colors, fonts, gradients, sizes} = useTheme();
   const [selectedLevel, setSelectedLevel] = useState(
-    workoutData.home_workout_level,
+    ''
   );
   const [data2, setData2] = useState(homeWorkout);
   const [completedDates, setCompletedDates] = useState([]);
@@ -52,17 +55,45 @@ const HomeWorkoutMain = ({navigation, route}) => {
     navigation.navigate('HomeWorkoutAll', {workout ,workoutData});
     // console.log(workout);
   };
-  const handleLevelChange = (level) => {
+  const handleLevelChange = async (level) => {
     setSelectedLevel(level);
     if (['Gym workout', 'Workout Challenge'].includes(level)) {
-      // Make an Axios API call here with the selected level
       if (level === 'Gym workout') {
-        navigation.navigate('GymWorkoutLoadingScreen');
+        try {
+          const userData = await api.get(`get_personal_datas/${workoutData.customer_id}`);
+          const user = userData.data.data;
+          console.log(user, "user data home workout loading");
+  
+          if (user.gender && user.gym_workout_level) {
+            const homeWorkout = await api.get(`get_gym_workouts?gender=${user.gender}&level=${user.gym_workout_level}`);
+            const gymWorkoutJSON = homeWorkout.data.data;
+            console.log(gymWorkoutJSON);
+  
+            if (gymWorkoutJSON) {
+              console.log(gymWorkoutJSON, "workout data gym");
+  
+              // Navigate to 'GymTabNavigator' with gymWorkoutJSON and user data
+              navigation.navigate('GymTabNavigator', {
+                screen: 'GymWorkoutMain',
+                params: { data: gymWorkoutJSON, formDataCopy: user },
+              });
+            }
+          } else {
+            console.log('workout page');
+            // Navigate to 'GymGenderPage' with workoutData
+            navigation.navigate('GymGenderPage', {
+              workoutData
+            });
+          }
+        } catch (error) {
+          console.error('Error in handleLevelChange:', error);
+        }
       } else if (level === 'Workout Challenge') {
-        navigation.navigate('ChallengeGenderPage',{workoutData});
+        navigation.navigate('ChallengeGenderPage', { workoutData });
       }
     }
   };
+  
   const [isLoading, setIsLoading] = useState(true); // Loading state
 
   useEffect(() => {
@@ -74,7 +105,7 @@ const HomeWorkoutMain = ({navigation, route}) => {
 
   const fetchData = async () => {
     try {
-      const response = await api.get(`get_customer_done_home_workouts/${workoutData.customer_id}`);
+      const response = await api.get(`get_customer_done_home_workouts/${customerId}`);
       if (response.data.success) {
         // Handle the data and update your calendar with the results
         const completedDates = response.data.data.map((item) => item.completed_date);
@@ -136,8 +167,8 @@ const HomeWorkoutMain = ({navigation, route}) => {
                   <Text>Your program :</Text>
                   <Text bold>
                     {' '}
-                    {selectedLevel.charAt(0).toUpperCase() +
-                      selectedLevel.slice(1)}
+                    {workoutData.home_workout_level.charAt(0).toUpperCase() +
+                      workoutData.home_workout_level.slice(1)}
                   </Text>
                 </Block>
               </Block>
@@ -155,7 +186,7 @@ const HomeWorkoutMain = ({navigation, route}) => {
                     }}
                     data={['Gym workout', 'Workout Challenge']} // Provide your options here
                     // defaultButtonText={formDataCopy.workout_level}
-                    defaultButtonText={'select workout'}
+                    defaultButtonText={'Select Workout'}
                     onSelect={handleLevelChange}
                   />
                 </Block>
