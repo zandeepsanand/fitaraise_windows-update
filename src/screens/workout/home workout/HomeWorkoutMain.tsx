@@ -20,17 +20,20 @@ import CalendarHomeWorkout from './calendar/Calendar';
 const HomeWorkoutMain = ({navigation, route}) => {
   const {t} = useTranslation();
   const { homeWorkout, workoutData, savedDate} = route.params;
+
+  // console.log(workoutData , "data in main page");
+  
   // const isSavedDateAvailable = savedDate !== undefined && savedDate !== null;
   // console.log(isSavedDateAvailable, 'saved mdate from congrats page ');
 
-  console.log(homeWorkout, 'haiii');
+  // console.log(homeWorkout, 'haiii');
 
   const [tab, setTab] = useState<number>(0);
   const {following, trending} = useData();
   const [products, setProducts] = useState(following);
   const {assets, colors, fonts, gradients, sizes} = useTheme();
   const [selectedLevel, setSelectedLevel] = useState(
-    workoutData.workout_level,
+    workoutData.home_workout_level,
   );
   const [data2, setData2] = useState(homeWorkout);
   const [completedDates, setCompletedDates] = useState([]);
@@ -51,21 +54,13 @@ const HomeWorkoutMain = ({navigation, route}) => {
   };
   const handleLevelChange = (level) => {
     setSelectedLevel(level);
-    if (['beginner', 'intermediate', 'expert'].includes(level)) {
+    if (['Gym workout', 'Workout Challenge'].includes(level)) {
       // Make an Axios API call here with the selected level
-      api
-        .get(
-          `get_home_workouts?gender=${workoutData.gender}&level=${level}`,
-        )
-        .then((response) => {
-          // Handle the API response here
-          // console.log(response.data.data, 'testing');
-          setData2(response.data.data);
-        })
-        .catch((error) => {
-          // Handle errors here
-          console.error(error);
-        });
+      if (level === 'Gym workout') {
+        navigation.navigate('GymWorkoutLoadingScreen');
+      } else if (level === 'Workout Challenge') {
+        navigation.navigate('ChallengeGenderPage',{workoutData});
+      }
     }
   };
   const [isLoading, setIsLoading] = useState(true); // Loading state
@@ -83,7 +78,6 @@ const HomeWorkoutMain = ({navigation, route}) => {
       if (response.data.success) {
         // Handle the data and update your calendar with the results
         const completedDates = response.data.data.map((item) => item.completed_date);
-
         console.log(completedDates, "dates");
         setCompletedDates(completedDates);
         // Set completedDates in your state or props
@@ -159,9 +153,9 @@ const HomeWorkoutMain = ({navigation, route}) => {
                       borderRadius: 20,
                       marginLeft: 10,
                     }}
-                    data={['beginner', 'intermediate', 'expert']} // Provide your options here
+                    data={['Gym workout', 'Workout Challenge']} // Provide your options here
                     // defaultButtonText={formDataCopy.workout_level}
-                    defaultButtonText={selectedLevel}
+                    defaultButtonText={'select workout'}
                     onSelect={handleLevelChange}
                   />
                 </Block>

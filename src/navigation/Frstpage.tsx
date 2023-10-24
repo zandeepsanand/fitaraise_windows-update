@@ -79,9 +79,13 @@ export default function Frstpage({
     [following, trending, setTab, setProducts],
   );
  const redirectTo =async ()=>{
-  
+ 
     try {
+      console.log("clicked");
+      
       const authDataJSON = await AsyncStorage.getItem('authData');
+      console.log(authDataJSON , "authdata first page");
+      
       if (authDataJSON) {
         const authData = JSON.parse(authDataJSON);
        
@@ -116,9 +120,7 @@ export default function Frstpage({
               // });
               navigation.navigate('Menu', { data: requiredCalorie, formDataCopy: authData.formData, dietPlan });
             } else if (authData.formData) {
-              navigation.navigate({
-                routes: [{ name: 'Details', params: { formData: authData.formData } }],
-              });
+              navigation.navigate('Details', { formData: authData.formData });
             } else {
               navigation.reset({
                 index: 0,

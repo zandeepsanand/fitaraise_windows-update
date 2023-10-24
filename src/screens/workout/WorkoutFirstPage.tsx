@@ -104,7 +104,7 @@ const WorkoutFirstPage = ({
             <TouchableWithoutFeedback
               onPress={() => {
                 handleProducts(3);
-                navigation.navigate('GymGenderPage',{workoutData});
+                navigation.navigate('GymWorkoutLoadingScreen');
               }}>
               <Block
                 style={styles.mainCardView}

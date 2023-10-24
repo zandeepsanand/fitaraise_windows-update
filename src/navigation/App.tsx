@@ -89,6 +89,7 @@ import Account from '../screens/account/Account';
 import HomeWorkoutLoadingScreen from '../screens/workout/home workout/HomeWorkoutLoadingScreen';
 import NameLastName from './NameLastName';
 import { AuthProvider } from '../hooks/AuthData';
+import GymWorkoutLoadingScreen from '../screens/workout/gym workout/GymWorkoutLoadingScreen';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
@@ -167,6 +168,11 @@ export default () => {
                 <Stack.Screen
                 name="HomeWorkoutLoadingScreen"
                 component={HomeWorkoutLoadingScreen}
+                options={{headerShown: false}}
+              />
+               <Stack.Screen
+                name="GymWorkoutLoadingScreen"
+                component={GymWorkoutLoadingScreen}
                 options={{headerShown: false}}
               />
             <Stack.Screen

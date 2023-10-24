@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {
   useCallback,
   useState,
@@ -24,6 +25,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 import {useHeaderHeight} from '@react-navigation/stack';
+import api from '../../../../api';
 
 export default function GymAnimationPageWorkout({navigation, route}) {
   const {assets, fonts, sizes, gradients, colors} = useTheme();
@@ -31,22 +33,34 @@ export default function GymAnimationPageWorkout({navigation, route}) {
   const animationProgress = useRef(new Animated.Value(0));
   useEffect(() => {}, []);
   useEffect(() => {
-    if (workoutData.workout_level) {
+    if (workoutData.gym_workout_level) {
       // Create a copy of the formData object
       const formDataCopy = {...workoutData};
-      console.log(formDataCopy, 'form data');
+      const formDataWithoutEmptyFields = Object.keys(formDataCopy).reduce((obj, key) => {
+        if (formDataCopy[key] !== null && formDataCopy[key] !== undefined && formDataCopy[key] !== '') {
+          obj[key] = formDataCopy[key];
+        }
+        return obj;
+      }, {});
+      console.log(formDataWithoutEmptyFields, 'form data empty');
 
       const fetchData = async () => {
+        console.log('clicked');
+        
         try {
-          const response = await axios.post(
-            `${BASE_URL}set_personal_datas`,
-            formDataCopy,
+          const response = await api.post(
+            `set_personal_datas`,
+            formDataWithoutEmptyFields,
           );
+          console.log(response.data ,"posted");
+          
 
           if (response.data.success) {
+            console.log('success posted');
+            
             // Call the second API
-            const secondApiResponse = await axios.get(
-              `${BASE_URL}get_gym_workouts?gender=${formDataCopy.gender}&level=${formDataCopy.workout_level}`,
+            const secondApiResponse = await api.get(
+              `get_gym_workouts?gender=${formDataCopy.gender}&level=${formDataCopy.gym_workout_level}`,
             );
             // Do something with the second API response
             const data = secondApiResponse.data.data;

@@ -140,10 +140,10 @@ import { log } from 'react-native-reanimated';
       };
       const nextPage =async ()=>{
         
-        if (workoutData.workout_level) {
+        if (workoutData.home_workout_level) {
           // Call the second API to get home workouts
           const secondApiResponse = await api.get(
-            `get_home_workouts?gender=${workoutData.gender}&level=${workoutData.workout_level}`
+            `get_home_workouts?gender=${workoutData.gender}&level=${workoutData.home_workout_level}`
           );
   
           // Process the second API response
@@ -167,7 +167,7 @@ import { log } from 'react-native-reanimated';
         }
       }
     
-      if (workoutData.workout_level) {
+      if (workoutData.home_workout_level) {
         fetchData();
         nextPage();
       } else {

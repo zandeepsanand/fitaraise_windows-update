@@ -55,7 +55,7 @@ const DifficultyLevel = ({
     setDifficulty(option);
     const updatedFormData = {
       ...workoutData,
-      workout_level: option,
+      home_workout_level: option,
     };
 
     navigation.setParams({workoutData: updatedFormData});
@@ -207,7 +207,7 @@ const DifficultyLevel = ({
             onPress={() => {
               // handleProducts(4);
               // navigation.navigate('HomeWorkoutMain');
-              if (workoutData.workout_level) {
+              if (workoutData.home_workout_level) {
                 navigation.navigate('AnimationPageWorkout', {workoutData});
               } else {
                 alert('please select your fitness level');

@@ -105,8 +105,8 @@ console.log(dietPlan , "new diet plan");
   
         </Block>
         <Block  padding={10} center align='center' >
-            <Text semibold>Please wait for the Diet calculation </Text>
-            <Text semibold>Our Ai is working on it </Text>
+            <Text semibold center>Please wait while we crunch the numbers for your personalized diet plan  </Text>
+            {/* <Text semibold> </Text> */}
         </Block>
       
        

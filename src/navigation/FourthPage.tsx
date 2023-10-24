@@ -261,6 +261,7 @@ const Cards = ({route, navigation}) => {
         height_unit: 'cm',
       };
       console.log(updatedFormData, 'height unit check');
+      navigation.setParams({formData: updatedFormData});
     } else {
       // Handle when the input exceeds the maximum value, e.g., show an error message.
     }
@@ -280,6 +281,7 @@ const Cards = ({route, navigation}) => {
         weight_unit: 'lbs',
       };
       console.log(updatedFormData, 'weight unit check');
+      navigation.setParams({formData: updatedFormData});
     } else {
       // Handle when the input exceeds the maximum limit, e.g., show an error message.
     }
@@ -299,6 +301,7 @@ const Cards = ({route, navigation}) => {
         weight_unit: 'kg',
       };
       console.log(updatedFormData, 'weight unit check');
+      navigation.setParams({formData: updatedFormData});
     } else {
       // Handle when the input exceeds the maximum limit, e.g., show an error message.
     }
@@ -377,7 +380,7 @@ const handleSecondaryPress = () => {
       height_unit: unit,
     };
     setSelectedUnit(unit);
-    // navigation.setParams({formData: updatedFormData})
+    navigation.setParams({formData: updatedFormData})
   };
 
   const handleKgSelect = (item) => {

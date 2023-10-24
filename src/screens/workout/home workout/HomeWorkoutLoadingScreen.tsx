@@ -23,87 +23,15 @@ const HomeWorkoutLoadingScreen = ({route}) => {
     }).start();
   }, []);
 
-  // useEffect(() => {
-  //   const checkAuthenticationStatus = async () => {
-  //     try {
-  //       const authDataJSON = await AsyncStorage.getItem('authData');
-
-  //       if (authDataJSON) {
-  //         const authData = JSON.parse(authDataJSON);
-  //         const authToken = authData.token;
-
-  //         if (authToken) {
-  //           try {
-  //             const workoutDataJSON = await AsyncStorage.getItem('workoutData');
-  //             // const homeWorkoutJSON = await AsyncStorage.getItem('homeWorkout');
-  //             const homeWorkoutJSON = await api.get(`get_home_workout_excercises/15`);
-  // console.log(homeWorkoutJSON);
-
-  //             if (workoutDataJSON && homeWorkoutJSON) {
-  //               const workoutData = JSON.parse(workoutDataJSON);
-  //               const homeWorkout = JSON.parse(homeWorkoutJSON);
-
-  //               // Check if homeWorkout is available
-  //               if (homeWorkout) {
-  //                 // Navigate to 'HomeTabNavigator' with homeWorkout and workoutData
-  //                 navigation.navigate('HomeTabNavigator', {
-  //                   screen: 'HomeWorkoutMain',
-  //                   params: { homeWorkout, workoutData },
-  //                 });
-  //               } else {
-  //                 // Navigate to 'fitness' screen with workoutData
-  //                 navigation.navigate('Gender', {
-  //                   workoutData: authData.formData,
-  //                 });
-  //               }
-  //             } else {
-  //               console.log('Data not found in AsyncStorage');
-  //             }
-
-  //             setIsLoading(false);
-  //           } catch (error) {
-  //             console.error('Error fetching stored data:', error);
-  //             setIsLoading(false);
-  //           }
-  //         }
-  //       } else {
-  //         console.log('Token not available');
-  //         navigation.reset({
-  //           index: 0,
-  //           routes: [{ name: 'loginNew' }],
-  //         });
-  //         setIsLoading(false);
-  //       }
-  //     } catch (error) {
-  //       console.error('Authentication Status Error:', error);
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   checkAuthenticationStatus();
-  // }, [navigation]);
-  // const workoutData = {
-  //   customer_id: 68,
-  //   first_name: 'Sandeep S Anand',
-  //   last_name: 'S an',
-
-  //   feet: '',
-  //   gender: 'male',
-  //   height: 10,
-  //   height_unit: 'cm',
-  //   inches: '',
-
-  //   weight: '10',
-  //   weight_unit: 'lbs',
-  //   workout_level: 'beginner',
-  // };
   useEffect(() => {
     const checkAuthenticationStatus = async () => {
       try {
         const authDataJSON = await AsyncStorage.getItem('authData');
+      
 
         if (authDataJSON) {
           const authData = JSON.parse(authDataJSON);
+
           const authToken = authData.token;
           // console.log('token');
           
@@ -117,18 +45,28 @@ const HomeWorkoutLoadingScreen = ({route}) => {
             try {
               const authData = JSON.parse(authDataJSON);
               const workoutDataJSON = authData.formData;
-              if (workoutDataJSON.gender && workoutDataJSON.workout_level){
+              const userData = await api.get(
+                `get_personal_datas/${workoutDataJSON.customer_id}`,
+              );
+              const user = userData.data.data;
+              console.log(user, "user data home workout loading");
+              
+
+
+              if (user.gender && user.home_workout_level){
                 const homeWorkout = await api.get(
-                  `get_home_workouts?gender=${workoutDataJSON.gender}&level=${workoutDataJSON.workout_level}`,
+                  `get_home_workouts?gender=${user.gender}&level=${user.home_workout_level}`,
                 );
                 const homeWorkoutJSON = homeWorkout.data.data;
                 console.log(homeWorkoutJSON);
                 if (homeWorkoutJSON) {
+                  console.log(homeWorkoutJSON , "workout data home");
+                  
                   
                   // Navigate to 'HomeTabNavigator' with homeWorkout and workoutData
                   navigation.navigate('HomeTabNavigator', {
                     screen: 'HomeWorkoutMain',
-                    params: { homeWorkout, workoutData:homeWorkoutJSON },
+                    params: { homeWorkout:homeWorkoutJSON, workoutData:user },
                   });
                 } 
               }else {

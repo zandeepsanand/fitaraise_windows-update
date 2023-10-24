@@ -18,19 +18,11 @@ import DonutChart1 from './DonutChart';
 import api from '../../api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const DATA = [
-  {name: 'sandeep', value: 10, color: '#F44336'},
-  {name: 'san', value: 30, color: '#FFC107'},
-  {name: 'sandeepf', value: 20, color: '#03A9F4'},
-];
+
 // const data=
 // {calories: 1648, carb_g: 206, carb_percent: "50%", fat_g: 37, fat_percent: "20%", protien_g: 124, protien_percent: "30%"}
 
-const props = {
-  activeStrokeWidth: 25,
-  inActiveStrokeWidth: 25,
-  inActiveStrokeOpacity: 0.2,
-};
+
 
 const CirclePage = ({route, navigation}) => {
   const {data, formDataCopy, dietPlan} = route.params;
@@ -50,41 +42,7 @@ const CirclePage = ({route, navigation}) => {
   const progress = 50;
   const progressOffset = circumference - (progress / 100) * circumference;
 
-  // async function checkPage() {
-  //   try {
-  //     // Retrieve the existing authData from AsyncStorage
-  //     const existingAuthDataString = await AsyncStorage.getItem('authData');
-  //     const existingAuthData = JSON.parse(existingAuthDataString) || {};
-  //     console.log(existingAuthData);
-      
-
-  //     // Merge the new data with the existing authData
-  //     const updatedAuthData = {
-  //       ...existingAuthData,
-  //       data, 
-  //       formDataCopy, 
-  //       dietPlan, 
-  //     };
-
-  //     // Store the updated authData object as a JSON string in AsyncStorage
-  //     await AsyncStorage.setItem('authData', JSON.stringify(updatedAuthData));
-
-  //     // Navigate to the desired screen with the parameters
-  //     // navigation.navigate('tabNavigator', {
-  //     //   screen: 'pie', // Screen name within the TabNavigator
-  //     //   params: {data, formDataCopy, dietPlan}, // Pass your parameters here
-  //     // });
-  //     navigation.navigate('Menu', {
-  //       screen: 'Screens',
-  //       params: {
-  //         data, formDataCopy, dietPlan
-  //       },
-  //     });
-  //   } catch (error) {
-  //     // Handle errors that may occur during retrieval or storage
-  //     console.error(error);
-  //   }
-  // }
+ 
   async function checkPage() {
     try {
       // Retrieve the existing authData from AsyncStorage
@@ -105,22 +63,99 @@ const CirclePage = ({route, navigation}) => {
   
       // Show a success message
       console.log('Data saved successfully.');
+      navigation.navigate('Menu', { data, formDataCopy, dietPlan });
   
       // Navigate to the desired screen with the parameters
-      navigation.navigate('Loading', {
+      // navigation.navigate('Loading', {
        
     
-          data,
-          formDataCopy,
-          dietPlan,
+      //     data,
+      //     formDataCopy,
+      //     dietPlan,
         
-      });
+      // });
     } catch (error) {
       // Handle errors that may occur during retrieval or storage
       console.error('Error while saving data:', error);
       // You can also show an error message to the user if needed.
     }
   }
+  const redirectTo = async ()=>{
+ 
+    try {
+      console.log("clicked");
+      
+      const authDataJSON = await AsyncStorage.getItem('authData');
+      console.log(authDataJSON , "authdata first page");
+      
+      if (authDataJSON) {
+        const authData = JSON.parse(authDataJSON);
+       
+        
+        const authToken = authData.token;
+        const customerId = authData.formData.customer_id;
+        const formData = authData.formData;
+        const token = authData.token;
+    
+        // loginSuccess(customerId, formData, token);
+        console.log(authToken , "auth Data");
+        if (authToken) {
+          // setAuthToken(authToken);
+          // setIsLoading(true);
+          const requiredCalorieResponse = await api.get(`get_daily_required_calories/${formData.customer_id}`);
+          const diet_List = await api.get(`get_recommended_diet/${formData.customer_id}`);
+
+
+          const requiredCalorie = requiredCalorieResponse.data.data;
+          
+          const dietPlan = diet_List.data.data.recommended_diet_list;
+          console.log(requiredCalorie , "calorie required");
+          console.log(authData.formData , "for workout example");
+          
+        
+            // setIsLoading(false);
+  
+            if ((requiredCalorieResponse.data.success === true) && (authData.formData)) {
+              //   navigation.reset({
+              //   index: 0,
+              //   routes: [{ name: 'Menu', params: { data: requiredCalorie, formDataCopy: authData.formData, dietPlan } }],
+              // });
+              navigation.navigate('Menu', { data: requiredCalorie, formDataCopy: authData.formData, dietPlan });
+            } else if (authData.formData) {
+              navigation.navigate('Details', { formData: authData.formData });
+            } else {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'loginNew' }],
+              });
+            }
+          // Replace 2000 with the desired loading duration (in milliseconds)
+        } else {
+          // No authToken, navigate to 'loginNew'
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'loginNew' }],
+          });
+        }
+      } else {
+        // authData JSON doesn't exist, navigate to 'loginNew'
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'loginNew' }],
+        });
+      }
+      // setIsLoading(false);
+    } catch (error) {
+      console.error('Authentication Status Error:', error);
+      // setIsLoading(false);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'loginNew' }],
+      });
+    }
+ 
+ }
+
   
   return (
    
@@ -195,7 +230,7 @@ const CirclePage = ({route, navigation}) => {
               </Block>
               <Block center align="center" style={{maxHeight: 90}}>
                 <Text p danger bold>
-                  Protien
+                Protein
                 </Text>
                 <Text p danger semibold padding={10} center>
                   {data.protien_g}g ({data.protien_percent})
@@ -231,7 +266,7 @@ const CirclePage = ({route, navigation}) => {
             radius={sizes.cardRadius}>
                <TouchableOpacity
             onPress={() => {
-              checkPage();
+              redirectTo();
             }}>
                <Block flex={1} paddingTop={10}>
               <Block>

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {useCallback, useState} from 'react';
 import {useData, useTheme, useTranslation} from '../../../hooks';
 import {Block, Button, Image, Input, Product, Text} from '../../../components';
@@ -25,7 +26,7 @@ const GymWorkoutMain = ({navigation, route}) => {
   const [products, setProducts] = useState(following);
   const {assets, colors, fonts, gradients, sizes} = useTheme();
   const [selectedLevel, setSelectedLevel] = useState(
-    formDataCopy.workout_level,
+    formDataCopy.gym_workout_level,
   );
   const [data2, setData2] = useState(data);
   console.log(data2, 'testing');
@@ -45,21 +46,15 @@ const GymWorkoutMain = ({navigation, route}) => {
   };
   const handleLevelChange = (level) => {
     setSelectedLevel(level);
-    if (['beginner', 'intermediate', 'expert'].includes(level)) {
+    if (['Home workout', 'Workout Challenge'].includes(level)) {
       // Make an Axios API call here with the selected level
-      axios
-        .get(
-          `${BASE_URL}get_gym_workouts?gender=${formDataCopy.gender}&level=${level}`,
-        )
-        .then((response) => {
-          // Handle the API response here
-          // console.log(response.data.data, 'testing');
-          setData2(response.data.data);
-        })
-        .catch((error) => {
-          // Handle errors here
-          console.error(error);
-        });
+      if (level === 'Home workout') {
+        console.log('clicked');
+        
+        navigation.navigate('HomeWorkoutLoadingScreen');
+      } else if (level === 'Workout Challenge') {
+        navigation.navigate('ChallengeGenderPage',{workoutData :formDataCopy});
+      }
     }
   };
 
@@ -101,9 +96,9 @@ const GymWorkoutMain = ({navigation, route}) => {
                     borderRadius: 20,
                     marginLeft: 10,
                   }}
-                  data={['beginner', 'intermediate', 'expert']} // Provide your options here
+                  data={['Home workout', 'Workout Challenge']} // Provide your options here
                   // defaultButtonText={formDataCopy.workout_level}
-                  defaultButtonText={selectedLevel}
+                  defaultButtonText={'Select Workout'}
                   onSelect={handleLevelChange}
                 />
               </Block>
