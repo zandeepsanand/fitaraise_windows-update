@@ -10,6 +10,7 @@ import {
   View,
   Modal,
 } from 'react-native';
+import moment from 'moment-timezone';
 import {useRoute} from '@react-navigation/native';
 import {Ionicons} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/core';
@@ -67,7 +68,7 @@ const GymWorkoutStart = () => {
 
   const currentWorkout = exerciseData[currentWorkoutIndex];
 
-  console.log(currentWorkout, 'workout data');
+  // console.log(currentWorkout, 'workout data');
 
   const restTimeInSeconds = currentWorkout.rest_time_in_seconds;
 
@@ -237,13 +238,18 @@ const GymWorkoutStart = () => {
     return `${formattedMinutes}:${formattedSeconds}`;
   };
 
-  const completed_date = new Date().toISOString().slice(0, 10);
+  const targetTimeZone = 'Asia/Kolkata'; // Change this to 'Asia/Kolkata' for Indian Standard Time
+
+  const completed_date = moment.tz(targetTimeZone).format('YYYY-MM-DD');
   
   // console.log(completed_date);
   const customer_id = customerId;
   const workout_id = currentWorkout.workout_id;
   const excercise_id = currentWorkout.excercise;
   const home_workout_excercise = currentWorkout.id;
+  
+  console.log(customerId,workout_id,excercise_id,home_workout_excercise ,completed_date , "id s for workout");
+  
   const workoutData = {
     customer_id,
     workout_id,
@@ -251,6 +257,7 @@ const GymWorkoutStart = () => {
     home_workout_excercise,
     completed_date,
   };
+
 
   const handleFinish = (currentWorkout) => {
     api

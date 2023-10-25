@@ -328,7 +328,7 @@ const GymWorkoutAll = ({route}) => {
                 <TouchableWithoutFeedback
                   key={exercise.id}
                   onPress={() => {
-                    console.log('Navigating with exercise:', exercise);
+                    console.log('Navigating with exercise:', exercise.completed_today);
                     navigation.navigate('GymWorkoutSingle', {
                       exerciseDataSingle: exercise,
                       exerciseData: exerciseAll,
@@ -418,22 +418,27 @@ const GymWorkoutAll = ({route}) => {
                     marginTop={5}
                     style={{
                       // Check if completedWorkouts is defined and contains the workout ID
-                      backgroundColor:
-                        completedWorkouts &&
-                        completedWorkouts.includes(exercise.excercise)
-                          ? '#92A3FD'
-                          : 'white',
+                      // backgroundColor:
+                      //   completedWorkouts &&
+                      //   completedWorkouts.includes(exercise.excercise)
+                      //     ? '#92A3FD'
+                      //     : 'white',
                       borderRadius: 15,
                       padding: 10,
-                    }}>
+                    }}
+                    color={exercise.completed_today ? '#92A3FD' : 'white'}
+                    >
                     <Image
                       width={75}
                       height={75}
-                      radius={10}
+                   
                       // source={require('../../../assets/images/gif.gif')}
                       source={{
                         uri: `${exercise.image}`,
-                      }}></Image>
+                      }}
+                      style={{ borderRadius: 20,
+                        }}
+                      ></Image>
 
                     <Block center>
                       <Block>

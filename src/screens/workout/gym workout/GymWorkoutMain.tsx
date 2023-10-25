@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {useData, useTheme, useTranslation} from '../../../hooks';
 import {Block, Button, Image, Input, Product, Text} from '../../../components';
 import {StatusBar as ExpoStatusBar} from 'expo-status-bar';
@@ -14,10 +14,13 @@ import GifPlayer from '../GifPlayer';
 import GymWorkoutCalender from './GymWorkoutCalender';
 import api from '../../../../api';
 import CalendarHomeWorkout from '../home workout/calendar/Calendar';
+import LoginContext from '../../../hooks/LoginContext';
 
 const GymWorkoutMain = ({navigation, route}) => {
+
   const {t} = useTranslation();
   const {data, formDataCopy, savedDate, completedWorkouts} = route.params;
+  const {authenticated,customerId} = useContext(LoginContext);
   const isSavedDateAvailable = savedDate !== undefined && savedDate !== null;
   // console.log(completedWorkouts, 'saved workouts');
 
@@ -94,7 +97,7 @@ const GymWorkoutMain = ({navigation, route}) => {
   };
   const fetchData = async () => {
     try {
-      const response = await api.get(`get_customer_done_home_workouts/${customerId}`);
+      const response = await api.get(`get_customer_done_gym_workouts/${customerId}`);
       if (response.data.success) {
         // Handle the data and update your calendar with the results
         const completedDates = response.data.data.map((item) => item.completed_date);
