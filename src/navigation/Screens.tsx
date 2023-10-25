@@ -63,13 +63,23 @@ export default ({data, formDataCopy, dietPlan}) => {
        <Stack.Screen
         name="Demo"
         component={DemoAlert}
-        options={{title: 'I Want to'}}
+        options={{title: 'I Want to',headerShown: false }}
         initialParams={{ formData:modifiedFormData }}
       />
     <Stack.Screen
         name="Details"
         component={SecondPage}
-        options={{ headerShown:true , title: 'I Want to'}}
+        options={{ headerShown:true , 
+          headerTitle: 'I Want to', // Set the title text
+          // headerTitleAlign: 'center', // Center-align the title
+          headerTitleStyle: {
+            paddingLeft: 20, // Add left padding to the title
+          },
+          headerLeft: () => null,
+          headerRight: () => null,
+          
+          }}
+          
         initialParams={{ formData:modifiedFormData }}
       />
 
