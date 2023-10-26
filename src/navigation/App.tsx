@@ -91,6 +91,7 @@ import NameLastName from './NameLastName';
 import { AuthProvider } from '../hooks/AuthData';
 import GymWorkoutLoadingScreen from '../screens/workout/gym workout/GymWorkoutLoadingScreen';
 import NotificationSeup from '../screens/notification/Notification';
+import usePushNotification from '../../usePushNotification';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
@@ -153,12 +154,12 @@ export default () => {
       <TranslationProvider>
         <ThemeProvider theme={theme} setTheme={setTheme}>
           <NavigationContainer theme={navigationTheme}>
-            <Stack.Navigator initialRouteName="Notification">
-            <Stack.Screen
+            <Stack.Navigator initialRouteName="Loading">
+            {/* <Stack.Screen
                 name="Notification"
-                component={NotificationSeup}
+                component={usePushNotification}
                 options={{headerShown: false}}
-              />
+              /> */}
             <Stack.Screen name="Menu" component={Menu} options={{ headerShown: false }} />
             <Stack.Screen
                 name="NameLastName"

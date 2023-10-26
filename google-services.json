@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "261015350901",
+    "project_id": "fitaraise-test",
+    "storage_bucket": "fitaraise-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:261015350901:android:15e0a6046c734a9820923c",
+        "android_client_info": {
+          "package_name": "com.sandeepsanand.sandeep"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3Zj9CuHoJHLXTcKWwv5Bd2m8DGEx6MIU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
