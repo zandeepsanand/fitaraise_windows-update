@@ -1,4 +1,5 @@
-import React, {useCallback, useEffect, useState} from 'react';
+/* eslint-disable prettier/prettier */
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import axios from 'axios';
 import {BASE_URL} from '@env';
 import {
@@ -21,6 +22,8 @@ import Timer from '../home workout/Timer';
 import TimerIntermediatePage from '../home workout/TimerIntermediatePage';
 import GymWorkoutDetailsPage from './ChallengeDetailsPage';
 import GymWorkoutDetailsPageTwo from './ChallengeDetailsPageTwo';
+import api from '../../../../api';
+import LoginContext from '../../../hooks/LoginContext';
 
 const isAndroid = Platform.OS === 'android';
 function PopupPage() {
@@ -42,6 +45,8 @@ const GymWorkoutStart = () => {
   const {exerciseData, completedWorkouts: initialCompletedWorkouts = []} =
     route.params;
   // console.log(exerciseData);
+  const {customerId}=useContext(LoginContext);
+
 
   const {user} = useData();
   const {t} = useTranslation();
@@ -191,37 +196,32 @@ const GymWorkoutStart = () => {
 
   const completed_date = new Date().toISOString().slice(0, 10);
   // console.log(completed_date);
-  const customer_id = 10;
-  const workout_id = currentWorkout.workout_id;
-  const excercise_id = currentWorkout.excercise;
-  const home_workout_excercise = currentWorkout.id;
-  const workoutData = {
-    customer_id,
-    workout_id,
-    excercise_id,
-    home_workout_excercise,
-    completed_date,
-  };
+  const customer_id = customerId;
+  const day_number = 1;
+  const challenge_excercise_id = 8 ;
+  // const workout_id = currentWorkout.workout_id;
+  const excercise_id = currentWorkout.excercise_id;
+  // const home_workout_excercise = currentWorkout.id;
+
 
   const handleFinish = (currentWorkout) => {
-    axios
+    api
       .post(
-        `${BASE_URL}add_home_workout_excercises_done`,
+        `update_workout_challenge_excercise`,
         {
           customer_id,
-          workout_id,
+          day_number,
+          challenge_excercise_id,
           excercise_id,
-          home_workout_excercise,
-          completed_date,
-        },
-        {
-          headers: {
-            Authorization: `Bearer 477|F4h2p6ibB4FFhCwx0RJLNO6rPRXhPbMttg2x1iYT`,
-          },
-        },
+          
+        }
+       
       )
       .then((response) => {
+        console.log(response.data);
         if (response.data.success) {
+         
+          
           setShowNextButton(true);
           setCompletedDate([completed_date]);
           setCompletedWorkouts([

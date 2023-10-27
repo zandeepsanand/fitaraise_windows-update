@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {useCallback, useEffect, useState} from 'react';
 import {useData, useTheme, useTranslation} from '../../../hooks';
 import {Block, Button, Image, Input, Product, Text} from '../../../components';
@@ -13,6 +14,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 
 import axios from 'axios';
 import {BASE_URL} from '@env';
+import api from '../../../../api';
 
 const ChallengeMain = ({navigation, route}) => {
   const {t} = useTranslation();
@@ -50,15 +52,11 @@ const ChallengeMain = ({navigation, route}) => {
           throw new Error('Please enter all details');
         }
 
-        const config = {
-          headers: {
-            Authorization: `Bearer 477|F4h2p6ibB4FFhCwx0RJLNO6rPRXhPbMttg2x1iYT`, // Replace with your actual token
-          },
-        };
+       
 
-        const response = await axios.get(
-          `${BASE_URL}get_workout_challenge_days/${challenge.id}`,
-          config,
+        const response = await api.get(
+          `get_workout_challenge_days/${challenge.id}`,
+          
         );
 
         const responseData = response.data.data;
@@ -100,15 +98,10 @@ const ChallengeMain = ({navigation, route}) => {
         throw new Error('Please enter all details');
       }
 
-      const config = {
-        headers: {
-          Authorization: `Bearer 477|F4h2p6ibB4FFhCwx0RJLNO6rPRXhPbMttg2x1iYT`, // Replace with your actual token
-        },
-      };
 
-      const response = await axios.get(
-        `${BASE_URL}get_workout_challenge_excercise/${challenge.id}/${currentDayNumber}`,
-        config,
+      const response = await api.get(
+        `get_workout_challenge_excercise/${challenge.id}/${currentDayNumber}`,
+       
       );
 
       const responseData = response.data.data;

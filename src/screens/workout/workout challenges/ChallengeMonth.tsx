@@ -10,8 +10,8 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import axios from 'axios';
-import {BASE_URL} from '@env';
+
+import api from '../../../../api';
 
 const ChallengeMonth = ({
   navigation,
@@ -45,15 +45,11 @@ const ChallengeMonth = ({
           throw new Error('Please enter all details');
         }
 
-        const config = {
-          headers: {
-            Authorization: `Bearer 509|izoIVDenxu1bwz3GlpEBs71m6lWU0Orh69ivSGLN`, // Replace with your actual token
-          },
-        };
+       
 
-        const response = await axios.get(
-          `${BASE_URL}get_workout_challenges?gender=${workoutData.gender}&level=${workoutData.workout_level}`,
-          config,
+        const response = await api.get(
+          `get_workout_challenges?gender=${workoutData.gender}&level=${workoutData.workout_level}`,
+          
         );
 
         const responseData = response.data.data;

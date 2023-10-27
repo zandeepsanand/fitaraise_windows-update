@@ -1,29 +1,28 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import 'react-native-gesture-handler';
 import { DataProvider } from './src/hooks';
 import AppNavigation from './src/navigation/App';
 import { LoginProvider } from './src/hooks/LoginContext';
 import * as Notifications from 'expo-notifications';
-import { View } from 'react-native';
-import { Text } from 'react-native';
 
 export default function App() {
-  const [notification, setNotification] = useState(null);
-
   useEffect(() => {
     registerForPushNotifications();
 
+    // Add a listener for received notifications
     const notificationListener = Notifications.addNotificationReceivedListener(notification => {
       // Handle received notification here
-      setNotification(notification);
+      console.log('Received notification:', notification);
     });
 
+    // Add a listener for notification responses
     const responseListener = Notifications.addNotificationResponseReceivedListener(response => {
       // Handle notification response here
       console.log('Notification response:', response);
     });
 
+    // Clean up the listeners when the component unmounts
     return () => {
       Notifications.removeNotificationSubscription(notificationListener);
       Notifications.removeNotificationSubscription(responseListener);
@@ -55,14 +54,7 @@ export default function App() {
   return (
     <LoginProvider>
       <DataProvider>
-        {/* <AppNavigation /> */}
-        {notification && (
-          <View>
-            <Text>Received Notification:</Text>
-            <Text>Title: {notification.request.content.title}</Text>
-            <Text>Body: {notification.request.content.body}</Text>
-          </View>
-        )}
+        <AppNavigation />
       </DataProvider>
     </LoginProvider>
   );
