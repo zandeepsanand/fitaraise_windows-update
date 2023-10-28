@@ -29,9 +29,8 @@ import {
 import {BlurView} from 'expo-blur';
 import LoginContext from '../hooks/LoginContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import api,{setAuthToken} from '../../api';
+import api, {setAuthToken} from '../../api';
 import Loader from '../screens/alert/loader/Loader';
-
 
 const {height, width} = Dimensions.get('window');
 
@@ -46,13 +45,13 @@ export default function Frstpage({
   console.log(formData);
   const {loginSuccess} = useContext(LoginContext);
 
-  
   const {assets, colors, fonts, gradients, sizes} = useTheme();
   const {t} = useTranslation();
   const [tab, setTab] = useState<number>(0);
   const {following, trending} = useData();
   const [products, setProducts] = useState(following);
-  const [isLoading , setIsLoading]=useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [expoNotification, setExpoNotification] = useState('');
   const {
     customerId,
     isLoggedIn,
@@ -61,7 +60,7 @@ export default function Frstpage({
     logout, // You can access the logout function
   } = useContext(LoginContext);
   console.log(token);
-  
+
   const handleLogout = () => {
     console.log('clicked');
 
@@ -70,7 +69,6 @@ export default function Frstpage({
     navigation.navigate('loginNew');
   };
 
-
   const handleProducts = useCallback(
     (tab: number) => {
       setTab(tab);
@@ -78,68 +76,75 @@ export default function Frstpage({
     },
     [following, trending, setTab, setProducts],
   );
- const redirectTo =async ()=>{
- 
+  const redirectTo = async () => {
     try {
-      console.log("clicked");
-      
+      console.log('clicked');
+
       const authDataJSON = await AsyncStorage.getItem('authData');
-      console.log(authDataJSON , "authdata first page");
-      
+      console.log(authDataJSON, 'authdata first page');
+
       if (authDataJSON) {
         const authData = JSON.parse(authDataJSON);
-       
-        
+
         const authToken = authData.token;
         const customerId = authData.formData.customer_id;
         const formData = authData.formData;
         const token = authData.token;
-    
+
         loginSuccess(customerId, formData, token);
-        console.log(authToken , "auth Data");
+        console.log(authToken, 'auth Data');
         if (authToken) {
           setAuthToken(authToken);
           setIsLoading(true);
-          const requiredCalorieResponse = await api.get(`get_daily_required_calories/${formData.customer_id}`);
-          const diet_List = await api.get(`get_recommended_diet/${formData.customer_id}`);
-
+          const requiredCalorieResponse = await api.get(
+            `get_daily_required_calories/${formData.customer_id}`,
+          );
+          const diet_List = await api.get(
+            `get_recommended_diet/${formData.customer_id}`,
+          );
 
           const requiredCalorie = requiredCalorieResponse.data.data;
-          
+
           const dietPlan = diet_List.data.data.recommended_diet_list;
-          console.log(requiredCalorie , "calorie required");
-          console.log(authData.formData , "for workout example");
-          
-        
-            setIsLoading(false);
-  
-            if ((requiredCalorieResponse.data.success === true) && (authData.formData)) {
-              //   navigation.reset({
-              //   index: 0,
-              //   routes: [{ name: 'Menu', params: { data: requiredCalorie, formDataCopy: authData.formData, dietPlan } }],
-              // });
-              navigation.navigate('Menu', { data: requiredCalorie, formDataCopy: authData.formData, dietPlan });
-            } else if (authData.formData) {
-              navigation.navigate('Details', { formData: authData.formData });
-            } else {
-              navigation.reset({
-                index: 0,
-                routes: [{ name: 'loginNew' }],
-              });
-            }
+          console.log(requiredCalorie, 'calorie required');
+          console.log(authData.formData, 'for workout example');
+
+          setIsLoading(false);
+
+          if (
+            requiredCalorieResponse.data.success === true &&
+            authData.formData
+          ) {
+            //   navigation.reset({
+            //   index: 0,
+            //   routes: [{ name: 'Menu', params: { data: requiredCalorie, formDataCopy: authData.formData, dietPlan } }],
+            // });
+            navigation.navigate('Menu', {
+              data: requiredCalorie,
+              formDataCopy: authData.formData,
+              dietPlan,
+            });
+          } else if (authData.formData) {
+            navigation.navigate('Details', {formData: authData.formData});
+          } else {
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'loginNew'}],
+            });
+          }
           // Replace 2000 with the desired loading duration (in milliseconds)
         } else {
           // No authToken, navigate to 'loginNew'
           navigation.reset({
             index: 0,
-            routes: [{ name: 'loginNew' }],
+            routes: [{name: 'loginNew'}],
           });
         }
       } else {
         // authData JSON doesn't exist, navigate to 'loginNew'
         navigation.reset({
           index: 0,
-          routes: [{ name: 'loginNew' }],
+          routes: [{name: 'loginNew'}],
         });
       }
       setIsLoading(false);
@@ -148,206 +153,238 @@ export default function Frstpage({
       setIsLoading(false);
       navigation.reset({
         index: 0,
-        routes: [{ name: 'loginNew' }],
+        routes: [{name: 'loginNew'}],
       });
     }
- 
- }
- 
-
+  };
 
   const animationProgress = useRef(new Animated.Value(0));
 
   useEffect(() => {
-    Animated.timing(animationProgress.current, {
-      toValue: 1,
-      duration: 5000,
-      easing: Easing.linear,
-      useNativeDriver: false,
-    }).start();
-  }, []);
+    const fetchData = async () => {
+      try {
+        // const response = await api.get(`get_personal_datas/${customerId}`);
+        // setExpoNotification(response.data.data.device_token);
+        // const expo = response.data.data.device_token;
+        const expoToken = await AsyncStorage.getItem('expoPushToken');
+
+        // If the token is found in AsyncStorage, set it in your component's state
+        if (expoToken) {
+          setExpoNotification(expoToken);
+        }
+  
+        // Start the animation after the API request is completed
+        Animated.timing(animationProgress.current, {
+          toValue: 1,
+          duration: 5000,
+          easing: Easing.linear,
+          useNativeDriver: false,
+        }).start();
+      } catch (error) {
+        console.error('Error fetching data for expo:', error);
+      }
+    };
+
+    fetchData();
+  }, [customerId, animationProgress]);
   return (
     <>
-    {isLoading ? <Loader /> : (
-      <Block>
-      <Block style={styles.container1} gradient={gradients.success}>
-        <Text bold font="Pacifico" style={{top: 40, padding: 16}}>
-          Welcome {formData.first_name}
-        </Text>
-        <View style={styles.img}>
-          <Image
-            source={require('../assets/images/fitter-bg.png')}
-            style={{width: '40%', height: '45%', top: 40}}
-          />
-        </View>
-        <ExpoStatusBar style="auto" />
-      </Block>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Block>
+          <Block style={styles.container1} gradient={gradients.success}>
+            <Text bold font="Pacifico" style={{top: 40, padding: 16}}>
+              Welcome {formData.first_name}
+            </Text>
+            <View style={styles.img}>
+              <Image
+                source={require('../assets/images/fitter-bg.png')}
+                style={{width: '40%', height: '45%', top: 40}}
+              />
+            </View>
+            <ExpoStatusBar style="auto" />
+          </Block>
 
-      <View style={styles.container}>
-        <TouchableWithoutFeedback
-          // onPress={() => navigation.navigate('Details')}
-          activeOpacity={0.1}
-          onPress={() => {handleProducts(2);
-          redirectTo();}}
-          // onPressOut={() => navigation.navigate('Details', {formData})}
-          >
-          <Block
-            style={styles.mainCardView}
-            flex={0}
-            marginTop={50}
-            //  radius={30}
-            gradient={gradients?.[tab === 2 ? 'success' : '#fffff']}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <View flex={2}>
-                <Image
-                  //  source={require('../../../assets/fruit2.png')}
-                  source={assets.fruit2}
-                  resizeMode="contain"
-                />
-                {/* <Lottie
+          <View style={styles.container}>
+            <TouchableWithoutFeedback
+              // onPress={() => navigation.navigate('Details')}
+              activeOpacity={0.1}
+              onPress={() => {
+                handleProducts(2);
+                redirectTo();
+              }}
+              // onPressOut={() => navigation.navigate('Details', {formData})}
+            >
+              <Block
+                style={styles.mainCardView}
+                flex={0}
+                marginTop={50}
+                //  radius={30}
+                gradient={gradients?.[tab === 2 ? 'success' : '#fffff']}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <View flex={2}>
+                    <Image
+                      //  source={require('../../../assets/fruit2.png')}
+                      source={assets.fruit2}
+                      resizeMode="contain"
+                    />
+                    {/* <Lottie
                     width={64}
                     height={64}
                     marginBottom={sizes.sm}
                     source={require('../assets/json/diet1.json')}
                     progress={animationProgress.current}
                   /> */}
-              </View>
-              <View flex={4} style={{alignSelf: 'center'}}>
-                <Text
-                  bold
-                  primary
+                  </View>
+                  <View flex={4} style={{alignSelf: 'center'}}>
+                    <Text
+                      bold
+                      primary
+                      style={{
+                        fontSize: 14,
+                        color: 'black',
+                      }}>
+                      {'DIET PLANS'}
+                    </Text>
+                    <View
+                      style={{
+                        marginTop: 4,
+                        borderWidth: 0,
+                        width: '85%',
+                      }}></View>
+                  </View>
+                </View>
+                <View
                   style={{
-                    fontSize: 14,
-                    color: 'black',
+                    height: 25,
+                    backgroundColor: 'pink',
+                    borderWidth: 0,
+                    width: 25,
+                    marginLeft: -26,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 50,
                   }}>
-                  {'DIET PLANS'}
-                </Text>
+                  <Image
+                    source={assets.arrow}
+                    color={colors.white}
+                    radius={0}
+                  />
+                </View>
+              </Block>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback
+              onPress={() => handleProducts(3)}
+              onPressOut={() =>
+                navigation.navigate('fitness', {workoutData: formData})
+              }>
+              <Block
+                style={styles.mainCardView}
+                flex={0}
+                //  radius={6}
+                gradient={gradients?.[tab === 3 ? 'success' : '#fffff']}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <View flex={2}>
+                    <Image
+                      // source={require('../../../assets/fitness2.png')}
+                      source={assets.fitness2}
+                      resizeMode="contain"
+                    />
+                  </View>
+                  <View flex={4} style={{alignSelf: 'center'}}>
+                    <Text bold primary>
+                      {'WORKOUT'}
+                    </Text>
+                    <View
+                      style={{
+                        marginTop: 4,
+                        borderWidth: 0,
+                        width: '85%',
+                      }}></View>
+                  </View>
+                </View>
                 <View
                   style={{
-                    marginTop: 4,
+                    height: 25,
+                    backgroundColor: 'pink',
                     borderWidth: 0,
-                    width: '85%',
-                  }}></View>
-              </View>
-            </View>
-            <View
-              style={{
-                height: 25,
-                backgroundColor: 'pink',
-                borderWidth: 0,
-                width: 25,
-                marginLeft: -26,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 50,
-              }}>
-              <Image source={assets.arrow} color={colors.white} radius={0} />
-            </View>
-          </Block>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback
-          onPress={() => handleProducts(3)}
-          onPressOut={() =>
-            navigation.navigate('fitness', {workoutData: formData})
-          }>
-          <Block
-            style={styles.mainCardView}
-            flex={0}
-            //  radius={6}
-            gradient={gradients?.[tab === 3 ? 'success' : '#fffff']}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <View flex={2}>
-                <Image
-                  // source={require('../../../assets/fitness2.png')}
-                  source={assets.fitness2}
-                  resizeMode="contain"
-                />
-              </View>
-              <View flex={4} style={{alignSelf: 'center'}}>
-                <Text bold primary>
-                  {'WORKOUT'}
-                </Text>
-                <View
-                  style={{
-                    marginTop: 4,
-                    borderWidth: 0,
-                    width: '85%',
-                  }}></View>
-              </View>
-            </View>
-            <View
-              style={{
-                height: 25,
-                backgroundColor: 'pink',
-                borderWidth: 0,
-                width: 25,
-                marginLeft: -26,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 50,
-              }}>
-              <Image source={assets.arrow} color={colors.white} radius={0} />
-            </View>
-          </Block>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback
-       
-          // onPressOut={() => navigation.navigate('water')}
-          onPress={() => {
-            handleProducts(4);
-            handleLogout();
-          }}>
-          <Block 
-            style={styles.mainCardView}
-            flex={0}
-            //  radius={6}
-            gradient={gradients?.[tab === 4 ? 'success' : '#fffff']}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <View flex={2}>
-                <Image
-                  //  source={require('../../../assets/book2.png')}
-                  source={assets.book2}
-                  resizeMode="contain"
-                />
-              </View>
-              <View flex={4} style={{alignContent: 'center'}}>
-                <Text
-                  bold
-                  primary
-                  style={{
-                    fontSize: 14,
-                    color: 'black',
-                    fontWeight: 'bold',
+                    width: 25,
+                    marginLeft: -26,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 50,
                   }}>
-                  {'NUTRITION FACTS'}
-                </Text>
+                  <Image
+                    source={assets.arrow}
+                    color={colors.white}
+                    radius={0}
+                  />
+                </View>
+              </Block>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback
+              // onPressOut={() => navigation.navigate('water')}
+              onPress={() => {
+                handleProducts(4);
+                handleLogout();
+              }}>
+              <Block
+                style={styles.mainCardView}
+                flex={0}
+                //  radius={6}
+                gradient={gradients?.[tab === 4 ? 'success' : '#fffff']}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <View flex={2}>
+                    <Image
+                      //  source={require('../../../assets/book2.png')}
+                      source={assets.book2}
+                      resizeMode="contain"
+                    />
+                  </View>
+                  <View flex={4} style={{alignContent: 'center'}}>
+                    <Text
+                      bold
+                      primary
+                      style={{
+                        fontSize: 14,
+                        color: 'black',
+                        fontWeight: 'bold',
+                      }}>
+                      {'NUTRITION FACTS'}
+                    </Text>
+                    <View
+                      style={{
+                        marginTop: 4,
+                        borderWidth: 0,
+                        width: '85%',
+                      }}></View>
+                  </View>
+                </View>
                 <View
                   style={{
-                    marginTop: 4,
+                    height: 25,
+                    backgroundColor: 'pink',
                     borderWidth: 0,
-                    width: '85%',
-                  }}></View>
-              </View>
-            </View>
-            <View
-              style={{
-                height: 25,
-                backgroundColor: 'pink',
-                borderWidth: 0,
-                width: 25,
-                marginLeft: -26,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 50,
-              }}>
-              <Image source={assets.arrow} color={colors.white} radius={0} />
-            </View>
-          </Block>
-        </TouchableWithoutFeedback>
-      </View>
-    </Block>
-    )}
-   </>
+                    width: 25,
+                    marginLeft: -26,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 50,
+                  }}>
+                  <Image
+                    source={assets.arrow}
+                    color={colors.white}
+                    radius={0}
+                  />
+                </View>
+              </Block>
+            </TouchableWithoutFeedback>
+            <Text>{expoNotification}</Text>
+          </View>
+        </Block>
+      )}
+    </>
   );
 }
 const styles = StyleSheet.create({

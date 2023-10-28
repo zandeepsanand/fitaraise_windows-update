@@ -97,7 +97,7 @@ console.log(customerId , "login context");
   const logout = async () => {
     try {
       // Clear the stored authentication data from AsyncStorage
-      await AsyncStorage.multiRemove(['authData', 'workoutData', 'homeWorkout', 'customerId', 'formData']);
+      await AsyncStorage.multiRemove(['authData', 'workoutData', 'homeWorkout', 'customerId', 'formData','expoPushToken']);
 
       setCustomerId(null);
       // Clear any other necessary data or states
