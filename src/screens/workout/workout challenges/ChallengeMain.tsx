@@ -114,6 +114,8 @@ const ChallengeMain = ({navigation, route}) => {
         navigation.navigate('ChallengeDayAll', {
           responseData,
           completedWorkouts,
+          currentDayNumber,
+          challenge
         });
       }
 
@@ -249,7 +251,9 @@ const ChallengeMain = ({navigation, route}) => {
                     // marginLeft: 12,
                     flexDirection: 'row',
                     alignItems: 'center',
-                  }}></View>
+                  }}>
+
+                  </View>
                 <View>
                   <Text bold white h4>
                     Start
@@ -344,7 +348,7 @@ const ChallengeMain = ({navigation, route}) => {
                       }}
                       bold
                       white>
-                      {workoutData.workout_level}
+                      {workoutData.challenge_workout_level}
                     </Text>
                   </View>
                 </View>
@@ -353,143 +357,12 @@ const ChallengeMain = ({navigation, route}) => {
           </View>
           <View>
             {weeks.map((week, index) => (
-              <View key={index}>{week}</View>
+              <View key={index}>
+                {week}
+                </View>
             ))}
           </View>
-          {/* <Block card marginHorizontal={10}>
-            <Text center bold paddingTop={20} h5>
-              Week 1
-            </Text>
-            <Block paddingHorizontal={10}>
-              <Block row center paddingTop={20}>
-                <Block
-                  center
-                  style={{
-                    borderColor: '#19F196F0',
-                    borderWidth: 3,
-                    borderRadius: 50,
-                    maxWidth: 60,
-                    minHeight: 60,
-                    backgroundColor: '#c7fce6',
-                  }}
-                  margin={10}>
-                  <Text center bold>
-                    DAY 1
-                  </Text>
-                </Block>
-                <Block
-                  center
-                  style={{
-                    borderColor: '#D9D9D9',
-                    borderWidth: 3,
-                    borderRadius: 50,
-                    maxWidth: 60,
-                    minHeight: 60,
-                  }}
-                  margin={10}>
-                  <Text center bold>
-                    DAY 2
-                  </Text>
-                </Block>
-                <Block
-                  center
-                  style={{
-                    borderColor: '#D9D9D9',
-                    borderWidth: 3,
-                    borderRadius: 50,
-                    maxWidth: 60,
-                    minHeight: 60,
-                  }}
-                  margin={10}>
-                  <Text center bold>
-                    DAY 3
-                  </Text>
-                </Block>
-                <Block
-                  center
-                  style={{
-                    borderColor: '#D9D9D9',
-                    borderWidth: 3,
-                    borderRadius: 50,
-                    maxWidth: 60,
-                    minHeight: 60,
-                  }}
-                  margin={10}>
-                  <Text center bold>
-                    DAY 4
-                  </Text>
-                </Block>
-              </Block>
-              <Block row center paddingTop={20}>
-                <Block
-                  center
-                  style={{
-                    borderColor: '#D9D9D9',
-                    borderWidth: 3,
-                    borderRadius: 50,
-                    maxWidth: 60,
-                    minHeight: 60,
-                  }}
-                  margin={10}>
-                  <Text center bold>
-                    DAY 5
-                  </Text>
-                </Block>
-                <Block
-                  center
-                  style={{
-                    borderColor: '#D9D9D9',
-                    borderWidth: 3,
-                    borderRadius: 50,
-                    maxWidth: 60,
-                    minHeight: 60,
-                  }}
-                  margin={10}>
-                  <Text center bold>
-                    DAY 6
-                  </Text>
-                </Block>
-                <Block
-                  center
-                  style={{
-                    borderColor: '#D9D9D9',
-                    borderWidth: 3,
-                    borderRadius: 50,
-                    maxWidth: 60,
-                    minHeight: 60,
-                  }}
-                  margin={10}>
-                  <Text center bold>
-                    DAY 7
-                  </Text>
-                </Block>
-              </Block>
-            </Block>
-            <View style={styles.container}>
-              <TouchableWithoutFeedback
-                onPress={() => {
-                  clickStart();
-                }}>
-                <Block
-                  style={styles.mainCardView1}
-                  gradient={gradients?.[tab === 2 ? 'success' : '#ffff']}>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <View
-                      style={{
-                        // marginLeft: 12,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                      }}></View>
-                    <View>
-                      <Text bold white h4>
-                        Start
-                      </Text>
-                    </View>
-                  </View>
-                </Block>
-              </TouchableWithoutFeedback>
-            </View>
-          </Block> */}
+ 
 
           <View style={{paddingBottom: 20}}>
             {/* <GifPlayer /> */}

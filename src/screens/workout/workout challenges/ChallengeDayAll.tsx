@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {useCallback, useEffect, useState} from 'react';
 import {
   Platform,
@@ -16,7 +17,7 @@ import {useData, useTheme, useTranslation} from '../../../hooks';
 const isAndroid = Platform.OS === 'android';
 
 const ChallengeDayAll = ({route}) => {
-  const {responseData, completedWorkouts = []} = route.params;
+  const {responseData, completedWorkouts = [],currentDayNumber,challenge} = route.params;
   // const [exerciseData, setExerciseData] = useState([]);
 
   console.log(responseData, 'time fgdfgdfgd');
@@ -239,6 +240,8 @@ const ChallengeDayAll = ({route}) => {
                 {
                   exerciseData: responseData,
                   completedWorkouts: completedWorkouts,
+                  currentDayNumber,
+                  challenge
                 }
               );
             }}>

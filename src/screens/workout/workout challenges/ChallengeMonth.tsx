@@ -19,7 +19,7 @@ const ChallengeMonth = ({
     params: {workoutData},
   },
 }) => {
-  // console.log(workoutData);
+  console.log(workoutData);
 
   const {t} = useTranslation();
   const [tab, setTab] = useState<number>(0);
@@ -40,15 +40,17 @@ const ChallengeMonth = ({
 
   useEffect(() => {
     const fetchData = async () => {
+
+
+
       try {
-        if (!workoutData.workout_level || !workoutData.gender) {
+        if (!workoutData.workout_challenge_level || !workoutData.gender) {
+          const userData = await api.post(`set_personal_datas`, workoutData);
+          console.log(userData.data, "post data use workout");
           throw new Error('Please enter all details');
         }
-
-       
-
         const response = await api.get(
-          `get_workout_challenges?gender=${workoutData.gender}&level=${workoutData.workout_level}`,
+          `get_workout_challenges?gender=${workoutData.gender}&level=${workoutData.workout_challenge_level}`,
           
         );
 

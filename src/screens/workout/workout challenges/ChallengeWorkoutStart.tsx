@@ -42,7 +42,7 @@ function PopupPage() {
 }
 const GymWorkoutStart = () => {
   const route = useRoute();
-  const {exerciseData, completedWorkouts: initialCompletedWorkouts = []} =
+  const {exerciseData, completedWorkouts: initialCompletedWorkouts = [],currentDayNumber ,challenge} =
     route.params;
   // console.log(exerciseData);
   const {customerId}=useContext(LoginContext);
@@ -197,9 +197,9 @@ const GymWorkoutStart = () => {
   const completed_date = new Date().toISOString().slice(0, 10);
   // console.log(completed_date);
   const customer_id = customerId;
-  const day_number = 1;
-  const challenge_excercise_id = 8 ;
-  // const workout_id = currentWorkout.workout_id;
+  const day_number = currentDayNumber;
+  const challenge_id = challenge.id ;
+  // const challenge_excercise_id = currentWorkout.workout_id;
   const excercise_id = currentWorkout.excercise_id;
   // const home_workout_excercise = currentWorkout.id;
 
@@ -211,8 +211,9 @@ const GymWorkoutStart = () => {
         {
           customer_id,
           day_number,
-          challenge_excercise_id,
+          challenge_id,
           excercise_id,
+
           
         }
        

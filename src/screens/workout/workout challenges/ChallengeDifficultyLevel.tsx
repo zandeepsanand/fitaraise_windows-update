@@ -35,7 +35,7 @@ const ChallengeDifficultyLevel = ({
     setDifficulty(option);
     const updatedFormData = {
       ...workoutData,
-      workout_level: option,
+      workout_challenge_level: option,
     };
 
     navigation.setParams({workoutData: updatedFormData});
@@ -187,7 +187,7 @@ const ChallengeDifficultyLevel = ({
             onPress={() => {
               // handleProducts(4);
               // navigation.navigate('HomeWorkoutMain');
-              if (workoutData.workout_level) {
+              if (workoutData.workout_challenge_level) {
                 navigation.navigate('ChallengeMonth', {workoutData});
               } else {
                 alert('please select your fitness level');
