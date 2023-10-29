@@ -17,10 +17,10 @@ import {useData, useTheme, useTranslation} from '../../../hooks';
 const isAndroid = Platform.OS === 'android';
 
 const ChallengeDayAll = ({route}) => {
-  const {responseData, completedWorkouts = [],currentDayNumber,challenge} = route.params;
+  const {responseData, completedWorkouts = [],currentDayNumber,challenge,dayWithId} = route.params;
   // const [exerciseData, setExerciseData] = useState([]);
 
-  console.log(responseData, 'time fgdfgdfgd');
+  console.log(responseData, 'workouts all');
 
   const [tab, setTab] = useState<number>(0);
 
@@ -188,7 +188,9 @@ const ChallengeDayAll = ({route}) => {
                   shadowOpacity: 0.5,
                   shadowRadius: 5,
                   elevation: 5,
-                }}>
+                }}
+                color={day.customer_completed ? '#92A3FD' : 'white'}
+                >
                 <Image
                   width={75}
                   height={75}
@@ -241,7 +243,7 @@ const ChallengeDayAll = ({route}) => {
                   exerciseData: responseData,
                   completedWorkouts: completedWorkouts,
                   currentDayNumber,
-                  challenge
+                  challenge,dayWithId
                 }
               );
             }}>

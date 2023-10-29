@@ -27,7 +27,7 @@ const ChallengeMain = ({navigation, route}) => {
   } = route.params;
 
   console.log(challenge, 'saved workouts');
-
+const month = challenge
   // console.log(savedDate, 'haiii');
 
   const [tab, setTab] = useState<number>(0);
@@ -55,7 +55,7 @@ const ChallengeMain = ({navigation, route}) => {
        
 
         const response = await api.get(
-          `get_workout_challenge_days/${challenge.id}`,
+          `get_workout_challenge_days/${month.id}`,
           
         );
 
@@ -115,7 +115,8 @@ const ChallengeMain = ({navigation, route}) => {
           responseData,
           completedWorkouts,
           currentDayNumber,
-          challenge
+          dayWithId:data,
+          challenge,
         });
       }
 
@@ -196,9 +197,10 @@ const ChallengeMain = ({navigation, route}) => {
           minHeight: 60,
           backgroundColor: day.completed ? '#c7fce6' : 'transparent',
         }}
+        // color={day.completed ? '#c7fce6' : 'green'}
         margin={10}>
         <Text center bold>
-          {day.day}
+        {day.day}
         </Text>
       </Block>
     ));

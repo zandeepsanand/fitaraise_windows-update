@@ -42,9 +42,9 @@ function PopupPage() {
 }
 const GymWorkoutStart = () => {
   const route = useRoute();
-  const {exerciseData, completedWorkouts: initialCompletedWorkouts = [],currentDayNumber ,challenge} =
+  const {exerciseData, completedWorkouts: initialCompletedWorkouts = [],currentDayNumber ,challenge ,dayWithId} =
     route.params;
-  // console.log(exerciseData);
+  console.log(challenge , "challenge workout all start");
   const {customerId}=useContext(LoginContext);
 
 
@@ -197,9 +197,12 @@ const GymWorkoutStart = () => {
   const completed_date = new Date().toISOString().slice(0, 10);
   // console.log(completed_date);
   const customer_id = customerId;
-  const day_number = currentDayNumber;
+  const day = currentDayNumber;
   const challenge_id = challenge.id ;
-  // const challenge_excercise_id = currentWorkout.workout_id;
+  // const selectedItem = dayWithId.find(item => item.day_number === currentDayNumber);
+  const challenge_excercise_id = currentWorkout.id;
+  console.log(challenge_excercise_id , "challenge exercisee id");
+  
   const excercise_id = currentWorkout.excercise_id;
   // const home_workout_excercise = currentWorkout.id;
 
@@ -210,16 +213,17 @@ const GymWorkoutStart = () => {
         `update_workout_challenge_excercise`,
         {
           customer_id,
-          day_number,
+          day,
           challenge_id,
           excercise_id,
+          challenge_excercise_id
 
           
         }
        
       )
       .then((response) => {
-        console.log(response.data);
+        console.log(response.data , "save to db ");
         if (response.data.success) {
          
           
@@ -313,8 +317,8 @@ const GymWorkoutStart = () => {
                       if (isLastWorkout) {
                         handleFinish(currentWorkout);
                         navigation.navigate('GymCongratsPage', {
-                          savedDate,
-                          completedWorkouts,
+                          // savedDate,
+                          // completedWorkouts,
                         }); // Replace 'YourNewPage' with the actual page name
                       }
                     }}>
