@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {
   Platform,
   Linking,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
   StyleSheet,
   View,
   Dimensions,
@@ -60,12 +60,9 @@ const ChallengeCongratsPage = ({route}) => {
           </View>
 
           <View style={styles.section2}>
-            <TouchableOpacity
+            <TouchableWithoutFeedback
               onPress={() => {
-                navigation.navigate('GymTabNavigator', {
-                  screen: 'GymWorkoutMain', // Screen name within the TabNavigator
-                  params: {savedDate, completedWorkouts}, // Pass your parameters here
-                });
+                navigation.navigate('ChallengeMain', {workoutData});
               }}>
               <Block style={styles.stickyButton} center justify="center" row>
                 <Text style={styles.buttonText} bold paddingRight={10}>
@@ -74,7 +71,7 @@ const ChallengeCongratsPage = ({route}) => {
                 <Image
                   source={require('../../../assets/icons/tick1.png')}></Image>
               </Block>
-            </TouchableOpacity>
+            </TouchableWithoutFeedback>
           </View>
         </View>
       </Block>

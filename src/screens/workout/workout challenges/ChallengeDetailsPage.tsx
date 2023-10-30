@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {Block, Button, Image, Text} from '../../../components';
@@ -7,7 +8,7 @@ import axios from 'axios';
 import {BASE_URL} from '@env';
 
 const ChallengeDetailsPage = ({workout, timeLeft ,formattedTime}) => {
-  console.log(formattedTime , "TESTING");
+  console.log(workout , "TESTING");
   
   const completed_date = new Date().toISOString().slice(0, 10);
   // console.log(completed_date);
@@ -76,37 +77,47 @@ const ChallengeDetailsPage = ({workout, timeLeft ,formattedTime}) => {
                 {t('profile.title')}
               </Text> */}
         </Button>
-        <Text center h4 bold margin={sizes.sm} marginTop={sizes.s}>
+        <Block>
+        <Text center h4 bold
+         marginLeft={-sizes.m}
+          marginTop={sizes.s}>
           {workout.excercise_name}
         </Text>
+        </Block>
+       
       </Block>
+      <Block padding={10}><Text center size={15} bold>{workout.excercise_times}</Text></Block>
 
       <Image
         background
         resizeMode="cover"
         padding={sizes.sm}
         paddingBottom={sizes.l}
-        height={350}
+        height={390}
         radius={30}
         source={{
-          uri: `${workout.image}`,
+          uri: `${workout.excercise_image}`,
         }}></Image>
       <View
         style={{
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
-          paddingTop: 30,
+          // paddingTop: 30,
         }}>
         {workout.time_or_sets === 'time' ? (
           <>
-            <Text padding={10} paddingTop={40} bold size={30}>
+            <Text padding={10}
+            //  paddingTop={40} 
+             bold size={30}>
              {formattedTime}
             </Text>
           </>
         ) : (
-          <Text padding={10} paddingTop={40} bold size={30}>
-            {workout.sets} X {workout.reps}
+          <Text padding={10}
+          //  paddingTop={40}
+           bold size={30}>
+            {/* {workout.sets} X {workout.reps} */}
           </Text>
         )}
       </View>

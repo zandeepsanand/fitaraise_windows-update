@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {useData, useTheme, useTranslation} from '../../../hooks';
 import {Block, Button, Image, Input, Product, Text} from '../../../components';
 import {StatusBar as ExpoStatusBar} from 'expo-status-bar';
@@ -15,6 +15,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 import axios from 'axios';
 import {BASE_URL} from '@env';
 import api from '../../../../api';
+import LoginContext from '../../../hooks/LoginContext';
 
 const ChallengeMain = ({navigation, route}) => {
   const {t} = useTranslation();
@@ -25,7 +26,7 @@ const ChallengeMain = ({navigation, route}) => {
     workoutData,
     challenge,
   } = route.params;
-
+const {customerId}=useContext(LoginContext);
   console.log(challenge, 'saved workouts');
 const month = challenge
   // console.log(savedDate, 'haiii');
@@ -75,6 +76,69 @@ const month = challenge
 
     fetchData();
   }, [challenge]);
+
+  const handleLevelChange = async (level) => {
+    setSelectedLevel(level);
+    if (['Home Workout', 'Gym Workout', '90 day challenge'].includes(level)) {
+      if (level === 'Home Workout') {
+        console.log('clicked');
+        
+        const userData = await api.get(`get_personal_datas/${customerId}`);
+        const user = userData.data.data;
+        console.log(user, "user data home workout loading");
+  
+        if (user.gender && user.home_workout_level) {
+          const homeWorkout = await api.get(
+            `get_home_workouts?gender=${user.gender}&level=${user.home_workout_level}`
+          );
+          const homeWorkoutJSON = homeWorkout.data.data;
+          console.log(homeWorkoutJSON);
+          if (homeWorkoutJSON) {
+            console.log(homeWorkoutJSON, "workout data home");
+            navigation.navigate('HomeTabNavigator', {
+              screen: 'HomeWorkoutMain',
+              params: { homeWorkout: homeWorkoutJSON, workoutData: user },
+            });
+          } 
+        } else {
+          console.log('workout page');
+          navigation.navigate('Gender', {
+            workoutData: formDataCopy,
+          });
+        }
+      } else if (level === 'Gym Workout') {
+        try {
+          const userData = await api.get(`get_personal_datas/${customerId}`);
+          const user = userData.data.data;
+          console.log(user, "user data home workout loading");
+  
+          if (user.gender && user.gym_workout_level) {
+            const gymWorkout = await api.get(
+              `get_gym_workouts?gender=${user.gender}&level=${user.gym_workout_level}`
+            );
+            const gymWorkoutJSON = gymWorkout.data.data;
+            console.log(gymWorkoutJSON);
+  
+            if (gymWorkoutJSON) {
+              console.log(gymWorkoutJSON, "workout data gym");
+              navigation.navigate('GymTabNavigator', {
+                screen: 'GymWorkoutMain',
+                params: { data: gymWorkoutJSON, formDataCopy: user },
+              });
+            }
+          } else {
+            console.log('workout page');
+            navigation.navigate('GymGenderPage', {
+              workoutData: user,
+            });
+          }
+        } catch (error) {
+          console.error('Error in handleLevelChange:', error);
+        }
+      }
+    }
+  };
+  
   // if (loading) {
   //   return (
   //     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -91,58 +155,61 @@ const month = challenge
   //   );
   // }
   // console.log(data.day_number, "days");
+  const [isCurrentDayCompleted, setIsCurrentDayCompleted] = useState(false);
 
-  const clickStart = async (currentDayNumber) => {
+  const clickStart = async () => {
     try {
       if (!challenge.id) {
         throw new Error('Please enter all details');
       }
-
-
-      const response = await api.get(
-        `get_workout_challenge_excercise/${challenge.id}/${currentDayNumber}`,
-       
-      );
-
-      const responseData = response.data.data;
-      console.log(responseData, 'day 1');
-
-      setTodayWorkout(responseData);
-      if (responseData === null) {
-        throw new Error('Turn on the network and retry');
-      } else {
-        navigation.navigate('ChallengeDayAll', {
-          responseData,
-          completedWorkouts,
-          currentDayNumber,
-          dayWithId:data,
-          challenge,
-        });
+      if (isCurrentDayCompleted) {
+        // Display an alert to inform the user that they've already completed today's workout
+        alert('You have already completed today\'s workout');
+        return;
       }
-
-      // Check if the next day is completed or not
-      const nextDayNumber = currentDayNumber + 1;
-      const nextDayIndex = nextDayNumber - 1; // Array index starts from 0
-
-      if (nextDayIndex < data.length) {
-        const nextDay = data[nextDayIndex];
-        if (nextDay.completed) {
-          // The next day is completed, load the workout for the day after it
-          const dayAfterNextDayNumber = currentDayNumber + 2;
-          // Load the workout for the day after the completed day
-          await loadWorkout(dayAfterNextDayNumber);
-        } else {
-          // The next day is not completed, load the workout for it
-          await loadWorkout(nextDayNumber);
+  
+      // Fetch the days data
+      const daysResponse = await api.get(`get_workout_challenge_days/${month.id}`);
+      const daysData = daysResponse.data.data;
+      console.log(daysData, "days data");
+      
+  
+      if (daysData.length === 0) {
+        throw new Error('No days data available');
+      }
+  
+      // Determine the current day number based on completion status
+      let currentDayNumber = 1;
+      for (const day of daysData) {
+        if (!day.completed) {
+          break; // The first incomplete day becomes the current day
         }
-      } else {
-        // All days are completed, handle as needed
-        // For example, display a message that all workouts are completed
+        currentDayNumber++;
       }
+  
+      if (currentDayNumber > daysData.length) {
+        throw new Error('All days are completed');
+      }
+  
+      // Fetch the workout data for the determined current day
+      const workoutResponse = await api.get(`get_workout_challenge_excercise/${challenge.id}/${currentDayNumber}`);
+      const responseData = workoutResponse.data.data;
+      console.log(responseData, `day ${currentDayNumber}`);
+  
+      setTodayWorkout(responseData);
+  
+      navigation.navigate('ChallengeDayAll', {
+        responseData,
+        completedWorkouts,
+        currentDayNumber,
+        dayWithId: daysData,
+        challenge,
+      });
     } catch (err) {
       setError(err.message);
     }
   };
+  
 
   const handleProducts = useCallback(
     (tab: number) => {
@@ -242,7 +309,7 @@ const month = challenge
           <TouchableWithoutFeedback
             onPress={() => {
               const firstDayOfCurrentWeek = week * 7 + 1; // Calculate day_number for the first day of the current week
-              clickStart(firstDayOfCurrentWeek);
+              clickStart();
             }}>
             <Block
               style={styles.mainCardView1}
@@ -312,7 +379,7 @@ const month = challenge
                   data={['Home Workout', 'Gym Workout', '90 day challenge']} // Provide your options here
                   // defaultButtonText={formDataCopy.workout_level}
                   defaultButtonText={'Select an option'}
-                  // onSelect={handleLevelChange}
+                  onSelect={handleLevelChange}
                 />
               </Block>
             </Block>

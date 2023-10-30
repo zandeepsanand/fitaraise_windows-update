@@ -90,6 +90,8 @@ import HomeWorkoutLoadingScreen from '../screens/workout/home workout/HomeWorkou
 import NameLastName from './NameLastName';
 import { AuthProvider } from '../hooks/AuthData';
 import GymWorkoutLoadingScreen from '../screens/workout/gym workout/GymWorkoutLoadingScreen';
+import ChallengeCongratsPage from '../screens/workout/workout challenges/ChallengeCongratsPage';
+import FirstPageCountrySelect from './FirstPageCountrySelect';
 
 
 // Keep the splash screen visible while we fetch resources
@@ -153,8 +155,12 @@ export default () => {
       <TranslationProvider>
         <ThemeProvider theme={theme} setTheme={setTheme}>
           <NavigationContainer theme={navigationTheme}>
-            <Stack.Navigator initialRouteName="Loading">
-          
+            <Stack.Navigator initialRouteName="FirstPageCountrySelect">
+            <Stack.Screen
+                name="FirstPageCountrySelect"
+                component={FirstPageCountrySelect}
+                options={{headerShown: false}}
+              />
             <Stack.Screen name="Menu" component={Menu} options={{ headerShown: false }} />
             <Stack.Screen
                 name="NameLastName"
@@ -594,6 +600,15 @@ export default () => {
               <Stack.Screen
                 name="GymCongratsPage"
                 component={GymCongratsPage}
+                options={{
+                  // title: 'Height And Weight',
+                  headerBackTitle: 'Back',
+                  headerShown: false,
+                }}
+              />
+                <Stack.Screen
+                name="ChallengeCongratsPage"
+                component={ChallengeCongratsPage}
                 options={{
                   // title: 'Height And Weight',
                   headerBackTitle: 'Back',

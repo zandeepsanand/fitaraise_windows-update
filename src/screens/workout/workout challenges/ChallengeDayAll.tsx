@@ -133,6 +133,9 @@ const ChallengeDayAll = ({route}) => {
                 {t('profile.title')}
               </Text> */}
             </Button>
+            <Image>
+              
+            </Image>
             <Block
               flex={0}
               align="center"
@@ -145,16 +148,16 @@ const ChallengeDayAll = ({route}) => {
                 alignSelf: 'center',
               }}>
               <Text h5 center white bold>
-                {/* {workout.name} */} hi
+                {/* {workout.name} */} Body Part Name
               </Text>
               {tab ? (
                 <>
-                  <Text white>{exerciseRecommended.length} Workouts</Text>
+                  <Text white>Minutes</Text>
                 </>
               ) : (
                 <Text p center white>
                   {/* {workout.total_minutes}  */}
-                  Minutes
+                  {responseData.length} Workouts
                 </Text>
               )}
             </Block>
@@ -162,10 +165,10 @@ const ChallengeDayAll = ({route}) => {
         </Block>
         <Block card>
           <Text paddingLeft={20} bold>
-            Day 1
+            Day {currentDayNumber}
           </Text>
           <Text center bold marginBottom={10}>
-            EXCERCISE 1 - Legs
+            {/* EXCERCISE 1 - Legs */}
           </Text>
           {responseData.map((day) => (
             <TouchableWithoutFeedback

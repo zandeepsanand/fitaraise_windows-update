@@ -238,7 +238,7 @@ const LoginScreenNew = ({navigation, route}) => {
   }, [registration, setIsValid]);
   return (
     <Block safe marginTop={sizes.xl} style={{backgroundColor: '#ffff'}}>
-      <Block scrollEnabled>
+      <Block scrollEnabled flex={1}>
         <Block flex={0} height={250}>
           <Image
             source={require('../assets/icons/fitaraise.png')}

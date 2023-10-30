@@ -8,6 +8,7 @@ import React, {
     useLayoutEffect,
     useEffect,
     useRef,
+    useContext,
   } from 'react';
   import axios from 'axios';
 import {BASE_URL} from '@env';
@@ -29,12 +30,14 @@ import {BASE_URL} from '@env';
   import {useNavigation} from '@react-navigation/core';
   import {useHeaderHeight} from '@react-navigation/stack';
 import api from '../../api';
+import LoginContext from '../hooks/LoginContext';
   
   export default function AnimationPage({navigation, route}) {
     const {assets, fonts, sizes, gradients, colors} = useTheme();
     const {data,formDataCopy} = route.params;
      const [dietPlan, setDietPlan] = useState('');
      console.log(formDataCopy.customer_id);
+     const {customerId}=useContext(LoginContext)
      
 
 

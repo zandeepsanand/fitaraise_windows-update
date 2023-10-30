@@ -297,8 +297,12 @@ const GymWorkoutStart = () => {
               data={exerciseData}
             /> */}
           </View>
-          <Block center paddingTop={20}>
-            <View style={{flex: 1}}>
+          <Block center 
+          paddingTop={20}
+          >
+            <View
+             style={{flex: 1}}
+            >
               <GymWorkoutDetailsPage
                 workout={currentWorkout}
                 timeLeft={timeLeft}
@@ -306,7 +310,9 @@ const GymWorkoutStart = () => {
               />
 
               {currentWorkout.time_or_sets === 'sets' ? (
-                <Block centerContent paddingTop={50}>
+                <Block centerContent 
+                // paddingTop={50}
+                >
                   <Button
                     tertiary
                     width={100}
@@ -316,7 +322,7 @@ const GymWorkoutStart = () => {
                       handleFinish(currentWorkout);
                       if (isLastWorkout) {
                         handleFinish(currentWorkout);
-                        navigation.navigate('GymCongratsPage', {
+                        navigation.navigate('ChallengeCongratsPage', {
                           // savedDate,
                           // completedWorkouts,
                         }); // Replace 'YourNewPage' with the actual page name
