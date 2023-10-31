@@ -231,27 +231,38 @@ const Cards = ({route, navigation}) => {
   };
   
   const handleInputChangeInches = (text) => {
-    const numericValue = text.replace(/[^0-9]/g, '');
-    if (numericValue <= 9) {
+    // Remove any non-numeric characters and allow decimal points from the input
+    const numericValue = text.replace(/[^0-9.]/g, '');
+  
+    if (!isNaN(numericValue) && numericValue <= 12) {
       setInputValueInch(numericValue);
+  
+      // Calculate the height in feet and inches as a decimal number
+      const heightInFeet = parseFloat(formData.feet);
+      const heightInInches = parseFloat(numericValue);
+      const updatedHeight = (heightInFeet + heightInInches / 12).toFixed(2);
+  
       const updatedFormData = {
         ...formData,
-        feet: formData.feet, // Preserve the existing feet value
         inches: numericValue,
-        height: formData.feet + '.' + numericValue, // Combine feet and inches
+        height: updatedHeight,
         height_unit: 'ft',
       };
       navigation.setParams({ formData: updatedFormData });
       console.log(updatedFormData, 'height unit check');
+    } else {
+      // Handle when the input exceeds the maximum limit or is not a valid number
+      console.log('Invalid or out of range height input');
     }
   };
+  
   const handleInputChangeCm = (text) => {
-    // Remove any non-numeric characters from the input
-    const numericValue = text.replace(/[^0-9]/g, '');
+    // Remove any non-numeric characters and allow decimal points from the input
+    const numericValue = text.replace(/[^0-9.]/g, '');
   
     // Limit the value to a maximum of 220 cm
     const maxCmValue = 220;
-    if (numericValue <= maxCmValue) {
+    if (!isNaN(numericValue) && parseFloat(numericValue) <= maxCmValue) {
       setInputValueCm(numericValue);
       const updatedFormData = {
         ...formData,
@@ -261,19 +272,21 @@ const Cards = ({route, navigation}) => {
         height_unit: 'cm',
       };
       console.log(updatedFormData, 'height unit check');
-      navigation.setParams({formData: updatedFormData});
+      navigation.setParams({ formData: updatedFormData });
     } else {
-      // Handle when the input exceeds the maximum value, e.g., show an error message.
+      // Handle when the input exceeds the maximum value or is not a valid number
+      console.log('Invalid or out of range height input');
     }
   };
+  
   const MAX_POUNDS_LIMIT = 1000; // Set the maximum limit in pounds
 
   const handleInputChangeLbs = (text) => {
-    // Remove any non-numeric characters from the input
-    const numericValue = text.replace(/[^0-9]/g, '');
+    // Remove any non-numeric characters and allow decimal points from the input
+    const numericValue = text.replace(/[^0-9.]/g, '');
   
     // Limit the value to the maximum pounds limit
-    if (numericValue <= MAX_POUNDS_LIMIT) {
+    if (!isNaN(numericValue) && parseFloat(numericValue) <= MAX_POUNDS_LIMIT) {
       setInputValueLbs(numericValue);
       const updatedFormData = {
         ...formData,
@@ -281,37 +294,42 @@ const Cards = ({route, navigation}) => {
         weight_unit: 'lbs',
       };
       console.log(updatedFormData, 'weight unit check');
-      navigation.setParams({formData: updatedFormData});
+      navigation.setParams({ formData: updatedFormData });
     } else {
-      // Handle when the input exceeds the maximum limit, e.g., show an error message.
+      // Handle when the input exceeds the maximum limit or is not a valid number
+      console.log('Invalid or out of range weight input');
     }
   };
   const MAX_KG_LIMIT = 500; // Set the maximum limit in kilograms
 
   const handleInputChangeKg = (text) => {
-    // Remove any non-numeric characters from the input
-    const numericValue = text.replace(/[^0-9]/g, '');
+    // Remove any non-numeric characters and allow decimal points from the input
+    const numericValue = text.replace(/[^0-9.]/g, '');
   
     // Limit the value to the maximum kilograms limit
-    if (numericValue <= MAX_KG_LIMIT) {
+    if (!isNaN(numericValue) && parseFloat(numericValue) <= MAX_KG_LIMIT) {
       setInputValueKg(numericValue);
+      
       const updatedFormData = {
         ...formData,
         weight: numericValue,
         weight_unit: 'kg',
       };
       console.log(updatedFormData, 'weight unit check');
-      navigation.setParams({formData: updatedFormData});
+      navigation.setParams({ formData: updatedFormData });
     } else {
-      // Handle when the input exceeds the maximum limit, e.g., show an error message.
+      // Handle when the input exceeds the maximum limit or is not a valid number
+      console.log('Invalid or out of range weight input');
     }
   };
+  
 
  const handlePrimaryPress = () => {
   setIsKg(true);
   setInputValueKg(''); // Clear the kg input field
   const updatedFormData = {
     ...formData,
+    weight:'',
     weight_unit: 'kg',
   };
   navigation.setParams({ formData: updatedFormData });
@@ -322,6 +340,7 @@ const handleSecondaryPress = () => {
   setInputValueLbs(''); // Clear the lbs input field
   const updatedFormData = {
     ...formData,
+    weight:'',
     weight_unit: 'lbs',
   };
   navigation.setParams({ formData: updatedFormData });
@@ -409,8 +428,11 @@ async function checkPage() {
     formData.acitivity_level
   ) {
     // Create a copy of the formData object
-    const formDataCopy = { ...formData };
+    const formDataCopy = Object.fromEntries(
+      Object.entries(formData).filter(([key, value]) => value !== null)
+    );
     console.log(formDataCopy, 'form data');
+
 
     try {
       const response = await api.post('set_personal_datas', formDataCopy);
@@ -586,7 +608,7 @@ async function checkPage() {
                     setInputValueInch('');
                     const updatedFormData = {
                       ...formData,
-
+                      height:'',
                       height_unit: 'cm',
                     };
                     navigation.setParams({formData: updatedFormData});
@@ -598,7 +620,7 @@ async function checkPage() {
                     setInputValueCm('');
                     const updatedFormData = {
                       ...formData,
-
+                      height:'',
                       height_unit: 'ft',
                     };
                     navigation.setParams({formData: updatedFormData});
