@@ -155,7 +155,7 @@ export default () => {
       <TranslationProvider>
         <ThemeProvider theme={theme} setTheme={setTheme}>
           <NavigationContainer theme={navigationTheme}>
-            <Stack.Navigator initialRouteName="FirstPageCountrySelect">
+            <Stack.Navigator initialRouteName="Loading">
             <Stack.Screen
                 name="FirstPageCountrySelect"
                 component={FirstPageCountrySelect}

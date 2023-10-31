@@ -116,24 +116,24 @@ const LoadingScreen = () => {
                 ],
               });
             } else {
-              // Reset the navigation stack and navigate to 'loginNew'
+              // Reset the navigation stack and navigate to 'FirstPageCountrySelect'
               navigation.reset({
                 index: 0,
-                routes: [{name: 'loginNew'}],
+                routes: [{name: 'FirstPageCountrySelect'}],
               });
             }
           } else {
-            // No authToken, navigate to 'loginNew'
+            // No authToken, navigate to 'FirstPageCountrySelect'
             navigation.reset({
               index: 0,
-              routes: [{name: 'loginNew'}],
+              routes: [{name: 'FirstPageCountrySelect'}],
             });
           }
         } else {
-          // authData JSON doesn't exist, navigate to 'loginNew'
+          // authData JSON doesn't exist, navigate to 'FirstPageCountrySelect'
           navigation.reset({
             index: 0,
-            routes: [{name: 'loginNew'}],
+            routes: [{name: 'FirstPageCountrySelect'}],
           });
         }
         setIsLoading(false);
@@ -142,7 +142,7 @@ const LoadingScreen = () => {
         setIsLoading(false);
         navigation.reset({
           index: 0,
-          routes: [{name: 'loginNew'}],
+          routes: [{name: 'FirstPageCountrySelect'}],
         });
       }
     };

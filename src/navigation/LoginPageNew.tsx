@@ -48,6 +48,9 @@ interface IRegistrationValidation {
 }
 
 const LoginScreenNew = ({navigation, route}) => {
+  const {country} = route.params;
+  console.log(country);
+
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [email, setEmail] = useState('');
   const [lastName, setLastName] = useState('');
@@ -60,7 +63,7 @@ const LoginScreenNew = ({navigation, route}) => {
   const [formShow, setFormShow] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
-  8606783324;
+
   const [isLoading, setIsLoading] = useState(false);
   const blockRef = useRef(null);
   const handleWebLink = useCallback((url) => Linking.openURL(url), []);
@@ -351,30 +354,29 @@ const LoginScreenNew = ({navigation, route}) => {
                             Login
                           </Text>
                         </Button>
-                      
+
                         <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      marginBottom: 30,
-                    }}>
-                    <Text>Forget password ?</Text>
-                    <TouchableOpacity
-                        onPress={() =>
-                          handleWebLink(
-                            'https://admin.fitaraise.com/password/reset',
-                          )
-                        }
-                      >
-                      <Text
-                       info
-                        bold
-                        style={{color: 'green', fontWeight: '700'}}>
-                        {' '}
-                        Reset
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            marginBottom: 30,
+                          }}>
+                          <Text>Forget password ?</Text>
+                          <TouchableOpacity
+                            onPress={() =>
+                              handleWebLink(
+                                'https://admin.fitaraise.com/password/reset',
+                              )
+                            }>
+                            <Text
+                              info
+                              bold
+                              style={{color: 'green', fontWeight: '700'}}>
+                              {' '}
+                              Reset
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
                       </Block>
 
                       <Block
@@ -452,7 +454,7 @@ const LoginScreenNew = ({navigation, route}) => {
                               color={colors.icon}
                             />
                           </Button>
-                          <Button
+                          {/* <Button
                             outlined
                             gray
                             shadow={!isAndroid}
@@ -471,7 +473,7 @@ const LoginScreenNew = ({navigation, route}) => {
                               width={sizes.m}
                               color={colors.icon}
                             />
-                          </Button>
+                          </Button> */}
                         </Block>
                       </Block>
                     </>
@@ -604,7 +606,7 @@ const LoginScreenNew = ({navigation, route}) => {
                               color={colors.icon}
                             />
                           </Button>
-                          <Button
+                          {/* <Button
                             outlined
                             gray
                             shadow={!isAndroid}
@@ -623,7 +625,7 @@ const LoginScreenNew = ({navigation, route}) => {
                               width={sizes.m}
                               color={colors.icon}
                             />
-                          </Button>
+                          </Button> */}
                         </Block>
                       </Block>
                     </>
@@ -650,98 +652,103 @@ const LoginScreenNew = ({navigation, route}) => {
                 </>
               ) : (
                 <>
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      setFormShow(true);
-                      setPhoneShow(false);
-                      setEmailShow(true);
-                    }}>
-                    <Block
-                      card
-                      padding={10}
-                      margin={10}
-                      flex={0}
-                      height={100}
-                      color={'lightgreen'}
-                      marginTop={20}>
-                      <Block row height={85} center>
-                        <Block
-                          flex={0}
-                          center
-                          width={60}
-                          height={60}
-                          radius={50}
-                          color={'#f0f0f8'}
-                          paddingLeft={18}
-                          marginTop={10}>
-                          <Image
-                            color={'green'}
-                            width={25}
-                            height={25}
-                            source={require('../assets/icons/fone.png')}></Image>
-                        </Block>
-                        <Block flex={1} center>
-                          <Block flex={0} center>
-                            <Text p semibold center white>
-                              Login With Mobile Number
-                            </Text>
-                            {/* <Text semibold secondary opacity={0.5} paddingTop={5} size={12}>
+                  {country === 'IN' ? (
+                    <TouchableWithoutFeedback
+                      onPress={() => {
+                        setFormShow(true);
+                        setPhoneShow(false);
+                        setEmailShow(true);
+                      }}>
+                      <Block
+                        card
+                        padding={10}
+                        margin={10}
+                        flex={0}
+                        height={100}
+                        color={'lightgreen'}
+                        marginTop={20}>
+                        <Block row height={85} center>
+                          <Block
+                            flex={0}
+                            center
+                            width={60}
+                            height={60}
+                            radius={50}
+                            color={'#f0f0f8'}
+                            paddingLeft={18}
+                            marginTop={10}>
+                            <Image
+                              color={'green'}
+                              width={25}
+                              height={25}
+                              source={require('../assets/icons/fone.png')}></Image>
+                          </Block>
+                          <Block flex={1} center>
+                            <Block flex={0} center>
+                              <Text p semibold center white>
+                                Login With Mobile Number
+                              </Text>
+                              {/* <Text semibold secondary opacity={0.5} paddingTop={5} size={12}>
                     Share to your friends
                   </Text> */}
+                            </Block>
                           </Block>
+                          <Block flex={0} center paddingRight={10}></Block>
                         </Block>
-                        <Block flex={0} center paddingRight={10}></Block>
                       </Block>
-                    </Block>
-                  </TouchableWithoutFeedback>
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      setFormShow(true);
-                      setPhoneShow(true);
-                      setEmailShow(false);
-                    }}>
-                    <Block
-                      card
-                      color={'lightgreen'}
-                      padding={10}
-                      margin={10}
-                      flex={0}
-                      height={100}>
-                      <Block row height={85} center>
-                        <Block
-                          flex={0}
-                          center
-                          width={60}
-                          height={60}
-                          radius={50}
-                          color={'#f0f0f8'}
-                          paddingLeft={18}
-                          marginTop={10}>
-                          <Image
-                            color={'green'}
-                            width={25}
-                            height={25}
-                            source={require('../assets/icons/mail.png')}></Image>
-                        </Block>
-                        <Block flex={1} center>
-                          <Block flex={0} center>
-                            <Text p semibold center white>
-                              Login With Email
-                            </Text>
-                            {/* <Text semibold secondary opacity={0.5} paddingTop={5} size={12}>
-                    Share to your friends
-                  </Text> */}
+                    </TouchableWithoutFeedback>
+                  ) : (
+                    <TouchableWithoutFeedback
+                      onPress={() => {
+                        setFormShow(true);
+                        setPhoneShow(true);
+                        setEmailShow(false);
+                      }}>
+                      <Block
+                        card
+                        color={'lightgreen'}
+                        padding={10}
+                        margin={10}
+                        flex={0}
+                        height={100}>
+                        <Block row height={85} center>
+                          <Block
+                            flex={0}
+                            center
+                            width={60}
+                            height={60}
+                            radius={50}
+                            color={'#f0f0f8'}
+                            paddingLeft={18}
+                            marginTop={10}>
+                            <Image
+                              color={'green'}
+                              width={25}
+                              height={25}
+                              source={require('../assets/icons/mail.png')}></Image>
                           </Block>
+                          <Block flex={1} center>
+                            <Block flex={0} center>
+                              <Text p semibold center white>
+                                Login With Email
+                              </Text>
+                              {/* <Text semibold secondary opacity={0.5} paddingTop={5} size={12}>
+Share to your friends
+</Text> */}
+                            </Block>
+                          </Block>
+                          <Block flex={0} center paddingRight={10}></Block>
                         </Block>
-                        <Block flex={0} center paddingRight={10}></Block>
                       </Block>
-                    </Block>
-                  </TouchableWithoutFeedback>
+                    </TouchableWithoutFeedback>
+                  )}
+
                   <Block
                     row
                     flex={0}
                     align="center"
                     justify="center"
+                    marginTop={sizes.sm}
                     marginBottom={sizes.sm}
                     paddingHorizontal={sizes.xxl}>
                     <Block
@@ -813,7 +820,11 @@ const LoginScreenNew = ({navigation, route}) => {
                     }}>
                     <Text>New to the app?</Text>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate('country')}>
+                      onPress={() =>
+                        navigation.navigate('login', {country})
+                        }
+                      
+                      >
                       <Text
                         primary
                         bold

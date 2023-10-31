@@ -4,16 +4,14 @@ import RNPickerSelect from 'react-native-picker-select';
 import api, {setAuthToken} from '../../api';
 import SelectDropdown from 'react-native-select-dropdown';
 
-import { View, Platform, Image, StyleSheet} from 'react-native';
+import {View, Platform, Image, StyleSheet} from 'react-native';
 import {Animated, Easing} from 'react-native';
 import Lottie from 'lottie-react-native';
-import {Text,Block, Button, Input} from '../components';
+import {Text, Block, Button, Input} from '../components';
 import {useTheme} from '../hooks';
 import {Picker} from '@react-native-picker/picker';
 
 const isAndroid = Platform.OS === 'android';
-
-
 
 const CountrySelect = ({navigation}) => {
   const {assets, colors, gradients, sizes} = useTheme();
@@ -27,7 +25,7 @@ const CountrySelect = ({navigation}) => {
         const response = await api.get('get_country_list');
         const countries = response.data.data;
         // console.log(countries);
-        
+
         setCountryList(countries);
       } catch (error) {
         console.error('Error fetching country list:', error);
@@ -45,10 +43,6 @@ const CountrySelect = ({navigation}) => {
   };
 
   console.log(selectedCountry);
-  
-
-
-
 
   const animationProgress = useRef(new Animated.Value(0));
 
@@ -66,10 +60,8 @@ const CountrySelect = ({navigation}) => {
       <Block scrollEnabled>
         <Block>
           <Image
-          resizeMode='cover'
+            resizeMode="cover"
             source={require('../assets/images/country.jpg')}
-
-       
             style={{alignSelf: 'flex-start', zIndex: 10}}
           />
           <Lottie
@@ -81,11 +73,10 @@ const CountrySelect = ({navigation}) => {
         </Block>
         <Block paddingHorizontal={sizes.sm}>
           <Block align="center" flex={0} center>
-       
-       <SelectDropdown
+            <SelectDropdown
               // defaultValue={selectedCountry}
-              defaultButtonText='Please Select country'
-              dropdownStyle={{ borderRadius: 20, height: 400, width: 350, }}
+              defaultButtonText="Please Select country"
+              dropdownStyle={{borderRadius: 20, height: 400, width: 350}}
               buttonStyle={{
                 // height: 400,
                 width: 350,
@@ -95,8 +86,7 @@ const CountrySelect = ({navigation}) => {
               }}
               data={countryList.map((country) => country.country_name)} // Use the list of country labels as data
               onSelect={(selectedItem, index) => {
-                handleCountryChange(index)
-
+                handleCountryChange(index);
               }} // Call handleCountryChange when a country is selected
             />
           </Block>
@@ -108,8 +98,10 @@ const CountrySelect = ({navigation}) => {
               marginVertical={sizes.s}
               marginHorizontal={sizes.sm}
               disabled={!selectedCountry}
-              onPress={() => navigation.navigate('login', {country: selectedCountry})}>
-              <Text bold h5 white >
+              onPress={() =>
+                navigation.navigate('login', {country: selectedCountry})
+              }>
+              <Text bold h5 white>
                 Next
               </Text>
             </Button>

@@ -3,7 +3,6 @@ import React, {useEffect, useRef, useState} from 'react';
 
 import api, {setAuthToken} from '../../api';
 
-
 import {View, Platform, StyleSheet, TextInput} from 'react-native';
 import {Animated, Easing} from 'react-native';
 
@@ -42,22 +41,22 @@ const FirstPageCountrySelect = ({navigation}) => {
   }, []);
 
   const handleSearch = (text) => {
+    setSelectedCountry(null);
     setSearchTerm(text);
     const filteredCountries = originalCountries.filter((country) =>
-      country.country_name.toLowerCase().includes(text.toLowerCase())
+      country.country_name.toLowerCase().includes(text.toLowerCase()),
     );
     setSearchResults(filteredCountries);
   };
   const handlePress = (country) => {
-console.log(country , "country data");
-setSelectedCountry(country);
-
-  }
+    console.log(country, 'country data');
+    setSelectedCountry(country);
+    setSearchTerm('');
+  };
 
   return (
     <Block safe marginTop={sizes.xl}>
       <Block scrollEnabled>
-   
         <Block card>
           <Block
             flex={0}
@@ -91,125 +90,134 @@ setSelectedCountry(country);
               />
             </View>
           </Block>
-          <Block
-            flex={1}
-            padding={10}
-            marginTop={20}
-            style={{position: 'relative'}}>
-              {selectedCountry?(
-             <Block
-             flex={0.1}
-             radius={sizes.sm}
-             shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
-             marginTop={sizes.m}
-             marginHorizontal={10}
-             card
-             color={'lightgreen'}
-             center>
-             <Block row align="center">
-               <Block flex={0}>
-                 {selectedCountry.image ===
-                 'https://admin.fitaraise.com/storage/uploads/app_images/no_image.png' ? (
-                   <Block
-                     style={{
-                       width: sizes.xl,
-                       height: sizes.xl,
-                       backgroundColor: '#fff',
-                       borderRadius: sizes.s,
-                       justifyContent: 'center',
-                       alignItems: 'center',
-                     }}
-                     marginLeft={sizes.s}>
-                     <Text
-                       style={{fontSize: 50, color: '#fff'}}
-                       bold
-                       white
-                       >
-                       {selectedCountry.country_name.charAt(0)}
-                     </Text>
-                   </Block>
-                 ) : (
-                   <Image
-                     source={{uri: `${selectedCountry.image_sm}`}}
-                     style={{
-                       width: 30,
-                       height: 30,
-                     }}
-                     marginLeft={sizes.s}
-                   />
-                 )}
-               </Block>
-               <Block flex={3} style={{alignSelf: 'center'}}>
-                 <Text p white semibold center padding={10}>
-                   {selectedCountry.country_name}
-                 </Text>
-               </Block>
-         
-             </Block>
-           </Block>
-              ):(
-               
-                <FlatList
+          <Block flex={1} padding={10} marginTop={20}>
+            {selectedCountry ? (
+              <>
+                <Block
+                  flex={0}
+                  height={70}
+                  radius={sizes.sm}
+                  shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
+                  marginTop={sizes.m}
+                  marginHorizontal={10}
+                  card
+                  color={'lightgreen'}
+                  center>
+                  <Block row align="center">
+                    <Block flex={0}>
+                      {selectedCountry.image_sm ===
+                      'https://admin.fitaraise.com/storage/uploads/app_images/no_image.png' ? (
+                        <Block
+                          style={{
+                            width: sizes.xl,
+                            height: sizes.xl,
+                            backgroundColor: '#fff',
+                            borderRadius: sizes.s,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                          marginLeft={sizes.s}>
+                          <Text
+                            style={{fontSize: 50, color: '#fff'}}
+                            bold
+                            white>
+                            {selectedCountry.country_name.charAt(0)}
+                          </Text>
+                        </Block>
+                      ) : (
+                        <Image
+                          source={{uri: `${selectedCountry.image_sm}`}}
+                          style={{
+                            width: 30,
+                            height: 30,
+                          }}
+                          marginLeft={sizes.s}
+                        />
+                      )}
+                    </Block>
+                    <Block flex={3} style={{alignSelf: 'center'}}>
+                      <Text p white semibold center padding={10}>
+                        {selectedCountry.country_name}
+                      </Text>
+                    </Block>
+                  </Block>
+                </Block>
+                <Block>
+                  
+                </Block>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end',
+                    marginBottom: 30,
+                    paddingRight: 10,
+                  }}>
+                  <TouchableWithoutFeedback onPress={()=>{
+                    const countryCode = selectedCountry.code;
+                    navigation.navigate('loginNew', {country: countryCode})
+                  }}>
+                    <Image source={assets.Button} />
+                  </TouchableWithoutFeedback>
+                </View>
+              </>
+            ) : (
+              <FlatList
                 data={searchResults}
                 keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                   <TouchableWithoutFeedback 
-                   onPress={() => handlePress(item)}
-                   >
-                     <Block
-                       flex={0}
-                       radius={sizes.sm}
-                       shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
-                       marginTop={sizes.m}
-                       marginHorizontal={10}
-                       card
-                       color="white"
-                       center>
-                       <Block row align="center">
-                         <Block flex={0}>
-                           {item.image ===
-                           'https://admin.fitaraise.com/storage/uploads/app_images/no_image.png' ? (
-                             <Block
-                               style={{
-                                 width: sizes.xl,
-                                 height: sizes.xl,
-                                 backgroundColor: '#fff',
-                                 borderRadius: sizes.s,
-                                 justifyContent: 'center',
-                                 alignItems: 'center',
-                               }}
-                               marginLeft={sizes.s}>
-                               <Text
-                                 style={{fontSize: 50, color: '#fff'}}
-                                 bold
-                                 primary>
-                                 {item.country_name.charAt(0)}
-                               </Text>
-                             </Block>
-                           ) : (
-                             <Image
-                               source={{uri: `${item.image_sm}`}}
-                               style={{
-                                 width: 30,
-                                 height: 30,
-                               }}
-                               marginLeft={sizes.s}
-                             />
-                           )}
-                         </Block>
-                         <Block flex={3} style={{alignSelf: 'center'}}>
-                           <Text p black semibold center padding={10}>
-                             {item.country_name}
-                           </Text>
-                         </Block>
-                   
-                       </Block>
-                     </Block>
-                   </TouchableWithoutFeedback>
-                 )}
-               />
-              )}
-          
+                renderItem={({item}) => (
+                  <TouchableWithoutFeedback onPress={() => handlePress(item)}>
+                    <Block
+                      flex={0}
+                      radius={sizes.sm}
+                      shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
+                      marginTop={sizes.m}
+                      marginHorizontal={10}
+                      card
+                      color="white"
+                      center>
+                      <Block row align="center">
+                        <Block flex={0}>
+                          {item.image ===
+                          'https://admin.fitaraise.com/storage/uploads/app_images/no_image.png' ? (
+                            <Block
+                              style={{
+                                width: sizes.xl,
+                                height: sizes.xl,
+                                backgroundColor: '#fff',
+                                borderRadius: sizes.s,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                              }}
+                              marginLeft={sizes.s}>
+                              <Text
+                                style={{fontSize: 50, color: '#fff'}}
+                                bold
+                                primary>
+                                {item.country_name.charAt(0)}
+                              </Text>
+                            </Block>
+                          ) : (
+                            <Image
+                              source={{uri: `${item.image_sm}`}}
+                              style={{
+                                width: 30,
+                                height: 30,
+                              }}
+                              marginLeft={sizes.s}
+                            />
+                          )}
+                        </Block>
+                        <Block flex={3} style={{alignSelf: 'center'}}>
+                          <Text p black semibold center padding={10}>
+                            {item.country_name}
+                          </Text>
+                        </Block>
+                      </Block>
+                    </Block>
+                  </TouchableWithoutFeedback>
+                )}
+              />
+            )}
           </Block>
         </Block>
       </Block>
