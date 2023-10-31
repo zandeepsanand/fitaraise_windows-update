@@ -327,7 +327,7 @@ export default function Frstpage({
               // onPressOut={() => navigation.navigate('water')}
               onPress={() => {
                 handleProducts(4);
-                handleLogout();
+                // handleLogout();
               }}>
               <Block
                 style={styles.mainCardView}
@@ -380,7 +380,7 @@ export default function Frstpage({
                 </View>
               </Block>
             </TouchableWithoutFeedback>
-            <Text>{expoNotification}</Text>
+            {/* <Text>{expoNotification}</Text> */}
           </View>
         </Block>
       )}
