@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import Date1 from './Date'; // Assuming you've imported Date1 correctly
 import { Block } from '../../components';
 
@@ -10,7 +10,6 @@ const Calendar = ({ onSelectDate, selected   }) => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [currentMonth, setCurrentMonth] = useState();
   const [newDate, setNewDate] = useState('');
-
 
   // get the dates from today to 10 days from now, format them as strings and store them in state
   const getDates = () => {

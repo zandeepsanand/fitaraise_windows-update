@@ -22,22 +22,11 @@ const HomeWorkoutMain = ({navigation, route}) => {
   const {t} = useTranslation();
   const { homeWorkout, workoutData, savedDate} = route.params;
   const {authenticated,customerId} = useContext(LoginContext);
-
-
-  // console.log(workoutData , "data in main page");
-  
-  // const isSavedDateAvailable = savedDate !== undefined && savedDate !== null;
-  // console.log(isSavedDateAvailable, 'saved mdate from congrats page ');
-
-  // console.log(homeWorkout, 'haiii');
-
   const [tab, setTab] = useState<number>(0);
   const {following, trending} = useData();
   const [products, setProducts] = useState(following);
   const {assets, colors, fonts, gradients, sizes} = useTheme();
-  const [selectedLevel, setSelectedLevel] = useState(
-    ''
-  );
+  const [selectedLevel, setSelectedLevel] = useState('');
   const [data2, setData2] = useState(homeWorkout);
   const [completedDates, setCompletedDates] = useState([]);
   console.log(data2, 'testing');

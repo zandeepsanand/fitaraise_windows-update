@@ -233,15 +233,12 @@ const Cards = ({route, navigation}) => {
   const handleInputChangeInches = (text) => {
     // Remove any non-numeric characters and allow decimal points from the input
     const numericValue = text.replace(/[^0-9.]/g, '');
-  
     if (!isNaN(numericValue) && numericValue <= 12) {
       setInputValueInch(numericValue);
-  
       // Calculate the height in feet and inches as a decimal number
       const heightInFeet = parseFloat(formData.feet);
       const heightInInches = parseFloat(numericValue);
       const updatedHeight = (heightInFeet + heightInInches / 12).toFixed(2);
-  
       const updatedFormData = {
         ...formData,
         inches: numericValue,

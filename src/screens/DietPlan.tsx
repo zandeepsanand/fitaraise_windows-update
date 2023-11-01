@@ -7,7 +7,6 @@ import React, {
   useState,
 } from 'react';
 import {DataTable} from 'react-native-paper';
-
 import {ProgressBarAndroid} from 'react-native-elements';
 import {BASE_URL} from '@env';
 import {useData, useTheme, useTranslation} from '../hooks/';
@@ -16,19 +15,13 @@ import {Animated, Easing, View} from 'react-native';
 import Lottie from 'lottie-react-native';
 import {StyleSheet, Platform, TouchableOpacity} from 'react-native';
 import CircularProgress from 'react-native-circular-progress-indicator';
-
 import ScrollCalender from './ScrollCalender';
 import ProgressBar from 'react-native-progress-step-bar';
-
 import * as Progress from 'react-native-progress';
-
-// import {log} from 'react-native-reanimated';
 import {MealContext} from '../hooks/useMeal';
 import Axios from 'axios';
 import PreviousDietDetails from './foodPage/PreviousDietDetails';
-
 const isAndroid = Platform.OS === 'android';
-
 import {useRoute} from '@react-navigation/native';
 import api from '../../api';
 import {ActivityIndicator} from 'react-native';
