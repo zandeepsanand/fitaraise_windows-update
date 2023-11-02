@@ -4,6 +4,7 @@ import {useData, useTheme, useTranslation} from '../../../hooks';
 import {Block, Button, Image, Input, Product, Text} from '../../../components';
 import {StatusBar as ExpoStatusBar} from 'expo-status-bar';
 import {StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
+import api from '../../../../api';
 
 // import ErrorModal from './ErrorModal';
 
@@ -43,6 +44,83 @@ const ChallengeDifficultyLevel = ({
 
     // navigation.navigate('Demo1', {formData: updatedFormData});
   };
+
+
+  const challengeSetData = async()=>{
+
+    if (workoutData.workout_challenge_level) {
+      // Create a copy of the formData object
+      const formDataCopy = {...workoutData};
+      const formDataWithoutEmptyFields = Object.keys(formDataCopy).reduce((obj, key) => {
+        if (formDataCopy[key] !== null && formDataCopy[key] !== undefined && formDataCopy[key] !== '') {
+          obj[key] = formDataCopy[key];
+        }
+        return obj;
+      }, {});
+      console.log(formDataWithoutEmptyFields, 'form data empty');
+  
+      const fetchData = async () => {
+        console.log('clicked');
+        
+        try {
+          const response = await api.post(
+            `set_personal_datas`,
+            formDataWithoutEmptyFields,
+          );
+          console.log(response.data ,"posted");
+          
+  
+          if (response.data.success) {
+            console.log('success posted');
+            
+            // Call the second API
+            const secondApiResponse = await api.get(
+              `get_workout_challenges?gender=${formDataCopy.gender}&level=${formDataCopy.workout_challenge_level}`,
+            );
+            // Do something with the second API response
+            const data = secondApiResponse.data.data;
+            // setData(secondApiResponse.data.data);
+            console.log(data, 'the data of second apifffff');
+            if (data === null) {
+              alert('turn on network and re-try');
+            } else {
+              console.log('success');
+              setTimeout(() => {
+                navigation.navigate('ChallengeMonth', {workoutData});
+                // navigation.navigate('HomeWorkoutMain', { data, formDataCopy });
+                // navigation.navigate('GymTabNavigator', {
+                //   screen: 'GymWorkoutMain', // Screen name within the TabNavigator
+                //   params: {data, formDataCopy}, // Pass your parameters here
+                // });
+              }, 500);
+            }
+            // navigation.navigate('donutchart', { data });
+          }
+          // Do something with the first API response
+          // console.log(response.data);
+        } catch (error) {
+          if (error.response) {
+            // The request was made, but the server responded with a status code that falls out of the range of 2xx
+            console.error('Response Error:', error.response.data);
+          } else if (error.request) {
+            // The request was made, but no response was received
+            console.error('Request Error:', error.request);
+          } else {
+            // Something happened in setting up the request that triggered an error
+            console.error('Request Setup Error:', error.message);
+          }
+        }
+      };
+      fetchData();
+    } else {
+      // console.log(formData.gender, formData.weight , formData.feet ,formData.inches , formData.acitivity_level,formData.height);
+  
+      alert('Please enter all details');
+    }
+
+
+
+  }
   return (
     <Block scroll>
       <Block
@@ -188,7 +266,8 @@ const ChallengeDifficultyLevel = ({
               // handleProducts(4);
               // navigation.navigate('HomeWorkoutMain');
               if (workoutData.workout_challenge_level) {
-                navigation.navigate('ChallengeMonth', {workoutData});
+                // navigation.navigate('ChallengeMonth', {workoutData});
+                challengeSetData();
               } else {
                 alert('please select your fitness level');
               }
