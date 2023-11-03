@@ -92,6 +92,8 @@ import { AuthProvider } from '../hooks/AuthData';
 import GymWorkoutLoadingScreen from '../screens/workout/gym workout/GymWorkoutLoadingScreen';
 import ChallengeCongratsPage from '../screens/workout/workout challenges/ChallengeCongratsPage';
 import FirstPageCountrySelect from './FirstPageCountrySelect';
+import ChallengeTabNavigator from '../screens/workout/workout challenges/ChallengeTabNavigator';
+import ChallengeMenu from '../screens/workout/workout challenges/ChallengeMenu';
 
 
 // Keep the splash screen visible while we fetch resources
@@ -156,6 +158,12 @@ export default () => {
         <ThemeProvider theme={theme} setTheme={setTheme}>
           <NavigationContainer theme={navigationTheme}>
             <Stack.Navigator initialRouteName="Loading">
+            <Stack.Screen name="ChallengeMenu" component={ChallengeMenu} options={{ headerShown: false }} />
+            <Stack.Screen
+                name="ChallengeTabNavigator"
+                component={ChallengeTabNavigator}
+                options={{headerShown: false}}
+              />
             <Stack.Screen
                 name="FirstPageCountrySelect"
                 component={FirstPageCountrySelect}

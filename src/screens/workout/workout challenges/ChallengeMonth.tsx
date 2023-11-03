@@ -109,7 +109,11 @@ const ChallengeMonth = ({
             {months.map((challenge, index) => (
               <TouchableWithoutFeedback
                 onPress={() => {
-                  navigation.navigate('ChallengeMain', {workoutData, challenge });
+                  // navigation.navigate('ChallengeMain', {workoutData, challenge });
+                  navigation.navigate('ChallengeTabNavigator', {
+                    screen: 'ChallengeMain',
+                    params: {  workoutData ,challenge},
+                  });
                   handleProducts(challenge.number_of_days);
                 }}>
                 <Block

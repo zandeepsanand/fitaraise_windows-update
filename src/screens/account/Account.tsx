@@ -1,15 +1,18 @@
 /* eslint-disable prettier/prettier */
 
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
 import {Block, Image, Text} from '../../components';
 import {TouchableOpacity} from 'react-native';
 import LoginContext from '../../hooks/LoginContext';
 import { CommonActions } from '@react-navigation/native';
 import { MealContext } from '../../hooks/useMeal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Account({route ,navigation}) {
-  const {formData} = route.params ?? {};
+  const [formData,setFormData]=useState('');
+  // const {formData} = route.params ?? {};
+
 
   const {
     customerId,
@@ -36,6 +39,39 @@ export default function Account({route ,navigation}) {
       })
     );
   };
+  useEffect(() => {
+    const checkAuthenticationStatus = async () => {
+      try {
+        const authDataJSON = await AsyncStorage.getItem('authData');
+        if (authDataJSON) {
+          const authData = JSON.parse(authDataJSON);
+
+          const authToken = authData.token;
+          const customerId = authData.formData.customer_id;
+          const formData = authData.formData;
+          const token = authData.token;
+          setFormData(formData)
+          // Store the authData object as a JSON string in AsyncStorage
+          // await AsyncStorage.setItem('authData', JSON.stringify(authData));
+
+          // Use the loginSuccess method from LoginContext
+          // setAuthToken(authData.token); // Set the token for future requests
+      
+        } 
+        
+      } catch (error) {
+        console.error('Authentication Status Error:', error);
+       
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'FirstPageCountrySelect'}],
+        });
+      }
+    };
+
+    checkAuthenticationStatus();
+  }, [navigation]);
+
   return (
     <Block safe marginTop={15}>
       <Block

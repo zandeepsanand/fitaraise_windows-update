@@ -76,7 +76,18 @@ const handleChallengePage = async()=>{
                 const firstActiveChallenge = activeChallenges[0];
             
                 // Use the navigation.navigate function to pass the data to the next screen
-                navigation.navigate('ChallengeMain', { workoutData, challenge: firstActiveChallenge });
+                // navigation.navigate('ChallengeMain', { workoutData, challenge: firstActiveChallenge });
+
+                navigation.navigate('ChallengeTabNavigator', {
+                  screen: 'ChallengeMain',
+                  params: {  workoutData ,challenge:firstActiveChallenge},
+                });
+                // navigation.navigate('ChallengeMenu', {
+                //   workoutData ,
+                //   challenge:firstActiveChallenge,
+                //   formDataCopy: authData.formData,
+                 
+                // });
               }
             } 
           }else {

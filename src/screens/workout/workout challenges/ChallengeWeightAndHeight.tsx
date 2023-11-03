@@ -6,6 +6,7 @@ import {StatusBar as ExpoStatusBar} from 'expo-status-bar';
 import {StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
 import DuoToggleSwitch from 'react-native-duo-toggle-switch';
 import Ripple from 'react-native-material-ripple';
+import api from '../../../../api';
 const ChallengeWeightAndHeight = ({
   navigation,
   route: {
@@ -96,6 +97,36 @@ const ChallengeWeightAndHeight = ({
     console.log(updatedFormData, 'height unit check');
   };
 
+  const heightWeightSave =async()=>{
+    if (
+      workoutData.gender &&
+      workoutData.weight &&
+      workoutData.height 
+    ) {
+      // Create a copy of the formData object
+      const formDataCopy = Object.fromEntries(
+        Object.entries(workoutData).filter(([key, value]) => value !== null)
+      );
+      console.log(formDataCopy, 'form data');
+  
+  
+      try {
+        const response = await api.post('set_personal_datas', formDataCopy);
+        console.log(formDataCopy, 'customer id');
+        console.log(response.data, 'hello');
+        alert(response.data.message);
+  
+        if (response.data.success) {
+          navigation.navigate('ChallengeDifficultyLevel', {workoutData});
+        }
+      } catch (error) {
+        console.error(error, 'errorsss');
+      }
+    } else {
+      // Alert the user to fill in all required fields
+      alert('Please enter all details');
+    }
+  }
   return (
     <Block scroll>
       <Block
@@ -374,7 +405,8 @@ const ChallengeWeightAndHeight = ({
                 (inputValueKg || inputValueLbs) &&
                 (inputValueCm || inputValueInch)
               ) {
-                navigation.navigate('ChallengeDifficultyLevel', {workoutData});
+                // navigation.navigate('ChallengeDifficultyLevel', {workoutData});
+                heightWeightSave();
               } else {
                 alert('Enter all fields');
               }
