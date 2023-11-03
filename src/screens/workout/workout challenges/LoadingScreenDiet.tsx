@@ -4,7 +4,7 @@ import React, {useContext, useEffect, useRef, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import {ActivityIndicator, View, StyleSheet} from 'react-native';
-import api, {setAuthToken} from '../../../../api' ;
+import api, {setAuthToken} from '../../../../api';
 import {Animated, Easing} from 'react-native';
 import Lottie from 'lottie-react-native';
 import LoginContext from '../../../hooks/LoginContext';
@@ -38,7 +38,6 @@ const LoadingScreenDiet = () => {
           const token = authData.token;
           // Store the authData object as a JSON string in AsyncStorage
           // await AsyncStorage.setItem('authData', JSON.stringify(authData));
-
           // Use the loginSuccess method from LoginContext
           // setAuthToken(authData.token); // Set the token for future requests
           loginSuccess(customerId, formData, token);
@@ -98,14 +97,18 @@ const LoadingScreenDiet = () => {
             ) {
               // Reset the navigation stack and navigate to 'Menu'
               // console.log("console ok");
-
-              navigation.reset({
-                index: 0,
-                routes: [
-                  {name: 'Frstpage', params: {formData: authData.formData}},
-                ],
-                // routes: [{ name: 'Menu', params: { data: requiredCalorie, formDataCopy: authData.formData , dietPlan } }],
+              navigation.navigate('Menu', {
+                data: requiredCalorie,
+                formDataCopy: authData.formData,
+                dietPlan,
               });
+              // navigation.navigate({
+              //   index: 0,
+              //   // routes: [
+              //   //   {name: 'Frstpage', params: {formData: authData.formData}},
+              //   // ],
+              //   routes: [{ name: 'Menu', params: { data: requiredCalorie, formDataCopy: authData.formData , dietPlan } }],
+              // });
             } else if (authData.formData) {
               // console.log("console ok 1");
               // Reset the navigation stack and navigate to 'Frstpage'
@@ -156,7 +159,7 @@ const LoadingScreenDiet = () => {
         {/* <ActivityIndicator size="large" color="#0000ff" /> */}
         <Lottie
           style={styles.backgroundAnimation}
-          source={require('../assets/json/loader.json')}
+          source={require('../../../assets/json/loader.json')}
           progress={animationProgress.current}
         />
       </View>

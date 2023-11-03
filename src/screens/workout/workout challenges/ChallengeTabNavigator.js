@@ -14,6 +14,7 @@ import LoadingScreen from '../../../navigation/LoadingScreen';
 import ChallengeMain from './ChallengeMain';
 import Account from '../../account/Account';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoadingScreenDiet from './LoadingScreenDiet';
 
 
 const workoutIcon = `
@@ -78,7 +79,7 @@ const ChallengeTabNavigator = ({route}) => {
       />
       <Tab.Screen
         name="Loading"
-        component={LoadingScreen}
+        component={LoadingScreenDiet}
         options={{
           headerShown: false,
 
