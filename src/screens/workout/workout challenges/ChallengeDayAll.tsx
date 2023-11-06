@@ -218,7 +218,7 @@ const ChallengeDayAll = ({route}) => {
                         semibold
                         size={15}
                         center>
-                        {day.time_in_seconds}
+                        {day.time_in_seconds} seconds
                       </Text>
                     </Block>
                   ) : (

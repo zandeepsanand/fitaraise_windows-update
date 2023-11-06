@@ -14,18 +14,17 @@ import {useNavigation} from '@react-navigation/core';
 import {Block, Button, Image, Text} from '../../../components';
 import {useData, useTheme, useTranslation} from '../../../hooks';
 
-const workoutData = [
-  {name: 'Workout 1', details: 'Details of Workout 1'},
-  {name: 'Workout 2', details: 'Details of Workout 2'},
-  // ... more workout data
-];
+
 
 const isAndroid = Platform.OS === 'android';
 const screenHeight = Dimensions.get('window').height;
 
 const ChallengeCongratsPage = ({route}) => {
-  const {savedDate, completedWorkouts} = route.params;
-  console.log(completedWorkouts, 'saved date from');
+  const {challenge} = route.params;
+  console.log('====================================');
+  console.log(challenge);
+  console.log('====================================');
+
 
   const {user} = useData();
   const {t} = useTranslation();
@@ -62,8 +61,13 @@ const ChallengeCongratsPage = ({route}) => {
           <View style={styles.section2}>
             <TouchableWithoutFeedback
               onPress={() => {
-                navigation.navigate('ChallengeMain', {workoutData});
-              }}>
+                navigation.navigate('ChallengeTabNavigator', {
+                  screen: 'ChallengeMain',
+                  params: {  challenge },
+                });
+              }}
+              
+              >
               <Block style={styles.stickyButton} center justify="center" row>
                 <Text style={styles.buttonText} bold paddingRight={10}>
                   Finish

@@ -16,6 +16,7 @@ import axios from 'axios';
 import {BASE_URL} from '@env';
 import api from '../../../../api';
 import LoginContext from '../../../hooks/LoginContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChallengeMain = ({navigation, route}) => {
   const {t} = useTranslation();
@@ -23,12 +24,11 @@ const ChallengeMain = ({navigation, route}) => {
     formDataCopy = [],
     savedDate = [],
     completedWorkouts = [],
-    workoutData,
     challenge,
   } = route.params;
-const {customerId}=useContext(LoginContext);
-  console.log(challenge, 'saved workouts');
-const month = challenge
+  const {customerId} = useContext(LoginContext);
+
+  const month = challenge;
   // console.log(savedDate, 'haiii');
 
   const [tab, setTab] = useState<number>(0);
@@ -39,12 +39,13 @@ const month = challenge
     // formDataCopy.workout_level,
     '',
   );
-  const [data, setData] = useState([]);
+  const [data, setData] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data2, setData2] = useState('');
-  const [currentDay, setCurrentDay] = useState(1);
+  const [currentDay, setCurrentDay] = useState(0);
   const [todayWorkout, setTodayWorkout] = useState('');
+  const [workoutData,setWorkoutData]=useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,12 +53,8 @@ const month = challenge
         if (!challenge.id) {
           throw new Error('Please enter all details');
         }
-
-       
-
         const response = await api.get(
           `get_workout_challenge_days/${month.id}`,
-          
         );
 
         const responseData = response.data.data;
@@ -75,31 +72,31 @@ const month = challenge
     };
 
     fetchData();
-  }, [challenge]);
+  },[month.id]);
 
   const handleLevelChange = async (level) => {
     setSelectedLevel(level);
     if (['Home Workout', 'Gym Workout', '90 day challenge'].includes(level)) {
       if (level === 'Home Workout') {
         console.log('clicked');
-        
+
         const userData = await api.get(`get_personal_datas/${customerId}`);
         const user = userData.data.data;
-        console.log(user, "user data home workout loading");
-  
+        console.log(user, 'user data home workout loading');
+
         if (user.gender && user.home_workout_level) {
           const homeWorkout = await api.get(
-            `get_home_workouts?gender=${user.gender}&level=${user.home_workout_level}`
+            `get_home_workouts?gender=${user.gender}&level=${user.home_workout_level}`,
           );
           const homeWorkoutJSON = homeWorkout.data.data;
           console.log(homeWorkoutJSON);
           if (homeWorkoutJSON) {
-            console.log(homeWorkoutJSON, "workout data home");
+            console.log(homeWorkoutJSON, 'workout data home');
             navigation.navigate('HomeTabNavigator', {
               screen: 'HomeWorkoutMain',
-              params: { homeWorkout: homeWorkoutJSON, workoutData: user },
+              params: {homeWorkout: homeWorkoutJSON, workoutData: user},
             });
-          } 
+          }
         } else {
           console.log('workout page');
           navigation.navigate('Gender', {
@@ -110,20 +107,20 @@ const month = challenge
         try {
           const userData = await api.get(`get_personal_datas/${customerId}`);
           const user = userData.data.data;
-          console.log(user, "user data home workout loading");
-  
+          console.log(user, 'user data home workout loading');
+
           if (user.gender && user.gym_workout_level) {
             const gymWorkout = await api.get(
-              `get_gym_workouts?gender=${user.gender}&level=${user.gym_workout_level}`
+              `get_gym_workouts?gender=${user.gender}&level=${user.gym_workout_level}`,
             );
             const gymWorkoutJSON = gymWorkout.data.data;
             console.log(gymWorkoutJSON);
-  
+
             if (gymWorkoutJSON) {
-              console.log(gymWorkoutJSON, "workout data gym");
+              console.log(gymWorkoutJSON, 'workout data gym');
               navigation.navigate('GymTabNavigator', {
                 screen: 'GymWorkoutMain',
-                params: { data: gymWorkoutJSON, formDataCopy: user },
+                params: {data: gymWorkoutJSON, formDataCopy: user},
               });
             }
           } else {
@@ -138,7 +135,7 @@ const month = challenge
       }
     }
   };
-  
+
   // if (loading) {
   //   return (
   //     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -164,22 +161,23 @@ const month = challenge
       }
       if (isCurrentDayCompleted) {
         // Display an alert to inform the user that they've already completed today's workout
-        alert('You have already completed today\'s workout');
+        alert("You have already completed today's workout");
         return;
       }
   
       // Fetch the days data
-      const daysResponse = await api.get(`get_workout_challenge_days/${month.id}`);
+      const daysResponse = await api.get(
+        `get_workout_challenge_days/${month.id}`,
+      );
       const daysData = daysResponse.data.data;
-      console.log(daysData, "days data");
-      
+      console.log(daysData, 'days data');
   
       if (daysData.length === 0) {
         throw new Error('No days data available');
       }
   
       // Determine the current day number based on completion status
-      let currentDayNumber = 1;
+      let currentDayNumber = 0;
       for (const day of daysData) {
         if (!day.completed) {
           break; // The first incomplete day becomes the current day
@@ -189,10 +187,15 @@ const month = challenge
   
       if (currentDayNumber > daysData.length) {
         throw new Error('All days are completed');
+      } else {
+        // Increment currentDayNumber to move to the next day
+        currentDayNumber++;
       }
   
       // Fetch the workout data for the determined current day
-      const workoutResponse = await api.get(`get_workout_challenge_excercise/${challenge.id}/${currentDayNumber}`);
+      const workoutResponse = await api.get(
+        `get_workout_challenge_excercise/${challenge.id}/${currentDayNumber}`,
+      );
       const responseData = workoutResponse.data.data;
       console.log(responseData, `day ${currentDayNumber}`);
   
@@ -243,6 +246,39 @@ const month = challenge
   //       });
   //   }
   // };
+  useEffect(() => {
+    const checkAuthenticationStatus = async () => {
+      try {
+        const authDataJSON = await AsyncStorage.getItem('authData');
+        if (authDataJSON) {
+          const authData = JSON.parse(authDataJSON);
+
+          const authToken = authData.token;
+          const customerId = authData.formData.customer_id;
+          const formData = authData.formData;
+          const token = authData.token;
+   
+
+          if (authToken) {
+            // Continue with your navigation logic...
+            setWorkoutData(formData)
+          } else {
+            console.log('Failed to get push token for push notification!');
+          }
+        }
+      } catch (error) {
+        console.error('Authentication Status Error:', error);
+        setIsLoading(false);
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'FirstPageCountrySelect'}],
+        });
+      }
+    };
+
+    checkAuthenticationStatus();
+  }, []);
+  console.log(workoutData.workout_challenge_level, 'dataaaa');
   const numberOfWeeks = Math.ceil(data.length / 7);
 
   const weeks = [];
@@ -267,7 +303,7 @@ const month = challenge
         // color={day.completed ? '#c7fce6' : 'green'}
         margin={10}>
         <Text center bold>
-        {day.day}
+          {day.day}
         </Text>
       </Block>
     ));
@@ -320,9 +356,7 @@ const month = challenge
                     // marginLeft: 12,
                     flexDirection: 'row',
                     alignItems: 'center',
-                  }}>
-
-                  </View>
+                  }}></View>
                 <View>
                   <Text bold white h4>
                     Start
@@ -417,7 +451,7 @@ const month = challenge
                       }}
                       bold
                       white>
-                      {workoutData.challenge_workout_level}
+                      {workoutData.workout_challenge_level}
                     </Text>
                   </View>
                 </View>
@@ -426,12 +460,9 @@ const month = challenge
           </View>
           <View>
             {weeks.map((week, index) => (
-              <View key={index}>
-                {week}
-                </View>
+              <View key={index}>{week}</View>
             ))}
           </View>
- 
 
           <View style={{paddingBottom: 20}}>
             {/* <GifPlayer /> */}

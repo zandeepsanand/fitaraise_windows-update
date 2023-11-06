@@ -47,6 +47,10 @@ console.log(customerId , "login context");
         if (authDataJSON) {
           const authData = JSON.parse(authDataJSON);
           const authToken = authData.token;
+          const customerId=authData.customerId
+          console.log('====================================');
+          console.log(customerId,"tell me");
+          console.log('====================================');
   
           if (authToken) {
             // User is authenticated

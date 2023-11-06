@@ -35,7 +35,7 @@ export default function Account({route ,navigation}) {
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
-        routes: [{ name: 'loginNew' }],
+        routes: [{ name: 'FirstPageCountrySelect' }],
       })
     );
   };

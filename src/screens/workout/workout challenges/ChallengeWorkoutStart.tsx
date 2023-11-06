@@ -89,7 +89,7 @@ const GymWorkoutStart = () => {
           ? exerciseData[currentWorkoutIndex - 1].time_in_seconds
           : 0,
       );
-      setIsTimerPaused(false); // Reset pause state to false
+      setIsTimerPaused(false); // Reset state to false
     }
   };
 
@@ -101,7 +101,7 @@ const GymWorkoutStart = () => {
   //         ? exerciseData[currentWorkoutIndex + 1].time_in_seconds
   //         : 0,
   //     );
-  //     setIsTimerPaused(false); // Reset pause state to false
+  //     setIsTimerPaused(false); // Reset state to false
   //     setShowRestPopup(true); // Show the rest time popup
 
   //   }
@@ -115,7 +115,7 @@ const GymWorkoutStart = () => {
 
       setCurrentWorkoutIndex(currentWorkoutIndex + 1);
       setTimeLeft(newRestTime); // Start the new countdown timer with the new rest time
-      setIsTimerPaused(false); // Reset pause state to false
+      setIsTimerPaused(false); // Reset state to false
       setShowRestPopup(true); // Show the rest time popup
       setShowNextButton(false); // to set show button false
     }
@@ -150,11 +150,11 @@ const GymWorkoutStart = () => {
     let interval;
 
     if (
-      !showRestPopup &&
+      
       currentWorkout.time_or_sets === 'time' &&
       timeLeft > 0 &&
-      isTimerRunning &&
-      !modalVisible // Check if the modal is not visible
+      isTimerRunning 
+    
     ) {
       interval = setInterval(() => {
         setTimeLeft((prevTime) => {
@@ -325,6 +325,7 @@ const GymWorkoutStart = () => {
                         navigation.navigate('ChallengeCongratsPage', {
                           // savedDate,
                           // completedWorkouts,
+                          challenge
                         }); // Replace 'YourNewPage' with the actual page name
                       }
                     }}>
@@ -368,7 +369,7 @@ const GymWorkoutStart = () => {
                 </Block>
               ) : (
                 <Block centerContent paddingTop={50}>
-                  {!isTimerRunning && !isTimerPaused && (
+                  {!isTimerRunning && (
                     <Button
                       onPress={handleStart}
                       tertiary

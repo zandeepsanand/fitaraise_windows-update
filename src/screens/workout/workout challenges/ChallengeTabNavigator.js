@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 // TabNavigator.js
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {useTheme} from '../../../hooks';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
@@ -8,14 +8,11 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import {Image} from 'react-native';
 
-
-
 import LoadingScreen from '../../../navigation/LoadingScreen';
 import ChallengeMain from './ChallengeMain';
 import Account from '../../account/Account';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingScreenDiet from './LoadingScreenDiet';
-
 
 const workoutIcon = `
 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" viewBox="0 0 22 20" fill="none">
@@ -24,17 +21,16 @@ const workoutIcon = `
 `;
 const Tab = createBottomTabNavigator();
 
-
 const ChallengeTabNavigator = ({route}) => {
   const {assets, colors, fonts, gradients, sizes} = useTheme();
-  const { workoutData,challenge,formDataCopy } = route.params ?? {};
-  const [formData , setFormData]=useState([]);
-  console.log(workoutData, "challenge data");
+  const {challenge} = route.params ?? {};
+  const [formData, setFormData] = useState([]);
+
   // useEffect(() => {
   //   const checkAuthenticationStatus = async () => {
   //     try {
   //       const authDataJSON = await AsyncStorage.getItem('authData');
-        
+
   //       if (authDataJSON) {
   //         const authData = JSON.parse(authDataJSON);
   //         const authToken = authData.token;
@@ -54,14 +50,14 @@ const ChallengeTabNavigator = ({route}) => {
   // }, []);
   return (
     <Tab.Navigator
-    screenOptions={{
+      screenOptions={{
         activeTintColor: '#97b4fe', // Set the active tab color to blue
         inactiveTintColor: 'gray', // Set the inactive tab color to gray
       }}>
       <Tab.Screen
         name="ChallengeMain"
         component={ChallengeMain}
-        initialParams={{ workoutData,challenge,formDataCopy}}
+        initialParams={{challenge}}
         options={{
           headerShown: false,
           tabBarLabel: 'Home',
@@ -93,21 +89,21 @@ const ChallengeTabNavigator = ({route}) => {
         }}
       />
       <Tab.Screen
-      name="profile"
-      component={Account}
-      initialParams={{ formData }}
-      options={{
-        headerShown: false,
+        name="profile"
+        component={Account}
+        initialParams={{formData}}
+        options={{
+          headerShown: false,
 
-        tabBarLabel: '', // Custom tab label
-        tabBarIcon: ({color, size}) => (
-          <Image
-            source={require('../../../assets/icons/user.png')} // Replace with your image source
-            style={{tintColor: color, width: 20, height: 20}}
-          />
-        ),
-      }}
-    />
+          tabBarLabel: '', // Custom tab label
+          tabBarIcon: ({color, size}) => (
+            <Image
+              source={require('../../../assets/icons/user.png')} // Replace with your image source
+              style={{tintColor: color, width: 20, height: 20}}
+            />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 };

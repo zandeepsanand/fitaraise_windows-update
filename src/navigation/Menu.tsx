@@ -142,7 +142,7 @@ const DrawerContent = (
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
-        routes: [{ name: 'loginNew' }],
+        routes: [{ name: 'FirstPageCountrySelect' }],
       })
     );
   };
