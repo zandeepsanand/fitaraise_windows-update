@@ -17,6 +17,7 @@ import {BASE_URL} from '@env';
 import api from '../../../../api';
 import LoginContext from '../../../hooks/LoginContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment-timezone';
 
 const ChallengeMain = ({navigation, route}) => {
   const {t} = useTranslation();
@@ -26,7 +27,11 @@ const ChallengeMain = ({navigation, route}) => {
     completedWorkouts = [],
     challenge,
   } = route.params;
+  console.log('====================================');
+  console.log(challenge);
+  console.log('====================================');
   const {customerId} = useContext(LoginContext);
+  const [isLoading,setIsLoading]=useState(true);
 
   const month = challenge;
   // console.log(savedDate, 'haiii');
@@ -45,7 +50,8 @@ const ChallengeMain = ({navigation, route}) => {
   const [data2, setData2] = useState('');
   const [currentDay, setCurrentDay] = useState(0);
   const [todayWorkout, setTodayWorkout] = useState('');
-  const [workoutData,setWorkoutData]=useState('');
+  const [workoutData, setWorkoutData] = useState('');
+  const [userData, setUserData] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,7 +78,7 @@ const ChallengeMain = ({navigation, route}) => {
     };
 
     fetchData();
-  },[month.id]);
+  }, [month.id]);
 
   const handleLevelChange = async (level) => {
     setSelectedLevel(level);
@@ -133,6 +139,35 @@ const ChallengeMain = ({navigation, route}) => {
           console.error('Error in handleLevelChange:', error);
         }
       }
+      else if (level === '90 day challenge') {
+        try {
+          setIsLoading(true);
+          if (!challenge.id) {
+            throw new Error('Please enter all details');
+          }
+          
+          // Fetch data specific to the '90 day challenge' scenario
+          const response = await api.get(`get_workout_challenge_days/13`);
+          const responseData = response.data.data;
+          console.log(responseData , "90 days");
+          setData(responseData);
+          setIsLoading(false);
+          
+          if (responseData === null) {
+            setIsLoading(false);
+            throw new Error('Turn on the network and retry');
+            
+
+          }
+  
+          // Handle the '90 day challenge' data or navigate to the appropriate screen
+          // Example: navigation.navigate('Your90DayChallengeScreen', { data: responseData });
+          // Replace 'Your90DayChallengeScreen' with your actual screen name and parameters
+        } catch (error) {
+          setIsLoading(false);
+          console.error('Error in handleLevelChange:', error);
+        }
+      }
     }
   };
 
@@ -152,8 +187,73 @@ const ChallengeMain = ({navigation, route}) => {
   //   );
   // }
   // console.log(data.day_number, "days");
+  const targetTimeZone = 'Asia/Kolkata'; // Change this to 'Asia/Kolkata' for Indian Standard Time
+
+  const completed_date = moment.tz(targetTimeZone).format('DD-MM-YYYY');
+  console.log('====================================');
+  console.log(completed_date);
+  console.log('====================================');
+
   const [isCurrentDayCompleted, setIsCurrentDayCompleted] = useState(false);
 
+  // const clickStart = async () => {
+  //   try {
+  //     if (!challenge.id) {
+  //       throw new Error('Please enter all details');
+  //     }
+  //     if (isCurrentDayCompleted) {
+  //       // Display an alert to inform the user that they've already completed today's workout
+  //       alert("You have already completed today's workout");
+  //       return;
+  //     }
+
+  //     // Fetch the days data
+  //     const daysResponse = await api.get(
+  //       `get_workout_challenge_days/${month.id}`,
+  //     );
+  //     const daysData = daysResponse.data.data;
+  //     console.log(daysData, 'days data');
+
+  //     if (daysData.length === 0) {
+  //       throw new Error('No days data available');
+  //     }
+
+  //     // Determine the current day number based on completion status
+  //     let currentDayNumber = 0;
+  //     for (const day of daysData) {
+  //       if (!day.completed) {
+  //         break; // The first incomplete day becomes the current day
+  //       }
+  //       currentDayNumber++;
+  //     }
+
+  //     if (currentDayNumber > daysData.length) {
+  //       throw new Error('All days are completed');
+  //     } else {
+  //       // Increment currentDayNumber to move to the next day
+  //       currentDayNumber++;
+  //     }
+
+  //     // Fetch the workout data for the determined current day
+  //     const workoutResponse = await api.get(
+  //       `get_workout_challenge_excercise/${challenge.id}/${currentDayNumber}`,
+  //     );
+  //     const responseData = workoutResponse.data.data;
+  //     console.log(responseData, `day ${currentDayNumber}`);
+
+  //     setTodayWorkout(responseData);
+
+  //     navigation.navigate('ChallengeDayAll', {
+  //       responseData,
+  //       completedWorkouts,
+  //       currentDayNumber,
+  //       dayWithId: daysData,
+  //       challenge,
+  //     });
+  //   } catch (err) {
+  //     setError(err.message);
+  //   }
+  // };
   const clickStart = async () => {
     try {
       if (!challenge.id) {
@@ -164,18 +264,18 @@ const ChallengeMain = ({navigation, route}) => {
         alert("You have already completed today's workout");
         return;
       }
-  
+
       // Fetch the days data
       const daysResponse = await api.get(
         `get_workout_challenge_days/${month.id}`,
       );
       const daysData = daysResponse.data.data;
       console.log(daysData, 'days data');
-  
+
       if (daysData.length === 0) {
         throw new Error('No days data available');
       }
-  
+
       // Determine the current day number based on completion status
       let currentDayNumber = 0;
       for (const day of daysData) {
@@ -184,23 +284,34 @@ const ChallengeMain = ({navigation, route}) => {
         }
         currentDayNumber++;
       }
-  
-      if (currentDayNumber > daysData.length) {
+
+      if (currentDayNumber >= daysData.length) {
         throw new Error('All days are completed');
-      } else {
-        // Increment currentDayNumber to move to the next day
-        currentDayNumber++;
       }
-  
+
+      // Check if the recent workout done date is the same as today's date
+      if (
+        daysData[currentDayNumber - 1].recent_workout_done_date &&
+        daysData[currentDayNumber - 1].recent_workout_done_date ===
+          completed_date // Replace todayDate with the actual today's date
+      ) {
+        // Display an alert to inform the user that they've already completed today's workout
+        alert("You have already completed today's workout");
+        return;
+      }
+
+      // If not, increment currentDayNumber to move to the next day
+      currentDayNumber++;
+
       // Fetch the workout data for the determined current day
       const workoutResponse = await api.get(
         `get_workout_challenge_excercise/${challenge.id}/${currentDayNumber}`,
       );
       const responseData = workoutResponse.data.data;
       console.log(responseData, `day ${currentDayNumber}`);
-  
+
       setTodayWorkout(responseData);
-  
+
       navigation.navigate('ChallengeDayAll', {
         responseData,
         completedWorkouts,
@@ -212,7 +323,6 @@ const ChallengeMain = ({navigation, route}) => {
       setError(err.message);
     }
   };
-  
 
   const handleProducts = useCallback(
     (tab: number) => {
@@ -256,12 +366,15 @@ const ChallengeMain = ({navigation, route}) => {
           const authToken = authData.token;
           const customerId = authData.formData.customer_id;
           const formData = authData.formData;
+          console.log('====================================');
+          console.log(formData);
+          console.log('====================================');
           const token = authData.token;
-   
 
           if (authToken) {
             // Continue with your navigation logic...
-            setWorkoutData(formData)
+            setIsLoading(false);
+            setUserData(formData);
           } else {
             console.log('Failed to get push token for push notification!');
           }
@@ -371,7 +484,15 @@ const ChallengeMain = ({navigation, route}) => {
   }
 
   return (
-    <Block safe marginTop={sizes.md} marginBottom={10}>
+    <>
+   
+    {isLoading && (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop:140}}>
+        <ActivityIndicator size="large" color="blue" />
+      </View>
+    )}
+    {!isLoading && (
+      <Block safe marginTop={sizes.md} marginBottom={10}>
       <Block
         scroll
         // paddingHorizontal={sizes.s}
@@ -451,7 +572,7 @@ const ChallengeMain = ({navigation, route}) => {
                       }}
                       bold
                       white>
-                      {workoutData.workout_challenge_level}
+                      {userData.workout_challenge_level}
                     </Text>
                   </View>
                 </View>
@@ -506,6 +627,9 @@ const ChallengeMain = ({navigation, route}) => {
         </Block>
       </Block>
     </Block>
+    )}
+     </>
+    
   );
 };
 const styles = StyleSheet.create({

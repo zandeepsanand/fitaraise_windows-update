@@ -71,22 +71,18 @@ console.log('====================================');
                 );
 
                 if (activeChallenges.length > 0) {
-                  // You can choose to navigate with the first active challenge here
-                  const firstActiveChallenge = activeChallenges[0];
-
-                  // Use the navigation.navigate function to pass the data to the next screen
-                  // navigation.navigate('ChallengeMain', { workoutData, challenge: firstActiveChallenge });
-
-                  navigation.navigate('ChallengeTabNavigator', {
-                    screen: 'ChallengeMain',
-                    params: {challenge: firstActiveChallenge},
-                  });
-                  // navigation.navigate('ChallengeMenu', {
-                  //   workoutData ,
-                  //   challenge:firstActiveChallenge,
-                  //   formDataCopy: authData.formData,
-                  // });
-                }
+                  // Get the challenge that is currently in use (where currently_using is true)
+                  const currentlyActiveChallenge = activeChallenges.find(
+                    (challenge) => challenge.currently_using
+                  );
+            
+                  if (currentlyActiveChallenge) {
+                    // Use the navigation.navigate function to pass the data to the next screen
+                    navigation.navigate('ChallengeTabNavigator', {
+                      screen: 'ChallengeMain',
+                      params: { challenge: currentlyActiveChallenge },
+                    });
+                  }
                 else {
                   console.log('workout page');
                   // Navigate to 'Gender' screen with workoutData
@@ -102,6 +98,7 @@ console.log('====================================');
                 workoutData: user,
               });
             }
+          }
 
             // console.log(homeWorkoutJSON.data.data);
           } catch (error) {
@@ -110,13 +107,13 @@ console.log('====================================');
             setIsLoading(false);
           }
         }
-      } else {
+       else {
         console.log('Token not available');
         navigation.reset({
           index: 0,
           routes: [{name: 'loginNew'}],
         });
-      }
+      }}
     } catch (error) {
       console.error('Authentication Status Error:', error);
     } finally {

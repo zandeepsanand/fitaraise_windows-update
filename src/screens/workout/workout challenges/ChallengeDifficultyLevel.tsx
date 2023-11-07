@@ -8,7 +8,6 @@ import api from '../../../../api';
 
 // import ErrorModal from './ErrorModal';
 
-
 const ChallengeDifficultyLevel = ({
   navigation,
   route: {
@@ -45,34 +44,38 @@ const ChallengeDifficultyLevel = ({
     // navigation.navigate('Demo1', {formData: updatedFormData});
   };
 
-
-  const challengeSetData = async()=>{
-
+  const challengeSetData = async () => {
     if (workoutData.workout_challenge_level) {
       // Create a copy of the formData object
       const formDataCopy = {...workoutData};
-      const formDataWithoutEmptyFields = Object.keys(formDataCopy).reduce((obj, key) => {
-        if (formDataCopy[key] !== null && formDataCopy[key] !== undefined && formDataCopy[key] !== '') {
-          obj[key] = formDataCopy[key];
-        }
-        return obj;
-      }, {});
+      const formDataWithoutEmptyFields = Object.keys(formDataCopy).reduce(
+        (obj, key) => {
+          if (
+            formDataCopy[key] !== null &&
+            formDataCopy[key] !== undefined &&
+            formDataCopy[key] !== ''
+          ) {
+            obj[key] = formDataCopy[key];
+          }
+          return obj;
+        },
+        {},
+      );
       console.log(formDataWithoutEmptyFields, 'form data empty');
-  
+
       const fetchData = async () => {
         console.log('clicked');
-        
+
         try {
           const response = await api.post(
             `set_personal_datas`,
             formDataWithoutEmptyFields,
           );
-          console.log(response.data ,"posted");
-          
-  
+          console.log(response.data, 'posted');
+
           if (response.data.success) {
             console.log('success posted');
-            
+
             // Call the second API
             const secondApiResponse = await api.get(
               `get_workout_challenges?gender=${formDataCopy.gender}&level=${formDataCopy.workout_challenge_level}`,
@@ -114,13 +117,10 @@ const ChallengeDifficultyLevel = ({
       fetchData();
     } else {
       // console.log(formData.gender, formData.weight , formData.feet ,formData.inches , formData.acitivity_level,formData.height);
-  
+
       alert('Please enter all details');
     }
-
-
-
-  }
+  };
   return (
     <Block scroll>
       <Block
@@ -196,13 +196,8 @@ const ChallengeDifficultyLevel = ({
               row
               center
               style={styles.mainCardView}
-              gradient={gradients?.[tab === 3 ? 'success' : '#ffff']}
-            >
-              <Block
-                row
-                padding={10}
-           
-              >
+              gradient={gradients?.[tab === 3 ? 'success' : '#ffff']}>
+              <Block row padding={10}>
                 <Block padding={10} center>
                   <Text bold size={sizes.sm} center>
                     INTERMEDIATE
@@ -235,26 +230,25 @@ const ChallengeDifficultyLevel = ({
               padding={10}
               style={styles.mainCardView}
               gradient={gradients?.[tab === 4 ? 'success' : '#ffff']}>
-                <Block row>
+              <Block row>
                 <Block padding={10} center>
-                <Text bold size={sizes.sm} center>
-                  EXPERT
-                </Text>
-              </Block>
-              <Block row center>
-                <Block style={styles.box}>
-                  {/* <Button warning shadow width={10}></Button> */}
+                  <Text bold size={sizes.sm} center>
+                    EXPERT
+                  </Text>
                 </Block>
-                <Block style={styles.box}>
-                  {/* <Button warning shadow width={10}></Button> */}
-                </Block>
+                <Block row center>
+                  <Block style={styles.box}>
+                    {/* <Button warning shadow width={10}></Button> */}
+                  </Block>
+                  <Block style={styles.box}>
+                    {/* <Button warning shadow width={10}></Button> */}
+                  </Block>
 
-                <Block style={styles.box}>
-                  {/* <Button warning shadow width={10}></Button> */}
+                  <Block style={styles.box}>
+                    {/* <Button warning shadow width={10}></Button> */}
+                  </Block>
                 </Block>
               </Block>
-                </Block>
-             
             </Block>
           </TouchableWithoutFeedback>
         </Block>
