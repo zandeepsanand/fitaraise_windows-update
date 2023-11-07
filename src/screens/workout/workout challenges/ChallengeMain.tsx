@@ -27,11 +27,9 @@ const ChallengeMain = ({navigation, route}) => {
     completedWorkouts = [],
     challenge,
   } = route.params;
-  console.log('====================================');
-  console.log(challenge);
-  console.log('====================================');
+
   const {customerId} = useContext(LoginContext);
-  const [isLoading,setIsLoading]=useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const month = challenge;
   // console.log(savedDate, 'haiii');
@@ -82,7 +80,7 @@ const ChallengeMain = ({navigation, route}) => {
 
   const handleLevelChange = async (level) => {
     setSelectedLevel(level);
-    if (['Home Workout', 'Gym Workout', '90 day challenge'].includes(level)) {
+    if (['Home Workout', 'Gym Workout', '90 day challenge','60 day challenge'].includes(level)) {
       if (level === 'Home Workout') {
         console.log('clicked');
 
@@ -138,28 +136,40 @@ const ChallengeMain = ({navigation, route}) => {
         } catch (error) {
           console.error('Error in handleLevelChange:', error);
         }
-      }
-      else if (level === '90 day challenge') {
+      } else if (level === '90 day challenge') {
         try {
           setIsLoading(true);
+          const userData = await api.get(`get_personal_datas/${customerId}`);
+          const user = userData.data.data;
           if (!challenge.id) {
             throw new Error('Please enter all details');
           }
-          
-          // Fetch data specific to the '90 day challenge' scenario
-          const response = await api.get(`get_workout_challenge_days/13`);
-          const responseData = response.data.data;
-          console.log(responseData , "90 days");
-          setData(responseData);
-          setIsLoading(false);
-          
-          if (responseData === null) {
-            setIsLoading(false);
-            throw new Error('Turn on the network and retry');
-            
-
+          if (user.gender && user.workout_challenge_level) {
+            const homeWorkout = await api.get(
+              `get_workout_challenges?gender=${user.gender}&level=${user.workout_challenge_level}`,
+            );
+            const challengeMonthJSON = homeWorkout.data.data;
+            const challenge90Days = challengeMonthJSON.find(
+              (challenge) => challenge.number_of_days === 90
+            );
+            if (challenge90Days) {
+              const challenge90DaysId = challenge90Days.id;
+              console.log("ID of 90 Days Challenge:", challenge90DaysId);
+              // Now you can use challenge90DaysId in your code
+              const response = await api.get(`get_workout_challenge_days/${challenge90DaysId}`);
+              const responseData = response.data.data;
+              console.log(responseData, '90 days');
+              setData(responseData);
+              setIsLoading(false);
+              if (responseData === null) {
+                setIsLoading(false);
+                throw new Error('Turn on the network and retry');
+              }
+            } else {
+              console.log("90 Days Challenge not found in the data.");
+            }
           }
-  
+          // Fetch data specific to the '90 day challenge' scenario
           // Handle the '90 day challenge' data or navigate to the appropriate screen
           // Example: navigation.navigate('Your90DayChallengeScreen', { data: responseData });
           // Replace 'Your90DayChallengeScreen' with your actual screen name and parameters
@@ -167,7 +177,45 @@ const ChallengeMain = ({navigation, route}) => {
           setIsLoading(false);
           console.error('Error in handleLevelChange:', error);
         }
+      } else if (level === '60 day challenge') {
+        try {
+          setIsLoading(true);
+          const userData60 = await api.get(`get_personal_datas/${customerId}`);
+          const user = userData60.data.data;
+          if (!challenge.id) {
+            throw new Error('Please enter all details');
+          }
+          if (user.gender && user.workout_challenge_level) {
+            const homeWorkout = await api.get(
+              `get_workout_challenges?gender=${user.gender}&level=${user.workout_challenge_level}`,
+            );
+            const challengeMonthJSON = homeWorkout.data.data;
+            const challenge60Days = challengeMonthJSON.find(
+              (challenge) => challenge.number_of_days === 60
+            );
+            if (challenge60Days) {
+              const challenge60DaysId = challenge60Days.id;
+              console.log("ID of 60 Days Challenge:", challenge60DaysId);
+              // Now you can use challenge90DaysId in your code
+              const response = await api.get(`get_workout_challenge_days/${challenge60DaysId}`);
+              const responseData = response.data.data;
+              console.log(responseData, '60 days');
+              setData(responseData);
+              setIsLoading(false);
+              if (responseData === null) {
+                setIsLoading(false);
+                throw new Error('Turn on the network and retry');
+              }
+            } else {
+              console.log("60 Days Challenge not found in the data.");
+            }
+          }
+         } catch (error) {
+          setIsLoading(false);
+          console.error('Error in handleLevelChange:', error);
+        }
       }
+
     }
   };
 
@@ -191,7 +239,7 @@ const ChallengeMain = ({navigation, route}) => {
 
   const completed_date = moment.tz(targetTimeZone).format('DD-MM-YYYY');
   console.log('====================================');
-  console.log(completed_date);
+  console.log(completed_date,"todays date");
   console.log('====================================');
 
   const [isCurrentDayCompleted, setIsCurrentDayCompleted] = useState(false);
@@ -485,32 +533,37 @@ const ChallengeMain = ({navigation, route}) => {
 
   return (
     <>
-   
-    {isLoading && (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop:140}}>
-        <ActivityIndicator size="large" color="blue" />
-      </View>
-    )}
-    {!isLoading && (
-      <Block safe marginTop={sizes.md} marginBottom={10}>
-      <Block
-        scroll
-        // paddingHorizontal={sizes.s}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: sizes.padding}}>
-        <Block>
+      {isLoading && (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 140,
+          }}>
+          <ActivityIndicator size="large" color="blue" />
+        </View>
+      )}
+      {!isLoading && (
+        <Block safe marginTop={sizes.md} marginBottom={10}>
           <Block
-            row
-            justify="space-around"
-            paddingBottom={10}
-            style={{borderBottomWidth: 10, borderBottomColor: '#938669'}}>
-            <Block paddingLeft={20}>
-              <Block center>
-                <Text key={challenge.id} bold>
-                  {challenge.challenge_name}
-                </Text>
-              </Block>
-              {/* <Block row>
+            scroll
+            // paddingHorizontal={sizes.s}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{paddingBottom: sizes.padding}}>
+            <Block>
+              <Block
+                row
+                justify="space-around"
+                paddingBottom={10}
+                style={{borderBottomWidth: 10, borderBottomColor: '#938669'}}>
+                <Block paddingLeft={20}>
+                  <Block center>
+                    <Text key={challenge.id} bold>
+                      {challenge.challenge_name}
+                    </Text>
+                  </Block>
+                  {/* <Block row>
                 <Text>Your program :</Text>
                 <Text bold>
                   {' '}
@@ -518,79 +571,79 @@ const ChallengeMain = ({navigation, route}) => {
                     selectedLevel.slice(1)}
                 </Text>
               </Block> */}
-            </Block>
-            <Block>
-              <Block center>
-                <SelectDropdown
-                  defaultValue={'one'}
-                  dropdownStyle={{borderRadius: 20}}
-                  buttonStyle={{
-                    height: 50,
-                    width: 180,
-                    backgroundColor: 'white',
-                    borderRadius: 20,
-                    marginLeft: 10,
-                  }}
-                  data={['Home Workout', 'Gym Workout', '90 day challenge']} // Provide your options here
-                  // defaultButtonText={formDataCopy.workout_level}
-                  defaultButtonText={'Select an option'}
-                  onSelect={handleLevelChange}
-                />
+                </Block>
+                <Block>
+                  <Block center>
+                    <SelectDropdown
+                      defaultValue={'one'}
+                      dropdownStyle={{borderRadius: 20}}
+                      buttonStyle={{
+                        height: 50,
+                        width: 180,
+                        backgroundColor: 'white',
+                        borderRadius: 20,
+                        marginLeft: 10,
+                      }}
+                      data={['Home Workout', 'Gym Workout', '90 day challenge','60 day challenge']} // Provide your options here
+                      // defaultButtonText={formDataCopy.workout_level}
+                      defaultButtonText={'Select an option'}
+                      onSelect={handleLevelChange}
+                    />
+                  </Block>
+                </Block>
               </Block>
-            </Block>
-          </Block>
-          <View style={styles.container}>
-            <TouchableWithoutFeedback onPress={() => {}}>
-              <Block
-                style={styles.mainCardView}
-                gradient={gradients?.[tab === 2 ? 'success' : '#ffff']}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <View
-                    style={{
-                      marginLeft: 12,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
-                    {/* <Image
+              <View style={styles.container}>
+                <TouchableWithoutFeedback onPress={() => {}}>
+                  <Block
+                    style={styles.mainCardView}
+                    gradient={gradients?.[tab === 2 ? 'success' : '#ffff']}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <View
+                        style={{
+                          marginLeft: 12,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        {/* <Image
                     source={assets.arrow}
                     color={colors.white}
                     radius={0}
                   /> */}
-                    <Text bold danger center paddingRight={8}>
-                      •
-                    </Text>
-                    <Text semibold gray center>
-                      Level -
-                    </Text>
-                  </View>
-                  <View style={{marginLeft: 12}}>
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        color: 'black',
-                        fontWeight: 'bold',
-                      }}
-                      bold
-                      white>
-                      {userData.workout_challenge_level}
-                    </Text>
-                  </View>
-                </View>
-              </Block>
-            </TouchableWithoutFeedback>
-          </View>
-          <View>
-            {weeks.map((week, index) => (
-              <View key={index}>{week}</View>
-            ))}
-          </View>
+                        <Text bold danger center paddingRight={8}>
+                          •
+                        </Text>
+                        <Text semibold gray center>
+                          Level -
+                        </Text>
+                      </View>
+                      <View style={{marginLeft: 12}}>
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            color: 'black',
+                            fontWeight: 'bold',
+                          }}
+                          bold
+                          white>
+                          {userData.workout_challenge_level}
+                        </Text>
+                      </View>
+                    </View>
+                  </Block>
+                </TouchableWithoutFeedback>
+              </View>
+              <View>
+                {weeks.map((week, index) => (
+                  <View key={index}>{week}</View>
+                ))}
+              </View>
 
-          <View style={{paddingBottom: 20}}>
-            {/* <GifPlayer /> */}
-            {/* <GymWorkoutCalender savedDate={savedDate} /> */}
-          </View>
+              <View style={{paddingBottom: 20}}>
+                {/* <GifPlayer /> */}
+                {/* <GymWorkoutCalender savedDate={savedDate} /> */}
+              </View>
 
-          {/* {data2.map((workout) => (
+              {/* {data2.map((workout) => (
             <TouchableOpacity
               key={workout.id}
               onPress={() => handleWorkoutClick(workout)}>
@@ -624,12 +677,11 @@ const ChallengeMain = ({navigation, route}) => {
               </Block>
             </TouchableOpacity>
           ))} */}
+            </Block>
+          </Block>
         </Block>
-      </Block>
-    </Block>
-    )}
-     </>
-    
+      )}
+    </>
   );
 };
 const styles = StyleSheet.create({

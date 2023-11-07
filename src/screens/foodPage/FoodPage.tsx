@@ -106,6 +106,7 @@ const FoodPage = ({route, navigation}) => {
   } = useContext(MealContext);
   // console.log(breakfastItems[0] ,"first one");
 
+
   const {assets, colors, gradients, sizes, fonts, user} = useTheme();
   const [selectedValue, setSelectedValue] = useState(245);
   const [count, setCount] = useState(1);
@@ -473,12 +474,28 @@ const FoodPage = ({route, navigation}) => {
     setExpanded(!expanded);
     setSelectedItemId(itemId);
   };
+  // const totalBreakfastCalorie = breakfastItems.reduce(
+  //   (acc, item) => acc + parseFloat(item.details.totalCalorie),
+  //   0
+  // );
+  const array1 = [1000, 2, 3, 4];
+
+  // 0 + 1 + 2 + 3 + 4
   const totalBreakfastCalorie = breakfastItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalCalorie),
-    0,
+    (accumulator, currentValue) => {
+      // Remove formatting characters (e.g., commas) before parsing
+      const value = currentValue.details.totalCalorie.replace(/,/g, '');
+      return accumulator + parseFloat(value);
+    },
+    0
   );
-  // const totalBreakfastCalories = totalBreakfastCalorie.toFixed(2);
-  // console.log("total calorie for breakfast items: ", totalBreakfastCalories);
+  
+  console.log(totalBreakfastCalorie, "total sum");
+  
+  // Format the number to always show 2 decimal places
+  const formattedTotalCalorie = totalBreakfastCalorie.toFixed(2);
+  
+  console.log("Total breakfast calorie:", formattedTotalCalorie);
 
   return (
     <Block safe scroll>

@@ -152,135 +152,202 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     return items.reduce((total, item) => total + item.calories, 0);
   };
 
+  const sum = breakfastItems.reduce(
+    (accumulator, currentValue) => {
+      // Remove formatting characters (e.g., commas) before parsing
+      const value = currentValue.details.totalCalorie.replace(/,/g, '');
+      return accumulator + parseFloat(value);
+    },
+    0
+  );
+  
+  console.log(sum, "total sum");
+
   const totalBreakfastCalorie = breakfastItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalCalorie),
+    (acc, item) => {
+      const value = item.details.totalCalorie.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
   const totalBreakfastProtein = breakfastItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalProtein),
+    (acc, item) => {
+      const value = item.details.totalProtein.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
 
   const totalBreakfastCarb = breakfastItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalCarb),
+    (acc, item) =>{
+      const value = item.details.totalCarb.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
   const totalBreakfastFat = breakfastItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalFat),
+    (acc, item) =>{
+      const value = item.details.totalFat.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
   // const totalBreakfastCalories = totalBreakfastCalorie.toFixed(2);
   // console.log("total calorie for breakfast items: ", totalBreakfastCalories);
 
   const totalLunchCalorie = lunchItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalCalorie),
+    (acc, item) =>{
+      const value = item.details.totalCalorie.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
   // const totalLunchCalories = totalLunchCalorie.toFixed(2);
   const totalLunchProtein = lunchItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalProtein),
+    (acc, item) => {
+      const value = item.details.totalProtein.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
 
   const totalLunchCarb = lunchItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalCarb),
+    (acc, item) => {
+      const value = item.details.totalCarb.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
   const totalLunchFat = lunchItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalFat),
+    (acc, item) =>{
+      const value = item.details.totalFat.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
 
   const totalDinnerCalorie = dinnerItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalCalorie),
+    (acc, item) =>{
+      const value = item.details.totalCalorie.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
   const totalDinnerProtein = dinnerItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalProtein),
+    (acc, item) => {
+      const value = item.details.totalFat.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
 
   const totalDinnerCarb = dinnerItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalCarb),
+    (acc, item) => {
+      const value = item.details.totalCarb.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
   const totalDinnerFat = dinnerItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalFat),
+    (acc, item) => {
+      const value = item.details.totalFat.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
   // const totalDinnerCalories = totalDinnerCalorie.toFixed(2);
 
   const totalMorningSnackCalorie = morningSnackItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalCalorie),
+    (acc, item) =>{
+      const value = item.details.totalCalorie.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
   const totalmorningSnackItemsProtein = morningSnackItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalProtein),
+    (acc, item) => {
+      const value = item.details.totalFat.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
 
   const totalmorningSnackItemsCarb = morningSnackItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalCarb),
+    (acc, item) => {
+      const value = item.details.totalCarb.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
   const totalmorningSnackItemsFat = morningSnackItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalFat),
+    (acc, item) => {
+      const value = item.details.totalFat.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
 
   // const totalMorningSnackCalories = totalMorningSnackCalorie.toFixed(2);
 
   const totalEveningSnackCalorie = eveningSnackItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalCalorie),
+    (acc, item) => {
+      const value = item.details.totalCalorie.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
   const totaleveningSnackItemsProtein = eveningSnackItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalProtein),
+    (acc, item) => {
+      const value = item.details.totalFat.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
 
   const totaleveningSnackItemsCarb = eveningSnackItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalCarb),
+    (acc, item) => {
+      const value = item.details.totalCarb.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
   const totaleveningSnackItemsFat = eveningSnackItems.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalFat),
+    (acc, item) => {
+      const value = item.details.totalFat.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
 
   const totalMeal1Calorie = mealItems1.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalCalorie),
+    (acc, item) => {
+      const value = item.details.totalCalorie.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
   const totalMeal1Protein = mealItems1.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalProtein),
+    (acc, item) => {
+      const value = item.details.totalFat.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
 
   const totalMeal1Carb = mealItems1.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalCarb),
+    (acc, item) => {
+      const value = item.details.totalCarb.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
   const totalMeal1Fat = mealItems1.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalFat),
+    (acc, item) => {
+      const value = item.details.totalFat.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
 
   const totalMeal2Calorie = mealItems2.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalCalorie),
+    (acc, item) => {
+      const value = item.details.totalCalorie.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
   const totalMeal2Protein = mealItems2.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalProtein),
+    (acc, item) => {
+      const value = item.details.totalFat.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
 
   const totalMeal2Carb = mealItems2.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalCarb),
+    (acc, item) => {
+      const value = item.details.totalCarb.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
   const totalMeal2Fat = mealItems2.reduce(
-    (acc, item) => acc + parseFloat(item.details.totalFat),
+    (acc, item) => {
+      const value = item.details.totalFat.replace(/,/g, '');
+     return acc + parseFloat(value);},
     0,
   );
 

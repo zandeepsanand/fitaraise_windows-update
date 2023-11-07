@@ -46,12 +46,14 @@ console.log('====================================');
          
           setIsLoading(true);
           setAuthToken(authToken);
-          // console.log(authToken, "token preview");
+          console.log(authToken, "token preview");
 
           try {
            
             const authData = JSON.parse(authDataJSON);
             const workoutDataJSON = authData.formData;
+            // const token =authData.token;
+
             console.log(customerId , "id");
             const userData = await api.get(`get_personal_datas/${customerId}`);
           
@@ -64,8 +66,12 @@ console.log('====================================');
                 `get_workout_challenges?gender=${user.gender}&level=${user.workout_challenge_level}`,
               );
               const challengeMonthJSON = homeWorkout.data.data;
+              console.log('====================================');
+              console.log(challengeMonthJSON, "months");
+              console.log('====================================');
               console.log(challengeMonthJSON);
               if (challengeMonthJSON) {
+             
                 const activeChallenges = challengeMonthJSON.filter(
                   (challenge) => challenge.currently_using,
                 );
@@ -75,7 +81,9 @@ console.log('====================================');
                   const currentlyActiveChallenge = activeChallenges.find(
                     (challenge) => challenge.currently_using
                   );
-            
+            console.log('====================================');
+            console.log(currentlyActiveChallenge,"check active");
+            console.log('====================================');
                   if (currentlyActiveChallenge) {
                     // Use the navigation.navigate function to pass the data to the next screen
                     navigation.navigate('ChallengeTabNavigator', {
@@ -90,9 +98,13 @@ console.log('====================================');
                     workoutData: user,
                   });
                 }
+              }else{
+                navigation.navigate('ChallengeGenderPage', {
+                  workoutData: user,
+                });
               }
             } else {
-              console.log('workout page');
+            
               // Navigate to 'Gender' screen with workoutData
               navigation.navigate('ChallengeGenderPage', {
                 workoutData: user,
