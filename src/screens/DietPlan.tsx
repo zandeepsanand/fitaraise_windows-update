@@ -164,27 +164,40 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
   console.log(sum, "total sum");
 
   const totalBreakfastCalorie = breakfastItems.reduce(
-    (acc, item) => {
-      const value = item.details.totalCalorie.replace(/,/g, '');
-     return acc + parseFloat(value);},
-    0,
+    (accumulator, currentValue) => {
+      // Remove formatting characters (e.g., commas) before parsing
+      const value = currentValue.details.totalCalorie.replace(/,/g, '');
+      return accumulator + parseFloat(value);
+    },
+    0
   );
+  // const totalBreakfastProtein = breakfastItems.reduce(
+  //   (acc, item) => {
+  //     const value = item.details.totalProtein;
+  //    return acc + parseFloat(value);
+  //   },
+  //   0,
+  // );
   const totalBreakfastProtein = breakfastItems.reduce(
-    (acc, item) => {
-      const value = item.details.totalProtein.replace(/,/g, '');
-     return acc + parseFloat(value);},
-    0,
+    (accumulator, currentValue) => {
+      const value = currentValue.details.totalProtein;
+
+      return accumulator +  parseFloat(value)
+    
+    },
+    0
   );
+  
 
   const totalBreakfastCarb = breakfastItems.reduce(
     (acc, item) =>{
-      const value = item.details.totalCarb.replace(/,/g, '');
+      const value = item.details.totalCarb;
      return acc + parseFloat(value);},
     0,
   );
   const totalBreakfastFat = breakfastItems.reduce(
     (acc, item) =>{
-      const value = item.details.totalFat.replace(/,/g, '');
+      const value = item.details.totalFat;
      return acc + parseFloat(value);},
     0,
   );
