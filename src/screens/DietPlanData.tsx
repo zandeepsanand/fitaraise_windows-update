@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {Alert, ScrollView, TouchableOpacity} from 'react-native';
+import {Alert, ScrollView, TouchableOpacity,TouchableWithoutFeedback} from 'react-native';
 import axios from 'axios';
 import {Platform, Linking, StyleSheet, View} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
@@ -372,7 +372,7 @@ const DietPlanData = ({route, navigation}) => {
     }
     console.log(servingId);
 
-    if (servingId !== null) {
+    
       // console.log(servingId);
 
       // console.log(mealDetails.customer_id, 'demo');
@@ -384,7 +384,7 @@ const DietPlanData = ({route, navigation}) => {
       navigation.navigate('Menu', {
         formDataCopy, // Pass your parameters here
       });
-    }
+    
     setLoading(false);
   };
   return (
@@ -871,17 +871,21 @@ const DietPlanData = ({route, navigation}) => {
           </Block>
         </Block>
       </Block>
+     
+      {loading ? ( // Show loading indicator if loading is true
       <Block center style={styles.buttonContainer}>
-        {loading ? ( // Show loading indicator if loading is true
           <ActivityIndicator size="large" color="blue" />
+          </Block>
         ) : (
-          <TouchableOpacity onPress={handleAddFood}>
-            <Text style={styles.buttonText} bold>
+          <TouchableWithoutFeedback onPress={handleAddFood}>
+             <Block center style={styles.buttonContainer}>
+             <Text style={styles.buttonText} bold>
               Add
             </Text>
-          </TouchableOpacity>
+     </Block>
+            
+          </TouchableWithoutFeedback>
         )}
-      </Block>
     </Block>
   );
 };

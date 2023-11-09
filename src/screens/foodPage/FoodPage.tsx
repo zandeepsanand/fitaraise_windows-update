@@ -385,11 +385,12 @@ const FoodPage = ({route, navigation}) => {
     switch (mealType) {
       case 'breakfast':
         try {
-          setIsLoading(false);
+         
           await addBreakfastItem(item, mealDetails);
           console.log('Breakfast item added successfully');
           console.log(mealDetails, 'dark');
           // Handle any post-addition logic or navigation here
+          setIsLoading(false);
         } catch (error) {
           setIsLoading(false);
           console.error('Error adding breakfast item:', error);
@@ -499,6 +500,28 @@ const FoodPage = ({route, navigation}) => {
 
   return (
     <Block safe scroll>
+      <Block  flex={0} style={{position:'absolute',zIndex:10}}>
+      <Button
+          marginTop={40}
+          marginLeft={10}
+          row
+          flex={0}
+          justify="flex-start"
+          onPress={() => navigation.goBack()}>
+          <Image
+            radius={0}
+            width={10}
+            height={18}
+            color={colors.white}
+            source={assets.arrow}
+            transform={[{rotate: '180deg'}]}
+          />
+          <Text p white marginLeft={sizes.s}>
+         
+          </Text>
+        </Button>
+      </Block>
+         
       <Block
         center
         flex={0.3}
@@ -507,7 +530,9 @@ const FoodPage = ({route, navigation}) => {
           backgroundColor: '#3cf29d',
           borderBottomRightRadius: 10,
           borderBottomLeftRadius: 10,
+          position:'relative'
         }}>
+       
         {mealType === 'breakfast' ? (
           <Text bold padding={10}>
             {' '}
@@ -528,7 +553,7 @@ const FoodPage = ({route, navigation}) => {
           progressValueColor={'#ffff'}
           activeStrokeColor="#baabf9"
           maxValue={data.calories * 0.2}
-          circleBackgroundColor={'#353353'}
+          circleBackgroundColor={totalBreakfastCalorie > (data.calories  * 0.2)? 'lightcoral' : '#353353'}
           title={
             // totalCaloriesOfAllFoods >= data.calories ? 'REACHED 🔥' : 'KCAL LEFT 🔥'
             'KCAL'
@@ -680,7 +705,8 @@ const FoodPage = ({route, navigation}) => {
                     {isEditMode &&
                     editItemId === item.details.id &&
                     editItemName === item.id ? (
-                      <Block
+                      <>
+                      {isLoading?(<ActivityIndicator size="large" color="green" />):( <Block
                         row
                         style={{alignSelf: 'center'}}
                         paddingTop={20}
@@ -717,7 +743,7 @@ const FoodPage = ({route, navigation}) => {
                             buttonStyle={{
                               height: 50,
                               width: 200,
-                              backgroundColor: 'white',
+                              backgroundColor: '#f2f8fc',
                               borderRadius: 20,
                               marginLeft: 10,
                             }}
@@ -787,16 +813,21 @@ const FoodPage = ({route, navigation}) => {
                             position: 'relative',
                             top: -12,
                           }}>
-                          <TouchableWithoutFeedback
-                            onPress={() => {
-                              // setSelectedFood(item.food_name);
-
-                              handleAddFood(item);
-                            }}>
-                            <Text bold>Update</Text>
-                          </TouchableWithoutFeedback>
+                            {isLoading?(<ActivityIndicator size="large" color="green" />):(
+                               <TouchableWithoutFeedback
+                               onPress={() => {
+                                 // setSelectedFood(item.food_name);
+   
+                                 handleAddFood(item);
+                               }}>
+                               <Text bold>Update</Text>
+                             </TouchableWithoutFeedback>
+                            )}
+                         
                         </Block>
-                      </Block>
+                      </Block>)}
+                      </>
+                     
                     ) : (
                       <Block>
                         <Block style={styles.row} flex={0}>
@@ -812,36 +843,39 @@ const FoodPage = ({route, navigation}) => {
                           </Block>
                           <Block flex={0} width={40}></Block>
                         </Block>
-                        <Block style={styles.row} flex={0} paddingTop={10}>
-                          <Block flex={0} width={65}>
-                            <Text paddingRight={10} center>
-                              {item.details.multiplication}
-                            </Text>
-                          </Block>
-
-                          <Block flex={3}>
-                            <Text center>{item.details.selectedDropDown}</Text>
-                          </Block>
-                          <TouchableWithoutFeedback
-                            key={item.details.id}
-                            onPress={() => {
-                              debouncedHandleEdit(item);
-                              toggleEdit(item);
-                              handleEditButtonClick(item);
-                            }}>
-                            <Block flex={0}>
-                              <Image
-                                marginLeft={5}
-                                marginRight={10}
-                                marginTop={1}
-                                source={require('../../assets/icons/edit1.png')}
-                                 color={'gray'}
-                                style={
-                                  (styles.data, {width: 30, height: 30})
-                                }></Image>
+                        {isLoading?(<ActivityIndicator size="large" color="green" />):(
+                            <Block style={styles.row} flex={0} paddingTop={10}>
+                            <Block flex={0} width={65} center>
+                              <Text paddingRight={10} center>
+                                {item.details.multiplication}
+                              </Text>
                             </Block>
-                          </TouchableWithoutFeedback>
-                        </Block>
+  
+                            <Block flex={3} center>
+                              <Text center>{item.details.selectedDropDown}</Text>
+                            </Block>
+                            <TouchableWithoutFeedback
+                              key={item.details.id}
+                              onPress={() => {
+                                debouncedHandleEdit(item);
+                                toggleEdit(item);
+                                handleEditButtonClick(item);
+                              }}>
+                              <Block flex={0} center>
+                                <Image
+                                  marginLeft={5}
+                                  marginRight={10}
+                                  marginTop={1}
+                                  source={require('../../assets/icons/edit1.png')}
+                                   color={'green'}
+                                  style={
+                                    (styles.data, {width: 40, height: 40})
+                                  }></Image>
+                              </Block>
+                            </TouchableWithoutFeedback>
+                          </Block>
+                         )}
+                      
                       </Block>
                     )}
                     <Block row flex={0} align="center" justify="center" marginTop={15}>

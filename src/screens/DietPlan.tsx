@@ -68,13 +68,13 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     mealItems2,
     isLoading,
     addWater,
-    water,
+    water
+    
   } = useContext(MealContext);
+  const {customerId}=useContext(LoginContext);
   const [isLoadingScroll, setIsLoadingScroll] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
 
-
-  const waterTracker = water ? water.water_tracker : null;
-  console.log(waterTracker, 'water track new');
 
   useEffect(() => {
     const loadingTimeout = setTimeout(() => {
@@ -91,20 +91,18 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
   const {data, dietPlan, formDataCopy} = route.params;
 
-  useEffect(() => {
-    const checkDataLoading = async () => {
-      if (isLoading) {
-        console.log('loading');
 
-        // Perform your data loading logic here
-        // ...
 
-        // Once data is loaded, you can update the context values
-      }
-    };
 
-    checkDataLoading();
-  }, [isLoading, data, dietPlan, formDataCopy]);
+  if(water){
+    console.log('====================================');
+    console.log(water,breakfastItems , 'water data');
+    console.log('====================================');
+  
+  }
+    console.log(water, 'water track new 1');
+    const waterTracker = water ? water.water_tracker : null;
+    console.log(waterTracker, 'water track new');
 
   console.log(data, 'check 2');
 
@@ -569,6 +567,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
     }
   };
 
+
   return (
     <Block paddingTop={10}>
       {shouldRenderDietPlan ? (
@@ -621,7 +620,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                       //     ? totalCaloriesOfAllFoods
                       //     : data.calories - totalCaloriesOfAllFoods
                       // }
-                      value={totalCaloriesOfAllFoods}
+                      value={(totalCaloriesOfAllFoods).toFixed(2)}
                       showProgressValue={false}
                       initialValue={initialValueWithoutDecimals}
                       radius={100}
@@ -631,7 +630,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                       maxValue={data.calories}
                       circleBackgroundColor={'#353353'}
                       title={
-                        totalCaloriesOfAllFoods >= data.calories
+                        (totalCaloriesOfAllFoods).toFixed(2) >= data.calories
                           ? 'KCAL OVER'
                           : `${data.calories - totalCaloriesOfAllFoods}`
                       }
@@ -885,7 +884,7 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
                                 });
                               }}>
                               <Text p black semibold center padding={10}>
-                                Breakfast ({totalBreakfastCalorie}) kcal
+                                Breakfast ({(totalBreakfastCalorie).toFixed(2)}) kcal
                               </Text>
                             </TouchableOpacity>
 
