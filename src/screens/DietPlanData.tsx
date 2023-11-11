@@ -1,6 +1,12 @@
 /* eslint-disable prettier/prettier */
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {Alert, ScrollView, TouchableOpacity,TouchableWithoutFeedback} from 'react-native';
+import {
+  Alert,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import axios from 'axios';
 import {Platform, Linking, StyleSheet, View} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
@@ -19,7 +25,7 @@ const isAndroid = Platform.OS === 'android';
 
 const DietPlanData = ({route, navigation}) => {
   const {mealType, responseData, meal_type, formDataCopy, food} = route.params;
-  // console.log(food);
+  console.log(responseData,"response");
 
   const [initialGram, setInitialGram] = useState(null);
   const [selectedWeight, setSelectedWeight] = useState(initialGram);
@@ -36,7 +42,7 @@ const DietPlanData = ({route, navigation}) => {
 
   // new items for adding food to db
   const [servingId, setServingId] = useState('');
-  // console.log(servingId);
+  console.log(servingId , "serving id");
 
   const [servingDesc, setServingDesc] = useState('');
 
@@ -372,21 +378,27 @@ const DietPlanData = ({route, navigation}) => {
     }
     console.log(servingId);
 
-    
-      // console.log(servingId);
+    // console.log(servingId);
 
-      // console.log(mealDetails.customer_id, 'demo');
+    // console.log(mealDetails.customer_id, 'demo');
 
-      // navigation.navigate('tabNavigator', {
-      //   screen: 'pie', // Screen name within the TabNavigator
-      //   params: {formDataCopy}, // Pass your parameters here
-      // });
-      navigation.navigate('Menu', {
-        formDataCopy, // Pass your parameters here
-      });
-    
+    // navigation.navigate('tabNavigator', {
+    //   screen: 'pie', // Screen name within the TabNavigator
+    //   params: {formDataCopy}, // Pass your parameters here
+    // });
+    navigation.navigate('Menu', {
+      formDataCopy, // Pass your parameters here
+    });
+
     setLoading(false);
   };
+  // const handleSearch= (text) =>{
+
+  //   setSelectedWeight(text);
+  //   setServingId(4792);
+  //   setMultiplication(1);
+
+  // }
   return (
     <Block safe>
       <Block
@@ -460,16 +472,44 @@ const DietPlanData = ({route, navigation}) => {
                       </Block>
 
                       <TouchableOpacity>
-                        <Block row paddingBottom={10} paddingLeft={10}>
-                          <Text
-                            p
-                            semibold
-                            marginRight={sizes.s}
-                            color={colors.secondary}>
-                            Selected Gram : {multiplication * selectedWeight}g
-                          </Text>
-
-                          {/* <Image source={assets.arrow} color={colors.link} /> */}
+                        <Block row marginTop={10}>
+                          <Block row paddingBottom={10} paddingLeft={10}>
+                            <Text
+                              p
+                              semibold
+                              marginRight={sizes.s}
+                              color={colors.secondary}>
+                              Selected Gram : {multiplication*selectedWeight}g
+                            </Text>
+                            <TextInput
+                              style={styles.input}
+                              autoCapitalize="none"
+                              placeholder="Search"
+                              // onChangeText={handleSearch}
+                              // value={selectedWeight} 
+                           
+                            />
+                            {/* <Image source={assets.arrow} color={colors.link} /> */}
+                          </Block>
+                          <TouchableWithoutFeedback
+                            // key={item.details.id}
+                            onPress={() => {
+                              // debouncedHandleEdit(item);
+                              // toggleEdit(item);
+                              // handleEditButtonClick(item);
+                            }}>
+                            <Block flex={0} center>
+                              <Image
+                                marginLeft={5}
+                                // marginRight={10}
+                                marginTop={1}
+                                source={require('../assets/icons/edit1.png')}
+                                color={'green'}
+                                style={
+                                  (styles.data, {width: 30, height: 30})
+                                }></Image>
+                            </Block>
+                          </TouchableWithoutFeedback>
                         </Block>
                       </TouchableOpacity>
                     </Block>
@@ -871,21 +911,20 @@ const DietPlanData = ({route, navigation}) => {
           </Block>
         </Block>
       </Block>
-     
+
       {loading ? ( // Show loading indicator if loading is true
-      <Block center style={styles.buttonContainer}>
+        <Block center style={styles.buttonContainer}>
           <ActivityIndicator size="large" color="blue" />
-          </Block>
-        ) : (
-          <TouchableWithoutFeedback onPress={handleAddFood}>
-             <Block center style={styles.buttonContainer}>
-             <Text style={styles.buttonText} bold>
+        </Block>
+      ) : (
+        <TouchableWithoutFeedback onPress={handleAddFood}>
+          <Block center style={styles.buttonContainer}>
+            <Text style={styles.buttonText} bold>
               Add
             </Text>
-     </Block>
-            
-          </TouchableWithoutFeedback>
-        )}
+          </Block>
+        </TouchableWithoutFeedback>
+      )}
     </Block>
   );
 };

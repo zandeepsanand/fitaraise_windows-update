@@ -71,7 +71,10 @@ const MealContextProvider: React.FC = ({children}) => {
   const [dinnerItems, setDinnerItems] = useState([]);
   const [mealItems1, setMealItems1] = useState<any[]>([]);
   const [mealItems2, setMealItems2] = useState<any[]>([]);
-  const [water, setWater] = useState<any[]>('');
+  const [water, setWater] = useState<any[]>(null);
+  console.log('====================================');
+  console.log(water, "usemeal data");
+  console.log('====================================');
   const [transformedData, setTransformedData] = useState([]);
   const [totalCalories, setTotalCalories] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -88,9 +91,7 @@ const MealContextProvider: React.FC = ({children}) => {
   function mapApiDataToDesiredFormat(apiResponse) {
     const dietDetails = apiResponse.data.diet_details;
     const waterData = apiResponse.data.water_tracker;
-    console.log('====================================');
-    console.log(waterData,"water data usemeal");
-    console.log('====================================');
+
     const dinnerData = dietDetails.find((meal) => meal.meal_type_id === 6);
     const breakfastData = dietDetails.find((meal) => meal.meal_type_id === 1);
     const morningSnackData = dietDetails.find(
@@ -162,6 +163,7 @@ const MealContextProvider: React.FC = ({children}) => {
           serving_desc_8: null,
           serving_desc_9: null,
           serving_size: item.taken_weight,
+          serving_description_id:item.serving_description_id,
           serving_weight_1: 28,
           serving_weight_2: 50,
           serving_weight_3: 180,
@@ -180,6 +182,7 @@ const MealContextProvider: React.FC = ({children}) => {
           vitamin_c_in_mg: item.vitamin_c,
           vitamin_d_mg: item.vitamin_d,
           weight_in_g: item.taken_weight,
+
         };
       });
       result.breakfastItems = mappedBreakfastData;
@@ -711,15 +714,12 @@ const MealContextProvider: React.FC = ({children}) => {
             setMealItems2(transformedData.mealItems2);
           }
           // setWater
-          if (responseData.data === null) {
-            setIsLoading(true);
-            console.log('Water data is null. Rerunning fetchData...');
-            fetchData();
-            return;
-          }
+      
     
           // Move the setWater line here
-          setWater(responseData.data);
+         
+
+        
         } catch (error) {
           console.error('Error:', error);
           if (error.response && error.response.data) {
@@ -739,6 +739,48 @@ const MealContextProvider: React.FC = ({children}) => {
       }
     
   },[breakfastItems, isLoading, authenticated, customerId, setWater]); // Include authenticated in the dependency array
+  useEffect(() => {
+    // Check if water is null after it has been set
+    if (water===null){
+      console.log('====================================');
+      console.log('backup code');
+      console.log('====================================');
+      const redoMealContext = async () => {
+        try {
+          const currentDate = new Date();
+          const formattedDate = `${currentDate.getFullYear()}-${String(
+            currentDate.getMonth() + 1,
+          ).padStart(2, '0')}-${String(currentDate.getDate()).padStart(
+            2,
+            '0',
+          )}`;
+  
+          const apiUrl = `get_daily_required_calories/${customerId}`;
+          // Make the API request to get data
+          const response = await api.get(apiUrl);
+          const responseData = response.data;
+          console.log(responseData.data , 'for water usemeal single ');
+          // Move the setWater line here
+          setWater(responseData.data.water_datas);
+  
+     
+        } catch (error) {
+          console.error('Error:', error);
+          if (error.response && error.response.data) {
+            console.error('Server Error Details:', error.response.data);
+            // You can set an error state or show an error message to the user here.
+          }
+        } finally {
+          setIsLoading(false);
+          setFetchDataFlag(false);
+        }
+      };
+      if (water === null) {
+        redoMealContext();
+      }
+    }
+  
+  }, [water,customerId]);
 
   
   const addBreakfastItem = (food: any, details: any) => {
@@ -761,7 +803,7 @@ const MealContextProvider: React.FC = ({children}) => {
         bodyFormData.append('food_id', food.id);
         bodyFormData.append('taken_weight', details.selectedWeight);
         bodyFormData.append('quantity', details.multiplication);
-        bodyFormData.append('serving_desc_id', details.id);
+        bodyFormData.append('serving_desc_id', details.serving_description_id);
         bodyFormData.append('desc_num_food_tbl', details.id);
 
         api({
@@ -803,6 +845,7 @@ const MealContextProvider: React.FC = ({children}) => {
                     updatedItems[existingIndex] = {
                       ...food,
                       details: itemToAdd.details,
+                      serving_description_id:itemToAdd.serving_description_id
                     };
                     setBreakfastItems(updatedItems);
                   }
@@ -876,7 +919,7 @@ const MealContextProvider: React.FC = ({children}) => {
                   // Add the item to breakfastItems
                   setBreakfastItems((prevItems) => [
                     ...prevItems,
-                    {...food, details: itemToAdd.details},
+                    {...food, details: itemToAdd.details,serving_description_id:itemToAdd.serving_description_id},
                   ]);
                 }
               }
@@ -1841,14 +1884,14 @@ const MealContextProvider: React.FC = ({children}) => {
         '0',
       )}`;
 
-      const apiUrl = `get_diet_list_wrt_date/${customerId}/${formattedDate}`;
+      const apiUrl = `get_daily_required_calories/${customerId}`;
       api
       .get(apiUrl)
       .then((response) => {
         const responseData = response.data;
         console.log(responseData.data,"track data");
 
-        setWater(responseData.data);
+        setWater(responseData.data.water_datas);
       }
        
         
@@ -1932,7 +1975,8 @@ const MealContextProvider: React.FC = ({children}) => {
     clearContextData,
     deleteItem,
     updateBreakfastItem,
-    isLoading,
+    isLoading
+    
   };
 
   return <MealContext.Provider value={value}>{children}</MealContext.Provider>;

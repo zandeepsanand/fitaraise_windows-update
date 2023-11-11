@@ -10,6 +10,7 @@ import {
   StyleSheet,
   View,
   ActivityIndicator,
+  TextInput,
 } from 'react-native';
 import Axios from 'axios';
 import {FlatList} from 'react-native';
@@ -22,9 +23,9 @@ import _ from 'lodash'; // Import Lodash
 import api from '../../../api';
 
 type Movie = {
-  id: string;
-  title: string;
-  releaseYear: string;
+  id: string,
+  title: string,
+  releaseYear: string,
 };
 
 const isAndroid = Platform.OS === 'android';
@@ -104,8 +105,7 @@ const FoodPage = ({route, navigation}) => {
     morningSnackItems,
     addBreakfastItem,
   } = useContext(MealContext);
-  // console.log(breakfastItems[0] ,"first one");
-
+  console.log(breakfastItems, 'first one');
 
   const {assets, colors, gradients, sizes, fonts, user} = useTheme();
   const [selectedValue, setSelectedValue] = useState(245);
@@ -182,6 +182,9 @@ const FoodPage = ({route, navigation}) => {
         console.error(error);
         setIsEditMode(false);
       });
+  }
+  function handleEdit4792(item){
+
   }
 
   // Define another function to be executed if food_id is available
@@ -385,7 +388,6 @@ const FoodPage = ({route, navigation}) => {
     switch (mealType) {
       case 'breakfast':
         try {
-         
           await addBreakfastItem(item, mealDetails);
           console.log('Breakfast item added successfully');
           console.log(mealDetails, 'dark');
@@ -488,20 +490,20 @@ const FoodPage = ({route, navigation}) => {
       const value = currentValue.details.totalCalorie.replace(/,/g, '');
       return accumulator + parseFloat(value);
     },
-    0
+    0,
   );
-  
-  console.log(totalBreakfastCalorie, "total sum");
-  
+
+  console.log(totalBreakfastCalorie, 'total sum');
+
   // Format the number to always show 2 decimal places
   const formattedTotalCalorie = totalBreakfastCalorie.toFixed(2);
-  
-  console.log("Total breakfast calorie:", formattedTotalCalorie);
+
+  console.log('Total breakfast calorie:', formattedTotalCalorie);
 
   return (
     <Block safe scroll>
-      <Block  flex={0} style={{position:'absolute',zIndex:10}}>
-      <Button
+      <Block flex={0} style={{position: 'absolute', zIndex: 10}}>
+        <Button
           marginTop={40}
           marginLeft={10}
           row
@@ -516,12 +518,10 @@ const FoodPage = ({route, navigation}) => {
             source={assets.arrow}
             transform={[{rotate: '180deg'}]}
           />
-          <Text p white marginLeft={sizes.s}>
-         
-          </Text>
+          <Text p white marginLeft={sizes.s}></Text>
         </Button>
       </Block>
-         
+
       <Block
         center
         flex={0.3}
@@ -530,9 +530,8 @@ const FoodPage = ({route, navigation}) => {
           backgroundColor: '#3cf29d',
           borderBottomRightRadius: 10,
           borderBottomLeftRadius: 10,
-          position:'relative'
+          position: 'relative',
         }}>
-       
         {mealType === 'breakfast' ? (
           <Text bold padding={10}>
             {' '}
@@ -553,7 +552,11 @@ const FoodPage = ({route, navigation}) => {
           progressValueColor={'#ffff'}
           activeStrokeColor="#baabf9"
           maxValue={data.calories * 0.2}
-          circleBackgroundColor={totalBreakfastCalorie > (data.calories  * 0.2)? 'lightcoral' : '#353353'}
+          circleBackgroundColor={
+            totalBreakfastCalorie > data.calories * 0.2
+              ? 'lightcoral'
+              : '#353353'
+          }
           title={
             // totalCaloriesOfAllFoods >= data.calories ? 'REACHED 🔥' : 'KCAL LEFT 🔥'
             'KCAL'
@@ -602,7 +605,6 @@ const FoodPage = ({route, navigation}) => {
                 marginTop={sizes.m}
                 marginHorizontal={0}
                 card
-               
                 flex={0.5}>
                 <Block row align="center">
                   <Block flex={0}>
@@ -681,153 +683,168 @@ const FoodPage = ({route, navigation}) => {
                     </TouchableWithoutFeedback>
                   </Block>
                 </Block>
-                <Block row flex={0} align="center" justify="center" marginTop={5}>
-                      <Block
-                        flex={0}
-                        height={1}
-                        width="50%"
-                        end={[1, 0]}
-                        start={[0, 1]}
-                        gradient={gradients.divider}
-                      />
-                      <Text center marginHorizontal={sizes.s}></Text>
-                      <Block
-                        flex={0}
-                        height={1}
-                        width="50%"
-                        end={[0, 1]}
-                        start={[1, 0]}
-                        gradient={gradients.divider}
-                      />
-                    </Block>
+                <Block
+                  row
+                  flex={0}
+                  align="center"
+                  justify="center"
+                  marginTop={5}>
+                  <Block
+                    flex={0}
+                    height={1}
+                    width="50%"
+                    end={[1, 0]}
+                    start={[0, 1]}
+                    gradient={gradients.divider}
+                  />
+                  <Text center marginHorizontal={sizes.s}></Text>
+                  <Block
+                    flex={0}
+                    height={1}
+                    width="50%"
+                    end={[0, 1]}
+                    start={[1, 0]}
+                    gradient={gradients.divider}
+                  />
+                </Block>
+
                 <Block margin={0}>
                   <Block margin={0} paddingTop={10} paddingLeft={10}>
                     {isEditMode &&
                     editItemId === item.details.id &&
                     editItemName === item.id ? (
                       <>
-                      {isLoading?(<ActivityIndicator size="large" color="green" />):( <Block
-                        row
-                        style={{alignSelf: 'center'}}
-                        paddingTop={20}
-                        flex={0}>
-                        <Input
-                          marginBottom={sizes.s}
-                          placeholder={item.details.multiplication.toString()} // Convert to string in case it's a number
-                          keyboardType="numeric"
-                          maxLength={3}
-                          style={{
-                            height: 50,
-                            width: 60,
-                            backgroundColor: 'white',
-                          }}
-                          onChangeText={(value) => {
-                            {
-                              // setCount(value);
-                              handleGramChange(value);
-                            }
-                          }}
-                        />
+                        {isLoading ? (
+                          <ActivityIndicator size="large" color="green" />
+                        ) : (
+                          <Block
+                            row
+                            style={{alignSelf: 'center'}}
+                            paddingTop={20}
+                            flex={0}>
+                            <Input
+                              marginBottom={sizes.s}
+                              placeholder={item.details.multiplication.toString()} // Convert to string in case it's a number
+                              keyboardType="numeric"
+                              maxLength={3}
+                              style={{
+                                height: 50,
+                                width: 60,
+                                backgroundColor: 'white',
+                              }}
+                              onChangeText={(value) => {
+                                {
+                                  // setCount(value);
+                                  handleGramChange(value);
+                                }
+                              }}
+                            />
 
-                        <Block
-                          style={{
-                            height: 50,
-                            // width: 300,
-                            backgroundColor: 'white',
-                            borderRadius: 20,
-                            marginLeft: 10,
-                          }}>
-                          <SelectDropdown
-                            // defaultValue={item.details.selectedWeight}
-                            dropdownStyle={{borderRadius: 20}}
-                            buttonStyle={{
-                              height: 50,
-                              width: 200,
-                              backgroundColor: '#f2f8fc',
-                              borderRadius: 20,
-                              marginLeft: 10,
-                            }}
-                            data={
-                              isLoadingServingGrams
-                                ? ['Loading...']
-                                : servingGrams
-                            }
-                            onSelect={(selectedItem, index) => {
-                              // console.log(servingGrams, 'ok bie ');
-                              const item1 = servingGrams.find((item1) =>
-                                item1.includes(selectedItem),
-                              );
+                            <Block
+                              style={{
+                                height: 50,
+                                // width: 300,
+                                backgroundColor: 'white',
+                                borderRadius: 20,
+                                marginLeft: 10,
+                              }}>
+                              <SelectDropdown
+                                // defaultValue={item.details.selectedWeight}
+                                dropdownStyle={{borderRadius: 20}}
+                                buttonStyle={{
+                                  height: 50,
+                                  width: 200,
+                                  backgroundColor: '#f2f8fc',
+                                  borderRadius: 20,
+                                  marginLeft: 10,
+                                }}
+                                data={
+                                  isLoadingServingGrams
+                                    ? ['Loading...']
+                                    : servingGrams
+                                }
+                                onSelect={(selectedItem, index) => {
+                                  // console.log(servingGrams, 'ok bie ');
+                                  const item1 = servingGrams.find((item1) =>
+                                    item1.includes(selectedItem),
+                                  );
 
-                              const selectedWeight1 = item1
-                                ? item1
-                                    .split(' ')
-                                    [item1.split(' ').length - 2].replace(
-                                      '(',
-                                      '',
-                                    )
-                                : null;
-                              // console.log('selected weight is ', selectedWeight1);
-                              setSelectedWeight(selectedWeight1);
-                              nutritionCalculation(item, selectedWeight1);
+                                  const selectedWeight1 = item1
+                                    ? item1
+                                        .split(' ')
+                                        [item1.split(' ').length - 2].replace(
+                                          '(',
+                                          '',
+                                        )
+                                    : null;
+                                  // console.log('selected weight is ', selectedWeight1);
+                                  setSelectedWeight(selectedWeight1);
+                                  nutritionCalculation(item, selectedWeight1);
 
-                              // console.log('selected weight is2', selectedWeight);
+                                  // console.log('selected weight is2', selectedWeight);
 
-                              // Get the ID of the selected item
-                              // console.log('this is serving detrails', servingDetailsFull);
-                              const ids = servingDetailsFull.find(
-                                (ids) =>
-                                  ids.name === selectedItem.split(' (')[0],
-                              );
-                              // console.log('dark', ids);
-                              if (ids) {
-                                setServingId(ids.id);
-                              }
-                            }}
-                            buttonTextAfterSelection={(selectedItem, index) => {
-                              // console.log(selectedItem);
-                              setSelectedDropDown(selectedItem);
-                              // console.log('hallalalalalalla', selectedDropDown);
-                              // text represented after item is selected
-                              // if data array is an array of objects then return selectedItem.property to render after item is selected
-                              return selectedItem;
-                            }}
-                            rowTextForSelection={(item, index) => {
-                              // text represented for each item in dropdown
-                              // if data array is an array of objects then return item.property to represent item in dropdown
-                              return item;
-                            }}
-                            defaultButtonText={item.details.selectedDropDown}
-                          />
-                        </Block>
-                        <Block
-                          card
-                          color={'#ffff'}
-                          flex={0}
-                          // paddingHorizontal={10}
-                          marginLeft={20}
-                          // marginTop={-10}
-                          style={{
-                            // width: 200,
-                            alignSelf: 'flex-end',
-                            backgroundColor: '#94a9fe',
-                            position: 'relative',
-                            top: -12,
-                          }}>
-                            {isLoading?(<ActivityIndicator size="large" color="green" />):(
-                               <TouchableWithoutFeedback
-                               onPress={() => {
-                                 // setSelectedFood(item.food_name);
-   
-                                 handleAddFood(item);
-                               }}>
-                               <Text bold>Update</Text>
-                             </TouchableWithoutFeedback>
-                            )}
-                         
-                        </Block>
-                      </Block>)}
+                                  // Get the ID of the selected item
+                                  // console.log('this is serving detrails', servingDetailsFull);
+                                  const ids = servingDetailsFull.find(
+                                    (ids) =>
+                                      ids.name === selectedItem.split(' (')[0],
+                                  );
+                                  // console.log('dark', ids);
+                                  if (ids) {
+                                    setServingId(ids.id);
+                                  }
+                                }}
+                                buttonTextAfterSelection={(
+                                  selectedItem,
+                                  index,
+                                ) => {
+                                  // console.log(selectedItem);
+                                  setSelectedDropDown(selectedItem);
+                                  // console.log('hallalalalalalla', selectedDropDown);
+                                  // text represented after item is selected
+                                  // if data array is an array of objects then return selectedItem.property to render after item is selected
+                                  return selectedItem;
+                                }}
+                                rowTextForSelection={(item, index) => {
+                                  // text represented for each item in dropdown
+                                  // if data array is an array of objects then return item.property to represent item in dropdown
+                                  return item;
+                                }}
+                                defaultButtonText={
+                                  item.details.selectedDropDown
+                                }
+                              />
+                            </Block>
+                            <Block
+                              card
+                              color={'#ffff'}
+                              flex={0}
+                              // paddingHorizontal={10}
+                              marginLeft={20}
+                              // marginTop={-10}
+                              style={{
+                                // width: 200,
+                                alignSelf: 'flex-end',
+                                backgroundColor: '#94a9fe',
+                                position: 'relative',
+                                top: -12,
+                              }}>
+                              {isLoading ? (
+                                <ActivityIndicator size="large" color="green" />
+                              ) : (
+                                <TouchableWithoutFeedback
+                                  onPress={() => {
+                                    // setSelectedFood(item.food_name);
+
+                                    handleAddFood(item);
+                                  }}>
+                                  <Text bold>Update</Text>
+                                </TouchableWithoutFeedback>
+                              )}
+                            </Block>
+                          </Block>
+                        )}
                       </>
-                     
                     ) : (
                       <Block>
                         <Block style={styles.row} flex={0}>
@@ -843,42 +860,101 @@ const FoodPage = ({route, navigation}) => {
                           </Block>
                           <Block flex={0} width={40}></Block>
                         </Block>
-                        {isLoading?(<ActivityIndicator size="large" color="green" />):(
-                            <Block style={styles.row} flex={0} paddingTop={10}>
-                            <Block flex={0} width={65} center>
-                              <Text paddingRight={10} center>
-                                {item.details.multiplication}
-                              </Text>
-                            </Block>
-  
-                            <Block flex={3} center>
-                              <Text center>{item.details.selectedDropDown}</Text>
-                            </Block>
-                            <TouchableWithoutFeedback
-                              key={item.details.id}
-                              onPress={() => {
-                                debouncedHandleEdit(item);
-                                toggleEdit(item);
-                                handleEditButtonClick(item);
-                              }}>
-                              <Block flex={0} center>
-                                <Image
-                                  marginLeft={5}
-                                  marginRight={10}
-                                  marginTop={1}
-                                  source={require('../../assets/icons/edit1.png')}
-                                   color={'green'}
-                                  style={
-                                    (styles.data, {width: 40, height: 40})
-                                  }></Image>
+                        {isLoading ? (
+                          <ActivityIndicator size="large" color="green" />
+                        ) : (
+                          <>
+                            {item.serving_description_id === 4792 ? (
+                              <Block
+                                style={styles.row}
+                                flex={0}
+                                paddingTop={10}>
+                                <Block flex={0} width={65} center>
+                                  <Text paddingRight={10} center>
+                                    Selected Weight
+                                  </Text>
+                                </Block>
+                                {isEditMode &&
+                                editItemId === item.serving_description_id &&
+                                editItemName === item.id ? (
+                                  <Block flex={3} center>
+                                    <TextInput />
+                                  </Block>
+                                ) : (
+                                  <Block flex={3} center>
+                                    <Text center>
+                                      {item.details.selectedDropDown}
+                                    </Text>
+                                  </Block>
+                                )}
+
+                                <TouchableWithoutFeedback
+                                  key={item.details.id}
+                                  onPress={() => {
+                                    debouncedHandleEdit(item);
+                                    toggleEdit(item);
+                                    handleEditButtonClick(item);
+                                  }}>
+                                  <Block flex={0} center>
+                                    <Image
+                                      marginLeft={5}
+                                      marginRight={10}
+                                      marginTop={1}
+                                      source={require('../../assets/icons/edit1.png')}
+                                      color={'green'}
+                                      style={
+                                        (styles.data, {width: 40, height: 40})
+                                      }></Image>
+                                  </Block>
+                                </TouchableWithoutFeedback>
                               </Block>
-                            </TouchableWithoutFeedback>
-                          </Block>
-                         )}
-                      
+                            ) : (
+                              <Block
+                                style={styles.row}
+                                flex={0}
+                                paddingTop={10}>
+                                <Block flex={0} width={65} center>
+                                  <Text paddingRight={10} center>
+                                    {item.details.multiplication}
+                                  </Text>
+                                </Block>
+
+                                <Block flex={3} center>
+                                  <Text center>
+                                    {item.details.selectedDropDown}
+                                  </Text>
+                                </Block>
+                                <TouchableWithoutFeedback
+                                  key={item.details.id}
+                                  onPress={() => {
+                                    debouncedHandleEdit(item);
+                                    toggleEdit(item);
+                                    handleEditButtonClick(item);
+                                  }}>
+                                  <Block flex={0} center>
+                                    <Image
+                                      marginLeft={5}
+                                      marginRight={10}
+                                      marginTop={1}
+                                      source={require('../../assets/icons/edit1.png')}
+                                      color={'red'}
+                                      style={
+                                        (styles.data, {width: 40, height: 40})
+                                      }></Image>
+                                  </Block>
+                                </TouchableWithoutFeedback>
+                              </Block>
+                            )}
+                          </>
+                        )}
                       </Block>
                     )}
-                    <Block row flex={0} align="center" justify="center" marginTop={15}>
+                    <Block
+                      row
+                      flex={0}
+                      align="center"
+                      justify="center"
+                      marginTop={15}>
                       <Block
                         flex={0}
                         height={1}

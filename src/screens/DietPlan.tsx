@@ -96,12 +96,12 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
   if(water){
     console.log('====================================');
-    console.log(water,breakfastItems , 'water data');
+    console.log(water, 'water data');
     console.log('====================================');
   
   }
     console.log(water, 'water track new 1');
-    const waterTracker = water ? water.water_tracker : null;
+    const waterTracker = water;
     console.log(waterTracker, 'water track new');
 
   console.log(data, 'check 2');
@@ -163,9 +163,20 @@ const DietPlan = ({navigation, text, maxLines = 3}) => {
 
   const totalBreakfastCalorie = breakfastItems.reduce(
     (accumulator, currentValue) => {
-      // Remove formatting characters (e.g., commas) before parsing
-      const value = currentValue.details.totalCalorie.replace(/,/g, '');
-      return accumulator + parseFloat(value);
+      // Check if currentValue.details.totalCalorie is a non-empty string
+      if (currentValue.details.totalCalorie && typeof currentValue.details.totalCalorie === 'string') {
+        // Remove formatting characters (e.g., commas) before parsing
+        const value = currentValue.details.totalCalorie.replace(/,/g, '');
+  
+        // Check if the parsed value is a valid number
+        const parsedValue = parseFloat(value);
+        if (!isNaN(parsedValue)) {
+          return accumulator + parsedValue;
+        }
+      }
+  
+      // If currentValue.details.totalCalorie is not a valid string or the parsing fails, return accumulator
+      return accumulator;
     },
     0
   );

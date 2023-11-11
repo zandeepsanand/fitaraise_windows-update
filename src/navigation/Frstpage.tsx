@@ -66,7 +66,7 @@ export default function Frstpage({
 
     // Call the logout function to log the user out
     logout();
-    navigation.navigate('loginNew');
+    navigation.navigate('FirstPageCountrySelect');
   };
 
   const handleProducts = useCallback(
@@ -153,7 +153,7 @@ export default function Frstpage({
       setIsLoading(false);
       navigation.reset({
         index: 0,
-        routes: [{name: 'loginNew'}],
+        routes: [{name: 'FirstPageCountrySelect'}],
       });
     }
   };
@@ -327,7 +327,7 @@ export default function Frstpage({
               // onPressOut={() => navigation.navigate('water')}
               onPress={() => {
                 handleProducts(4);
-                // handleLogout();
+                handleLogout();
               }}>
               <Block
                 style={styles.mainCardView}

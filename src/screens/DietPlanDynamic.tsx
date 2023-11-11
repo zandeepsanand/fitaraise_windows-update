@@ -3,10 +3,12 @@ import React, {useState} from 'react';
 import {BASE_URL} from '@env';
 import {useTheme, useTranslation} from '../hooks/';
 import {Block, Image, Input, Text} from '../components/';
-import {Platform, TouchableOpacity, SectionList ,TouchableWithoutFeedback} from 'react-native';
+import {Platform, TouchableOpacity, SectionList ,TouchableWithoutFeedback, StyleSheet} from 'react-native';
 import Axios from 'axios';
 import {FlatList} from 'react-native';
 import api from '../../api';
+import { View } from 'react-native';
+import { TextInput } from 'react-native';
 type Movie = {
   id: string;
   title: string;
@@ -74,16 +76,41 @@ const DietPlanDynamic = ({route, navigation}) => {
   return (
     <Block safe>
       <Block
+      // card
         color={colors.card}
         flex={0}
         paddingBottom={sizes.padding}
-        paddingHorizontal={sizes.s}
-        paddingTop={sizes.s}>
-        <Input
+        paddingHorizontal={sizes.m}
+        paddingTop={sizes.s}
+        radius={10}
+        >
+        {/* <Input
           onChangeText={fetchResults}
           placeholder="Search food,meals or Brand "
-        />
+        /> */}
+         <View style={styles.inputContainer}>
+              <Image
+                source={require('../assets/icons/search.png')} // Replace with your icon source
+                style={styles.icon}
+                color={'green'}
+              />
+              <TextInput
+                style={styles.input}
+                autoCapitalize="none"
+                placeholder="Search"
+                // onChangeText={handleSearch}
+                // value={searchTerm}
+                onChangeText={fetchResults}
+              />
+            </View>
       </Block>
+      <Block
+            flex={0}
+            paddingTop={10}
+            paddingHorizontal={sizes.sm}
+            style={{position: 'relative'}}>
+           
+          </Block>
       <FlatList
         data={searchResults}
         keyExtractor={(item) => item.id}
@@ -154,5 +181,28 @@ const DietPlanDynamic = ({route, navigation}) => {
     </Block>
   );
 };
+const styles = StyleSheet.create({
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: '#f2f8fc',
+    borderRadius: 15,
+    borderWidth: 0.3,
+    padding: 15,
+    marginBottom: 10,
+    paddingRight: 0,
+    backgroundColor: '#f2f8fc',
+    // minHeight:30
+  },
+  icon: {
+    width: 20, // Adjust icon width as needed
+    height: 20, // Adjust icon height as needed
+    marginRight: 10, // Adjust spacing between icon and input field as needed
+    color: 'green',
+  },
+  input: {
+    flex: 1, // Allow input field to expand to fill available space
+  },
+});
 
 export default DietPlanDynamic;
