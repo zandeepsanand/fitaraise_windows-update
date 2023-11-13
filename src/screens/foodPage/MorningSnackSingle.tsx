@@ -10,6 +10,7 @@ import {
   StyleSheet,
   View,
   ActivityIndicator,
+  TextInput,
 } from 'react-native';
 import Axios from 'axios';
 import {FlatList} from 'react-native';
@@ -838,6 +839,87 @@ const MorningSnackSingle = ({route, navigation}) => {
                             </Block>
                           </TouchableWithoutFeedback>
                         </Block>
+                        <>
+                            {item.serving_description_id === 4792 ? (
+                              <Block
+                                style={styles.row}
+                                flex={0}
+                                paddingTop={10}>
+                                <Block flex={0} width={65} center>
+                                  <Text paddingRight={10} center>
+                                    Selected Weight
+                                  </Text>
+                                </Block>
+                                {isEditMode  ? (
+                                  <Block flex={3} center>
+                                    <TextInput />
+                                  </Block>
+                                ) : (
+                                  <Block flex={3} center>
+                                    <Text center>
+                                      {item.details.selectedDropDown}
+                                    </Text>
+                                  </Block>
+                                )}
+
+                                <TouchableWithoutFeedback
+                                  key={item.details.id}
+                                  onPress={() => {
+                                    debouncedHandleEdit(item);
+                              toggleEdit(item);
+                              handleEditButtonClick(item);
+                                  }}>
+                                  <Block flex={0} center>
+                                    <Image
+                                      marginLeft={5}
+                                      marginRight={10}
+                                      marginTop={1}
+                                      source={require('../../assets/icons/edit1.png')}
+                                      color={'green'}
+                                      style={
+                                        (styles.data, {width: 40, height: 40})
+                                      }></Image>
+                                  </Block>
+                                </TouchableWithoutFeedback>
+                              </Block>
+                            ) : (
+                              <Block
+                                style={styles.row}
+                                flex={0}
+                                paddingTop={10}>
+                                <Block flex={0} width={65} center>
+                                  <Text paddingRight={10} center>
+                                    {item.details.multiplication}
+                                  </Text>
+                                </Block>
+
+                                <Block flex={3} center>
+                                  <Text center>
+                                    {item.details.selectedDropDown}
+                                  </Text>
+                                </Block>
+                                <TouchableWithoutFeedback
+                                  key={item.details.id}
+                                  onPress={() => {
+                                    debouncedHandleEdit(item);
+                                    toggleEdit(item);
+                                    handleEditButtonClick(item);
+                                  }}>
+                                  <Block flex={0} center>
+                                    <Image
+                                      marginLeft={5}
+                                      marginRight={10}
+                                      marginTop={1}
+                                      source={require('../../assets/icons/edit1.png')}
+                                      color={'red'}
+                                      style={
+                                        (styles.data, {width: 40, height: 40})
+                                      }></Image>
+                                  </Block>
+                                </TouchableWithoutFeedback>
+                              </Block>
+                            )}
+                          </>
                       </Block>
                     )}
                     <Block row flex={0} align="center" justify="center" marginTop={15}>

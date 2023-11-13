@@ -30,6 +30,14 @@ type Movie = {
 
 const isAndroid = Platform.OS === 'android';
 const FoodPage = ({route, navigation}) => {
+  const {
+    updateBreakfastItem,
+    breakfastItems,
+    deleteItem,
+    morningSnackItems,
+    addBreakfastItem,
+  } = useContext(MealContext);
+  console.log(breakfastItems, 'first one');
   const {data, formDataCopy} = route.params;
   // console.log(formDataCopy);
   const [initialGram, setInitialGram] = useState(0);
@@ -98,14 +106,7 @@ const FoodPage = ({route, navigation}) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
-  const {
-    updateBreakfastItem,
-    breakfastItems,
-    deleteItem,
-    morningSnackItems,
-    addBreakfastItem,
-  } = useContext(MealContext);
-  console.log(breakfastItems, 'first one');
+ 
 
   const {assets, colors, gradients, sizes, fonts, user} = useTheme();
   const [selectedValue, setSelectedValue] = useState(245);
@@ -168,13 +169,14 @@ const FoodPage = ({route, navigation}) => {
         const servingGrams = response.data.data.serving_desc.map(
           (serving) => `${serving.name} (${serving.weight} g)`,
         );
-        servingInitialGram.unshift(100);
+        setInitialGram(item.details.selectedWeight);
+        servingInitialGram.unshift(initialGram);
         setServingId(servingId[0]);
         setServingDetails(servingNames);
         nutritionCalculation(item);
         setServingGrams(servingGrams);
-        setInitialGram(item.details.selectedWeight);
-        servingGrams.unshift('100 g');
+        
+        servingGrams.unshift(`${item.details.selectedWeight} g`);
         setSelectedDropDown(item.details.selectedDropDown);
         setIsLoadingServingGrams(false);
       })
@@ -353,6 +355,7 @@ const FoodPage = ({route, navigation}) => {
     calciumAmount,
     ironAmount,
   ]);
+const   serving_description_id = id ;
   const mealDetails = {
     totalCalorie,
     totalProtein,
@@ -379,6 +382,7 @@ const FoodPage = ({route, navigation}) => {
     id,
     mealType,
     meal_type,
+    serving_description_id
   };
   // console.log(id, 'db id ');
 
@@ -864,7 +868,7 @@ const FoodPage = ({route, navigation}) => {
                           <ActivityIndicator size="large" color="green" />
                         ) : (
                           <>
-                            {item.serving_description_id === 4792 ? (
+                            {item.serving_description_id=== 4792 ? (
                               <Block
                                 style={styles.row}
                                 flex={0}
@@ -883,7 +887,7 @@ const FoodPage = ({route, navigation}) => {
                                 ) : (
                                   <Block flex={3} center>
                                     <Text center>
-                                      {item.details.selectedDropDown}
+                                      {item.weight_in_g} gm
                                     </Text>
                                   </Block>
                                 )}
@@ -892,8 +896,8 @@ const FoodPage = ({route, navigation}) => {
                                   key={item.details.id}
                                   onPress={() => {
                                     debouncedHandleEdit(item);
-                                    toggleEdit(item);
-                                    handleEditButtonClick(item);
+                              toggleEdit(item);
+                              handleEditButtonClick(item);
                                   }}>
                                   <Block flex={0} center>
                                     <Image

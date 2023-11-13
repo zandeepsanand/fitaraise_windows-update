@@ -392,13 +392,13 @@ const DietPlanData = ({route, navigation}) => {
 
     setLoading(false);
   };
-  // const handleSearch= (text) =>{
+  const handleSearch = (text) =>{
 
-  //   setSelectedWeight(text);
-  //   setServingId(4792);
-  //   setMultiplication(1);
+    setSelectedWeight(text);
+    setServingId(4792);
+    setMultiplication(1);
 
-  // }
+  }
   return (
     <Block safe>
       <Block
@@ -485,7 +485,7 @@ const DietPlanData = ({route, navigation}) => {
                               style={styles.input}
                               autoCapitalize="none"
                               placeholder="Search"
-                              // onChangeText={handleSearch}
+                              onChangeText={handleSearch}
                               // value={selectedWeight} 
                            
                             />

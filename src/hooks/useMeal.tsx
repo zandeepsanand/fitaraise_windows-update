@@ -243,6 +243,7 @@ const MealContextProvider: React.FC = ({children}) => {
           serving_desc_8: null,
           serving_desc_9: null,
           serving_size: item.taken_weight,
+          serving_description_id:item.serving_description_id,
           serving_weight_1: 28,
           serving_weight_2: 50,
           serving_weight_3: 180,
@@ -803,8 +804,12 @@ const MealContextProvider: React.FC = ({children}) => {
         bodyFormData.append('food_id', food.id);
         bodyFormData.append('taken_weight', details.selectedWeight);
         bodyFormData.append('quantity', details.multiplication);
-        bodyFormData.append('serving_desc_id', details.serving_description_id);
+        // bodyFormData.append('serving_desc_id', details.serving_description_id);
         bodyFormData.append('desc_num_food_tbl', details.id);
+
+
+        bodyFormData.append('serving_desc_id', details.id);
+    
 
         api({
           method: 'post',
@@ -919,7 +924,9 @@ const MealContextProvider: React.FC = ({children}) => {
                   // Add the item to breakfastItems
                   setBreakfastItems((prevItems) => [
                     ...prevItems,
-                    {...food, details: itemToAdd.details,serving_description_id:itemToAdd.serving_description_id},
+                    {...food, details: itemToAdd.details,
+                      serving_description_id:itemToAdd.serving_description_id
+                    },
                   ]);
                 }
               }
@@ -957,7 +964,7 @@ const MealContextProvider: React.FC = ({children}) => {
         bodyFormData.append('food_id', food.id);
         bodyFormData.append('taken_weight', details.selectedWeight);
         bodyFormData.append('quantity', details.multiplication);
-        bodyFormData.append('serving_desc_id', details.id);
+        bodyFormData.append('serving_desc_id', details.serving_description_id);
         bodyFormData.append('desc_num_food_tbl', details.id);
 
         api({
@@ -1002,6 +1009,7 @@ const MealContextProvider: React.FC = ({children}) => {
                     updatedItems[existingIndex] = {
                       ...food,
                       details: itemToAdd.details,
+                      serving_description_id:itemToAdd.serving_description_id
                     };
                     setMorningSnackItems(updatedItems);
                   }
