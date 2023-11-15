@@ -42,11 +42,17 @@ function PopupPage() {
 }
 const GymWorkoutStart = () => {
   const route = useRoute();
-  const {exerciseData, completedWorkouts: initialCompletedWorkouts = [],currentDayNumber ,challenge ,dayWithId} =
-    route.params;
-  console.log(challenge , "challenge workout all start");
-  const {customerId}=useContext(LoginContext);
+  const {
+    exerciseData,
+    completedWorkouts: initialCompletedWorkouts = [],
+    currentDayNumber,
+    challenge,
+    dayWithId,
+  } = route.params;
+  console.log(challenge, 'challenge workout all start');
+  const {customerId} = useContext(LoginContext);
 
+  // Callback function to receive dataForDB from GymWorkoutDetailsPage
 
   const {user} = useData();
   const {t} = useTranslation();
@@ -91,6 +97,25 @@ const GymWorkoutStart = () => {
       );
       setIsTimerPaused(false); // Reset state to false
     }
+  };
+  const [kgInputValues, setKgInputValues] = useState(
+    Array(currentWorkout.sets).fill(''),
+  );
+  const [lbsInputValues, setLbsInputValues] = useState(
+    Array(currentWorkout.sets).fill(''),
+  );
+  const [repsInputValuesLbs, setRepsInputValuesLbs] = useState(
+    Array(currentWorkout.sets).fill(''),
+  );
+  const [repsInputValuesKg, setRepsInputValuesKg] = useState(
+    Array(currentWorkout.sets).fill(''),
+  );
+
+  const clearInputFields = () => {
+    setKgInputValues(Array(currentWorkout.sets).fill(''));
+    setLbsInputValues(Array(currentWorkout.sets).fill(''));
+    setRepsInputValuesLbs(Array(currentWorkout.sets).fill(''));
+    setRepsInputValuesKg(Array(currentWorkout.sets).fill(''));
   };
 
   // const goToNextWorkout = () => {
@@ -150,11 +175,9 @@ const GymWorkoutStart = () => {
     let interval;
 
     if (
-      
       currentWorkout.time_or_sets === 'time' &&
       timeLeft > 0 &&
-      isTimerRunning 
-    
+      isTimerRunning
     ) {
       interval = setInterval(() => {
         setTimeLeft((prevTime) => {
@@ -198,35 +221,67 @@ const GymWorkoutStart = () => {
   // console.log(completed_date);
   const customer_id = customerId;
   const day = currentDayNumber;
-  const challenge_id = challenge.id ;
+  const challenge_id = challenge.id;
   // const selectedItem = dayWithId.find(item => item.day_number === currentDayNumber);
   const challenge_excercise_id = currentWorkout.id;
-  console.log(challenge_excercise_id , "challenge exercisee id");
-  
+  console.log(challenge_excercise_id, 'challenge exercisee id');
+
   const excercise_id = currentWorkout.excercise_id;
   // const home_workout_excercise = currentWorkout.id;
+  const weightValuesKg = kgInputValues.map((value) => parseInt(value));
+  const repsValuesKg = repsInputValuesKg.map((value) => parseInt(value));
+  console.log(weightValuesKg,"weight");
+  
 
+  const weightValuesLbs = lbsInputValues.map((value) => parseInt(value));
+  const repsValuesLbs = repsInputValuesLbs.map((value) => parseInt(value));
 
-  const handleFinish = (currentWorkout) => {
+  const hasKgData = weightValuesKg.length > 0 && repsValuesKg.length > 0;
+  const hasLbsData = weightValuesLbs.length > 0 && repsValuesLbs.length > 0;
+
+  const [weightvsreps,setWeightVsRep ]=useState(null);
+
+  if (hasKgData && !hasLbsData){
+    console.log('jai');
+    
+    const weight_vs_reps = weightValuesKg.map((weight, index) => ({
+      weight: `${weight}kg`,
+      reps: repsValuesKg[index],
+    }));
+    setWeightVsRep(weight_vs_reps)
+  }else if(!hasKgData && hasLbsData){
+    const weight_vs_reps = weightValuesLbs.map((weight, index) => ({
+      weight: `${weight}kg`,
+      reps: repsValuesLbs[index],
+    }));
+    setWeightVsRep(weight_vs_reps)
+  }
+const weight_vs_reps = weightvsreps;
+ console.log('====================================');
+ console.log(weight_vs_reps, "demo");
+ console.log('====================================');
+
+  // console.log(dataForDB,"weight upload");
+
+  useEffect(() => {
+    console.log('====================================');
+    console.log(weightvsreps, "demo");
+    console.log('====================================');
+  }, [weightvsreps]);
+
+  const handleFinish = (currentWorkout, weight_vs_reps) => {
     api
-      .post(
-        `update_workout_challenge_excercise`,
-        {
-          customer_id,
-          day,
-          challenge_id,
-          excercise_id,
-          challenge_excercise_id
-
-          
-        }
-       
-      )
+      .post(`update_workout_challenge_excercise`, {
+        customer_id,
+        day,
+        challenge_id,
+        excercise_id,
+        challenge_excercise_id,
+        weight_vs_reps,
+      })
       .then((response) => {
-        console.log(response.data , "save to db ");
+        console.log(response.data, 'save to db ');
         if (response.data.success) {
-         
-          
           setShowNextButton(true);
           setCompletedDate([completed_date]);
           setCompletedWorkouts([
@@ -239,6 +294,7 @@ const GymWorkoutStart = () => {
         console.error('Error fetching exercise data:', error);
       });
   };
+
   const uniqueCompletedWorkouts = [...new Set(completedWorkouts)];
   const firstUnfinishedWorkoutIndex = exerciseData.findIndex(
     (workout) => !uniqueCompletedWorkouts.includes(workout.excercise),
@@ -261,6 +317,21 @@ const GymWorkoutStart = () => {
   //   // Clear the timeout if the component unmounts before the timeout
   //   return () => clearTimeout(timeout);
   // }, []); // Empty dependency array means this effect runs only once when mounted
+  const [areFieldsFilled, setFieldsFilled] = useState(false);
+  // Callback function to update the state when fields are filled on the subpage
+  const handleFieldsFilled = (filled) => {
+    setFieldsFilled(filled);
+  };
+
+  // Update the currentWorkout when needed, e.g., when moving to the next workout
+
+  useEffect(() => {
+    // Update the input arrays with the new workout's sets
+    setKgInputValues(Array(currentWorkout.sets).fill(''));
+    setLbsInputValues(Array(currentWorkout.sets).fill(''));
+    setRepsInputValuesLbs(Array(currentWorkout.sets).fill(''));
+    setRepsInputValuesKg(Array(currentWorkout.sets).fill(''));
+  }, [currentWorkout]);
 
   return (
     <Block safe marginTop={sizes.md}>
@@ -297,141 +368,122 @@ const GymWorkoutStart = () => {
               data={exerciseData}
             /> */}
           </View>
-          <Block center 
-          paddingTop={20}
-          >
-            <View
-             style={{flex: 1}}
-            >
+          <Block center paddingTop={20}>
+            <View style={{flex: 1}}>
               <GymWorkoutDetailsPage
                 workout={currentWorkout}
                 timeLeft={timeLeft}
                 formattedTime={formatTime(timeLeft)}
+                onFieldsFilled={handleFieldsFilled}
+                kgInputValues={kgInputValues}
+                setKgInputValues={setKgInputValues}
+                lbsInputValues={lbsInputValues}
+                setLbsInputValues={setLbsInputValues}
+                repsInputValuesLbs={repsInputValuesLbs}
+                setRepsInputValuesLbs={setRepsInputValuesLbs}
+                repsInputValuesKg={repsInputValuesKg}
+                setRepsInputValuesKg={setRepsInputValuesKg}
               />
-
-              {currentWorkout.time_or_sets === 'sets' ? (
-                <Block centerContent 
-                // paddingTop={50}
-                >
-                  <Button
-                    tertiary
-                    width={100}
-                    style={{alignSelf: 'center', backgroundColor: '#fdb2b2'}}
-                    onPress={() => {
-                      goToNextWorkout();
-                      handleFinish(currentWorkout);
-                      if (isLastWorkout) {
-                        handleFinish(currentWorkout);
-                        navigation.navigate('ChallengeCongratsPage', {
-                          // savedDate,
-                          // completedWorkouts,
-                          challenge
-                        }); // Replace 'YourNewPage' with the actual page name
-                      }
-                    }}>
-                    <Text center bold>
-                      DONE
-                    </Text>
-                  </Button>
-                </Block>
-              ) : timeLeft === 0 ? (
-                <Block centerContent paddingTop={50}>
-                  {showNextButton ? (
+              {currentWorkout.weight_vs_reps === null ||
+              currentWorkout.weight_vs_reps.length === 0 ? (
+                currentWorkout.time_or_sets === 'sets' ? (
+                  <Block
+                    centerContent
+                    // paddingTop={50}
+                  >
                     <Button
                       tertiary
+                      width={100}
+                      style={{
+                        alignSelf: 'center',
+                        backgroundColor: '#fdb2b2',
+                      }}
                       onPress={() => {
-                        goToNextWorkout();
-                        setShowNextButton(false);
-                        handleFinish(currentWorkout);
-                        if (isLastWorkout) {
-                          navigation.navigate('GymCongratsPage', {
-                            savedDate,
-                            completedWorkouts,
-                          }); // Replace 'YourNewPage' with the actual page name
+                        if (areFieldsFilled) {
+                          goToNextWorkout();
+                          handleFinish(currentWorkout, weight_vs_reps);
+                          if (isLastWorkout) {
+                            handleFinish(currentWorkout, weight_vs_reps);
+                            navigation.navigate('ChallengeCongratsPage', {
+                              // savedDate,
+                              // completedWorkouts,
+                              challenge,
+                            }); // Replace 'YourNewPage' with the actual page name
+                          }
                         }
                       }}
-                      white
-                      width={100}
-                      radius={15}
-                      style={{alignSelf: 'center'}}>
-                      <Text bold>Next</Text>
+                      disabled={!areFieldsFilled}>
+                      <Text center bold>
+                        DONE
+                      </Text>
                     </Button>
-                  ) : (
-                    <Button
-                      onPress={() => handleFinish(currentWorkout)}
-                      color={colors.lightGreen}
-                      width={100}
-                      radius={15}
-                      style={{alignSelf: 'center'}}>
-                      <Text bold>Finish</Text>
-                    </Button>
-                  )}
-                </Block>
+                  </Block>
+                ) : timeLeft === 0 ? (
+                  <Block centerContent paddingTop={50}>
+                    {showNextButton ? (
+                      <Button
+                        tertiary
+                        onPress={() => {
+                          goToNextWorkout();
+                          setShowNextButton(false);
+                          handleFinish(currentWorkout, weight_vs_reps);
+                          if (isLastWorkout) {
+                            navigation.navigate('GymCongratsPage', {
+                              savedDate,
+                              completedWorkouts,
+                            }); // Replace 'YourNewPage' with the actual page name
+                          }
+                        }}
+                        white
+                        width={100}
+                        radius={15}
+                        style={{alignSelf: 'center'}}>
+                        <Text bold>Next</Text>
+                      </Button>
+                    ) : (
+                      <Button
+                        onPress={() =>
+                          handleFinish(currentWorkout, weight_vs_reps)
+                        }
+                        color={colors.lightGreen}
+                        width={100}
+                        radius={15}
+                        style={{alignSelf: 'center'}}>
+                        <Text bold>Finish</Text>
+                      </Button>
+                    )}
+                  </Block>
+                ) : (
+                  <Block centerContent paddingTop={50}>
+                    {!isTimerRunning && (
+                      <Button
+                        onPress={handleStart}
+                        tertiary
+                        white
+                        width={100}
+                        radius={15}
+                        style={{alignSelf: 'center'}}
+                        row>
+                        <Text bold>Start</Text>
+                      </Button>
+                    )}
+                    {isTimerRunning && (
+                      <Button
+                        onPress={handlePause}
+                        tertiary
+                        white
+                        width={100}
+                        radius={15}
+                        style={{alignSelf: 'center'}}
+                        row>
+                        <Text bold>Pause</Text>
+                      </Button>
+                    )}
+                  </Block>
+                )
               ) : (
-                <Block centerContent paddingTop={50}>
-                  {!isTimerRunning && (
-                    <Button
-                      onPress={handleStart}
-                      tertiary
-                      white
-                      width={100}
-                      radius={15}
-                      style={{alignSelf: 'center'}}
-                      row>
-                      <Text bold>Start</Text>
-                    </Button>
-                  )}
-                  {isTimerRunning && (
-                    <Button
-                      onPress={handlePause}
-                      tertiary
-                      white
-                      width={100}
-                      radius={15}
-                      style={{alignSelf: 'center'}}
-                      row>
-                      <Text bold>Pause</Text>
-                    </Button>
-                  )}
-                  {/* <Button
-                    tertiary
-                    onPress={toggleTimerPause}
-                    white
-                    width={100}
-                    radius={15}
-                    style={{alignSelf: 'center'}}
-                    row>
-                    <Image
-                      radius={0}
-                      width={18}
-                      height={20}
-                      color={colors.white}
-                      source={
-                        isTimerPaused
-                          ? require('../../../assets/icons/play.png')
-                          : require('../../../assets/icons/pause.png')
-                      }
-                      transform={[{rotate: '0deg'}]}
-                      style={{alignSelf: 'center'}}
-                      marginRight={5}
-                    />
-                    <Text bold>{isTimerPaused ? 'Resume' : 'Pause'}</Text>
-                  </Button> */}
-                </Block>
+                <></>
               )}
-              {/* <View>
-                <Text>{formatTime(timeLeft)}</Text>
-                {!isTimerRunning && !isTimerPaused && (
-                  <Button onPress={handleStart}>
-                    <Text>Start</Text>
-                  </Button>
-                )}
-                {isTimerRunning && (
-                  <Button onPress={handlePause}>
-                    <Text>Pause</Text>
-                  </Button>
-                )}
-              </View> */}
 
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-between'}}>
