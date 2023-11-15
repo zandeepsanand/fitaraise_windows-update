@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {useEffect, useState} from 'react';
 import {TextInput, View} from 'react-native';
 import {Block, Button, Image, Input, Text} from '../../../components';
@@ -74,7 +75,7 @@ const GymWorkoutDetailsPage = ({
 
   const {assets, colors, sizes} = useTheme();
   // console.log(workout.id);
-  const customer_id = 10;
+  const customer_id = 2;
   const workout_id = workout.workout_id;
   const excercise_id = workout.excercise;
   const home_workout_excercise = workout.id;
