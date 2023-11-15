@@ -25,7 +25,7 @@ const isAndroid = Platform.OS === 'android';
 
 const DietPlanData = ({route, navigation}) => {
   const {mealType, responseData, meal_type, formDataCopy, food} = route.params;
-  console.log(responseData,"response");
+  console.log(responseData, 'response');
 
   const [initialGram, setInitialGram] = useState(null);
   const [selectedWeight, setSelectedWeight] = useState(initialGram);
@@ -42,7 +42,7 @@ const DietPlanData = ({route, navigation}) => {
 
   // new items for adding food to db
   const [servingId, setServingId] = useState('');
-  console.log(servingId , "serving id");
+  console.log(servingId, 'serving id');
 
   const [servingDesc, setServingDesc] = useState('');
 
@@ -125,6 +125,22 @@ const DietPlanData = ({route, navigation}) => {
   const IMAGE_VERTICAL_MARGIN =
     (sizes.width - (IMAGE_VERTICAL_SIZE + sizes.sm) * 2) / 2;
   const [isLoadingServingGrams, setIsLoadingServingGrams] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [searchText, setSearchText] = useState('');
+
+  const handleSearch = (text) => {
+    setSearchText(text);
+    setSelectedWeight(text);
+    setServingId(4792);
+    setMultiplication(1);
+    // Add any additional logic you need when the search text changes
+  };
+
+  const handleEditButtonClick = () => {
+    setIsEditing(true);
+    setSearchText('');
+  };
+
   useEffect(() => {
     setIsLoadingServingGrams(true);
     axios
@@ -392,13 +408,7 @@ const DietPlanData = ({route, navigation}) => {
 
     setLoading(false);
   };
-  const handleSearch = (text) =>{
 
-    setSelectedWeight(text);
-    setServingId(4792);
-    setMultiplication(1);
-
-  }
   return (
     <Block safe>
       <Block
@@ -472,32 +482,65 @@ const DietPlanData = ({route, navigation}) => {
                       </Block>
 
                       <TouchableOpacity>
+                     
                         <Block row marginTop={10}>
                           <Block row paddingBottom={10} paddingLeft={10}>
-                            <Text
-                              p
-                              semibold
-                              marginRight={sizes.s}
-                              color={colors.secondary}>
-                              Selected Gram : {multiplication*selectedWeight}g
-                            </Text>
-                            <TextInput
-                              style={styles.input}
-                              autoCapitalize="none"
-                              placeholder="Search"
-                              onChangeText={handleSearch}
-                              // value={selectedWeight} 
-                           
-                            />
+                          {isEditing ? (
+                              <>
+                              <Block center flex={0}>
+                              <Text
+                                  p
+                                  semibold
+                                  center
+                                  marginRight={sizes.s}
+                                  color={colors.secondary}>
+                                  Selected Gram :
+                                </Text>
+                              </Block>
+                               
+                                <TextInput
+                                  style={styles.inputContainer}
+                                  autoCapitalize="none"
+                                  placeholder={`${
+                                    multiplication * selectedWeight
+                                  }g`}
+                                  onChangeText={handleSearch}
+                                  value={searchText}
+                                />
+                              </>
+                            ) : (
+                              <Text
+                                p
+                                semibold
+                                center
+                                marginRight={sizes.s}
+                                color={colors.secondary}>
+                                Selected Gram :{' '}
+                                {multiplication * selectedWeight}g
+                              </Text>
+                            )}
                             {/* <Image source={assets.arrow} color={colors.link} /> */}
                           </Block>
-                          <TouchableWithoutFeedback
+                          {isEditing?(
+                             <TouchableWithoutFeedback
+                             // key={item.details.id}
+                             onPress={handleEditButtonClick}>
+                             <Block flex={0} center>
+                               {/* <Image
+                                 marginLeft={5}
+                                 // marginRight={10}
+                                 marginTop={1}
+                                 source={require('../assets/icons/edit1.png')}
+                                 color={'green'}
+                                 style={
+                                   (styles.data, {width: 30, height: 30})
+                                 }></Image> */}
+                             </Block>
+                           </TouchableWithoutFeedback>
+                          ):(
+                            <TouchableWithoutFeedback
                             // key={item.details.id}
-                            onPress={() => {
-                              // debouncedHandleEdit(item);
-                              // toggleEdit(item);
-                              // handleEditButtonClick(item);
-                            }}>
+                            onPress={handleEditButtonClick}>
                             <Block flex={0} center>
                               <Image
                                 marginLeft={5}
@@ -510,6 +553,8 @@ const DietPlanData = ({route, navigation}) => {
                                 }></Image>
                             </Block>
                           </TouchableWithoutFeedback>
+                          )}
+                         
                         </Block>
                       </TouchableOpacity>
                     </Block>
@@ -586,6 +631,7 @@ const DietPlanData = ({route, navigation}) => {
                       : null;
 
                     setSelectedWeight(selectedweight1);
+                    setIsEditing(false);
                     // Get the ID of the selected item
                     // console.log('this is serving detrails', servingDetailsFull);
 
@@ -929,6 +975,19 @@ const DietPlanData = ({route, navigation}) => {
   );
 };
 const styles = StyleSheet.create({
+  inputContainer: {
+    // flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: '#f2f8fc',
+    borderRadius: 15,
+    borderWidth: 0.3,
+    width: 75,
+    // marginBottom: 10,
+    padding: 10,
+    backgroundColor: 'white',
+  color:'gray'
+    // minHeight:30
+  },
   buttonText: {
     color: 'white',
     fontSize: 16,

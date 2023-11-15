@@ -106,8 +106,6 @@ const FoodPage = ({route, navigation}) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
- 
-
   const {assets, colors, gradients, sizes, fonts, user} = useTheme();
   const [selectedValue, setSelectedValue] = useState(245);
   const [count, setCount] = useState(1);
@@ -175,7 +173,7 @@ const FoodPage = ({route, navigation}) => {
         setServingDetails(servingNames);
         nutritionCalculation(item);
         setServingGrams(servingGrams);
-        
+
         servingGrams.unshift(`${item.details.selectedWeight} g`);
         setSelectedDropDown(item.details.selectedDropDown);
         setIsLoadingServingGrams(false);
@@ -185,9 +183,7 @@ const FoodPage = ({route, navigation}) => {
         setIsEditMode(false);
       });
   }
-  function handleEdit4792(item){
-
-  }
+  function handleEdit4792(item) {}
 
   // Define another function to be executed if food_id is available
   function anotherFunction(foodData) {
@@ -355,7 +351,7 @@ const FoodPage = ({route, navigation}) => {
     calciumAmount,
     ironAmount,
   ]);
-const   serving_description_id = id ;
+  const serving_description_id = id;
   const mealDetails = {
     totalCalorie,
     totalProtein,
@@ -382,7 +378,7 @@ const   serving_description_id = id ;
     id,
     mealType,
     meal_type,
-    serving_description_id
+    serving_description_id,
   };
   // console.log(id, 'db id ');
 
@@ -815,7 +811,9 @@ const   serving_description_id = id ;
                                   return item;
                                 }}
                                 defaultButtonText={
-                                  item.details.selectedDropDown
+                                  item.serving_description_id === 4792
+                                    ? item.details.taken_weight
+                                    : item.details.selectedDropDown
                                 }
                               />
                             </Block>
@@ -851,24 +849,35 @@ const   serving_description_id = id ;
                       </>
                     ) : (
                       <Block>
-                        <Block style={styles.row} flex={0}>
-                          <Block flex={0}>
-                            <Text paddingRight={10} semibold>
-                              Quantity
-                            </Text>
-                          </Block>
-                          <Block flex={3}>
-                            <Text center semibold>
-                              Selected serving size
-                            </Text>
-                          </Block>
-                          <Block flex={0} width={40}></Block>
-                        </Block>
+                        {
+                                  item.serving_description_id === 4792
+                                    ? (
+                                      <Block flex={3}>
+                                     
+                                      </Block>
+                                    ):(
+                                      <Block style={styles.row} flex={0}>
+                                      <Block flex={0}>
+                                        <Text paddingRight={10} semibold>
+                                          Quantity
+                                        </Text>
+                                      </Block>
+                                      <Block flex={3}>
+                                        <Text center semibold>
+                                          Selected serving size
+                                        </Text>
+                                      </Block>
+                                      <Block flex={0} width={40}></Block>
+                                    </Block>
+                                    )
+                                    
+                                }
+                      
                         {isLoading ? (
                           <ActivityIndicator size="large" color="green" />
                         ) : (
                           <>
-                            {item.serving_description_id=== 4792 ? (
+                            {item.serving_description_id === 4792 ? (
                               <Block
                                 style={styles.row}
                                 flex={0}
@@ -886,9 +895,11 @@ const   serving_description_id = id ;
                                   </Block>
                                 ) : (
                                   <Block flex={3} center>
-                                    <Text center>
-                                      {item.weight_in_g} gm
-                                    </Text>
+                                    <Text center> {
+                                  item.serving_description_id === 4792
+                                    ? item.details.taken_weight
+                                    : item.details.selectedDropDown
+                                } gm</Text>
                                   </Block>
                                 )}
 
@@ -896,8 +907,8 @@ const   serving_description_id = id ;
                                   key={item.details.id}
                                   onPress={() => {
                                     debouncedHandleEdit(item);
-                              toggleEdit(item);
-                              handleEditButtonClick(item);
+                                    toggleEdit(item);
+                                    handleEditButtonClick(item);
                                   }}>
                                   <Block flex={0} center>
                                     <Image
@@ -905,7 +916,7 @@ const   serving_description_id = id ;
                                       marginRight={10}
                                       marginTop={1}
                                       source={require('../../assets/icons/edit1.png')}
-                                      color={'green'}
+                                      color={'#449c4a'}
                                       style={
                                         (styles.data, {width: 40, height: 40})
                                       }></Image>
@@ -925,7 +936,11 @@ const   serving_description_id = id ;
 
                                 <Block flex={3} center>
                                   <Text center>
-                                    {item.details.selectedDropDown}
+                                  {
+                                  item.serving_description_id === 4792
+                                    ? item.details.taken_weight
+                                    : item.details.selectedDropDown
+                                }
                                   </Text>
                                 </Block>
                                 <TouchableWithoutFeedback
@@ -941,7 +956,7 @@ const   serving_description_id = id ;
                                       marginRight={10}
                                       marginTop={1}
                                       source={require('../../assets/icons/edit1.png')}
-                                      color={'red'}
+                                      color={'#449c4a'}
                                       style={
                                         (styles.data, {width: 40, height: 40})
                                       }></Image>
