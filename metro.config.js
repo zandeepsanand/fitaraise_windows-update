@@ -1,43 +1,18 @@
-/* eslint-disable prettier/prettier */
-// const { getDefaultConfig } = require('@expo/metro-config');
-// module.exports = (async () => {
-//     const {
-//       resolver: { sourceExts, assetExts }
-//     } = await getDefaultConfig(__dirname)
-//     return {
-//       transformer: {
-//         defaultConfig: async () => ({
-//           transform: {
-//             experimentalImportSupport: false,
-//             inlineRequires: false
-//           }
-//         })
-//       },
-//       resolver: {
-//         sourceExts,
-//         assetExts: [...assetExts, 'fcscript']
-//       }
-//     }
-//   })()
-const { getDefaultConfig } = require('@expo/metro-config');
+const { getDefaultConfig } = require('metro-config');
 
 module.exports = (async () => {
-  const {
-    resolver: { sourceExts, assetExts }
-  } = await getDefaultConfig(__dirname);
+  const defaultConfig = await getDefaultConfig(__dirname);
 
   return {
     transformer: {
-      defaultConfig: async () => ({
-        transform: {
-          experimentalImportSupport: false,
-          inlineRequires: false
-        }
-      })
+      ...defaultConfig.transformer,
+      experimentalImportSupport: false,
+      inlineRequires: false,
+      assetPlugins: ['expo-asset/tools/hashAssetFiles'],
     },
     resolver: {
-      sourceExts,
-      assetExts: [...assetExts, 'fcscript']
-    }
+      ...defaultConfig.resolver,
+      assetExts: [...defaultConfig.resolver.assetExts, 'fcscript'],
+    },
   };
 })();
