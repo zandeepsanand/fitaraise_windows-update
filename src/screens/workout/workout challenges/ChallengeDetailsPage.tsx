@@ -29,21 +29,18 @@ const ChallengeDetailsPage = ({
     const updatedValues = [...kgInputValues];
     updatedValues[index] = newValue;
     setKgInputValues(updatedValues);
-    
   };
 
   const handleLbsInputChange = (index, newValue) => {
     const updatedValues = [...lbsInputValues];
     updatedValues[index] = newValue;
     setLbsInputValues(updatedValues);
-  
   };
 
   const handleRepsKgInputChange = (index, newValue) => {
     const updatedValues = [...repsInputValuesKg];
     updatedValues[index] = newValue;
     setRepsInputValuesKg(updatedValues);
-    
   };
   const handleRepsLbsInputChange = (index, newValue) => {
     const updatedValues = [...repsInputValuesLbs];
@@ -52,7 +49,6 @@ const ChallengeDetailsPage = ({
     const updatedValuesKg = [...repsInputValuesKg];
     updatedValues[index] = newValue;
     setRepsInputValuesKg(updatedValues);
-   
   };
   console.log(repsInputValuesLbs, repsInputValuesKg, kgInputValues, 'reps ');
 
@@ -91,6 +87,23 @@ const ChallengeDetailsPage = ({
       repsLbsValues.every((value) => value.trim() !== '');
 
     return kgAndRepsKgFilled || lbsAndRepsKgFilled;
+  };
+  const clearLbsInputValues = () => {
+    setLbsInputValues(Array.from({length: workout.sets}, () => ''));
+    setRepsInputValuesLbs(Array.from({length: workout.sets}, () => ''));
+  };
+
+  const clearKgInputValues = () => {
+    setKgInputValues(Array.from({length: workout.sets}, () => ''));
+    setRepsInputValuesKg(Array.from({length: workout.sets}, () => ''));
+  };
+
+  const clearInputValues = () => {
+    if (lbsView) {
+      clearKgInputValues(); // If lbs view is true, clear kg values
+    } else {
+      clearLbsInputValues(); // If lbs view is false, clear lbs values
+    }
   };
 
   // Call the callback function to update the state on the main page
@@ -166,60 +179,57 @@ const ChallengeDetailsPage = ({
             {workout.weight_vs_reps === null ||
             workout.weight_vs_reps.length === 0 ? (
               <Block
-              flex={4}
-              style={{
-                alignItems: 'center',
-                shadowRadius: 8,
-                shadowOpacity: 0.3,
-                shadowColor: '#757575',
-                shadowOffset: {
-                  width: 0,
-                  height: 3,
-                },
-              }}
-              paddingBottom={20}>
-              <DuoToggleSwitch
-                primaryText="Lbs"
-                secondaryText="Kg"
-                onPrimaryPress={() => {
-                  //   setModalCm(true);
-                  //   setIsCm(true);
-                  setLbsView(false);
-       
-
-                  const updatedFormData = {
-                    ...workoutData,
-                    height_unit: 'cm',
-                  };
-                  navigation.setParams({workoutData: updatedFormData});
+                flex={4}
+                style={{
+                  alignItems: 'center',
+                  shadowRadius: 8,
+                  shadowOpacity: 0.3,
+                  shadowColor: '#757575',
+                  shadowOffset: {
+                    width: 0,
+                    height: 3,
+                  },
                 }}
-                onSecondaryPress={() => {
-                  // setModalFeet(true);
-                  setLbsView(true);
-                  //   setIsCm(false);
-                  const updatedFormData = {
-                    ...workoutData,
+                paddingBottom={20}>
+                <DuoToggleSwitch
+                  primaryText="Lbs"
+                  secondaryText="Kg"
+                  onPrimaryPress={() => {
+                    setLbsView(false);
+                    clearInputValues();
+                    const updatedFormData = {
+                      ...workoutData,
+                      height_unit: 'cm',
+                    };
+                    navigation.setParams({workoutData: updatedFormData});
+                  }}
+                  onSecondaryPress={() => {
+                    setLbsView(true);
+                    clearInputValues();
+                    const updatedFormData = {
+                      ...workoutData,
+                      height_unit: 'ft',
+                    };
+                    navigation.setParams({workoutData: updatedFormData});
+                  }}
+                  TouchableComponent={Ripple}
+                  primaryButtonStyle={{height: 50}}
+                  secondaryButtonStyle={{height: 50}}
+                  // primaryTextStyle={}
+                  rippleColor="#fff"
+                  rippleContainerBorderRadius={50}
+                  activeColor="#5f9b4c"
+                />
+              </Block>
+            ) : (
+              <></>
+            )}
 
-                    height_unit: 'ft',
-                  };
-                  navigation.setParams({workoutData: updatedFormData});
-                }}
-                TouchableComponent={Ripple}
-                primaryButtonStyle={{height: 50}}
-                secondaryButtonStyle={{height: 50}}
-                // primaryTextStyle={}
-                rippleColor="#fff"
-                rippleContainerBorderRadius={50}
-                activeColor="#5f9b4c"
-              />
-            </Block>
-            ):(<></>)}
-           
             {workout.weight_vs_reps === null ||
             workout.weight_vs_reps.length === 0 ? (
               <>
                 {lbsView === true ? (
-                  <Button onPress={() => setModalKg(true)}>
+                  <Button>
                     {Array.from({length: workout.sets}, (_, setIndex) => (
                       <View style={{flexDirection: 'row', marginBottom: 10}}>
                         <TextInput
@@ -243,7 +253,6 @@ const ChallengeDetailsPage = ({
                           }}
                         />
                         <TextInput
-                          // key={setIndex}
                           placeholder={`Reps  ${setIndex + 1}`}
                           keyboardType="numeric"
                           maxLength={2}
@@ -265,7 +274,7 @@ const ChallengeDetailsPage = ({
                     ))}
                   </Button>
                 ) : (
-                  <Button>
+                  <Button onPress={clearInputValues}>
                     {Array.from({length: workout.sets}, (_, setIndex) => (
                       <View style={{flexDirection: 'row', marginBottom: 10}}>
                         <TextInput
@@ -289,7 +298,6 @@ const ChallengeDetailsPage = ({
                           }}
                         />
                         <TextInput
-                          // key={setIndex}
                           placeholder={`Reps  ${setIndex + 1}`}
                           keyboardType="numeric"
                           maxLength={3}
@@ -314,50 +322,56 @@ const ChallengeDetailsPage = ({
               </>
             ) : (
               <Block padding={20}>
-
-             
-              {workout.weight_vs_reps.map((item, index) => (
-                <Block card 
-                  key={index}
-                  style={{flexDirection: 'row', marginBottom: 10}}>
-                  <Text center
-                    style={{
-                      height: 50,
-                      width: 150,
-                      borderRadius: 10,
-                      backgroundColor: 'white',
-                      borderWidth: 0,
-                      padding: 10,
-                    }}>
-                    Weight: 
-                    <Text bold primary> {item.weight}</Text>
-                  </Text>
-                  <Text center
-                    style={{
-                      height: 50,
-                      width: 150,
-                      borderRadius: 10,
-                      backgroundColor: 'white',
-                      borderWidth: 0,
-                      marginLeft: 10,
-                      padding: 10,
-                    }}>
-                    Reps: 
-                    <Text bold primary> {item.reps}</Text>
-                  </Text>
-                 <Block flex={0} center paddingRight={10}>
-                 <Image
-                    radius={0}
-                    width={30}
-                    height={30}
-                    // color={colors.primary}
-                    source={require('../../../assets/icons/yes.png')}
-                    // transform={[{rotate: '180deg'}]}
-                  />
-                 </Block>
-                </Block>
-                
-              ))}
+                {workout.weight_vs_reps.map((item, index) => (
+                  <Block
+                    card
+                    key={index}
+                    style={{flexDirection: 'row', marginBottom: 10}}>
+                    <Text
+                      center
+                      style={{
+                        height: 50,
+                        width: 150,
+                        borderRadius: 10,
+                        backgroundColor: 'white',
+                        borderWidth: 0,
+                        padding: 10,
+                      }}>
+                      Weight:
+                      <Text bold primary>
+                        {' '}
+                        {item.weight}
+                      </Text>
+                    </Text>
+                    <Text
+                      center
+                      style={{
+                        height: 50,
+                        width: 150,
+                        borderRadius: 10,
+                        backgroundColor: 'white',
+                        borderWidth: 0,
+                        marginLeft: 10,
+                        padding: 10,
+                      }}>
+                      Reps:
+                      <Text bold primary>
+                        {' '}
+                        {item.reps}
+                      </Text>
+                    </Text>
+                    <Block flex={0} center paddingRight={10}>
+                      <Image
+                        radius={0}
+                        width={30}
+                        height={30}
+                        // color={colors.primary}
+                        source={require('../../../assets/icons/yes.png')}
+                        // transform={[{rotate: '180deg'}]}
+                      />
+                    </Block>
+                  </Block>
+                ))}
               </Block>
             )}
           </>
