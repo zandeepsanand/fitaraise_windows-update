@@ -111,50 +111,7 @@ const GymWorkoutDetailsPage = ({
     console.log(updatedFormData, 'height unit check');
   };
   const navigation = useNavigation();
-  // console.log(timeLeft);
-  const handleFinish = () => {
-    axios
-      .post(
-        `${BASE_URL}add_home_workout_excercises_done`,
-        {
-          customer_id,
-          workout_id,
-          excercise_id,
-          home_workout_excercise,
-          completed_date,
-        },
-        {
-          headers: {
-            Authorization: `Bearer 477|F4h2p6ibB4FFhCwx0RJLNO6rPRXhPbMttg2x1iYT`,
-          },
-        },
-      )
-      .then((response) => {
-        console.log(response.data);
-        // setExerciseData(response.data.data);
-        // console.log('Exercise data after API call:', response.data.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching exercise data:', error);
-      });
-  };
-  // Validation function to check if all input fields are filled
-  // const areFieldsFilled = () => {
-  //   const isKgFilled = kgInputValues.every((value) => value.trim() !== '');
-  //   const isLbsFilled = lbsInputValues.every((value) => value.trim() !== '');
-  //   const isRepsKgFilled = repsInputValuesKg.every(
-  //     (value) => value.trim() !== '',
-  //   );
-  //   const isRepsLbsFilled = repsInputValuesLbs.every(
-  //     (value) => value.trim() !== '',
-  //   );
 
-  //   // Check if all elements in kgInputValues are filled AND
-  //   // all elements in repsInputValuesKg are filled OR
-  //   // all elements in lbsInputValues are filled AND
-  //   // all elements in repsInputValuesLbs are filled
-  //   return (isKgFilled && isRepsKgFilled) || (isLbsFilled && isRepsLbsFilled);
-  // };
   const areFieldsFilled = () => {
     const kgValues = kgInputValues.slice(0, workout.sets);
     const lbsValues = lbsInputValues.slice(0, workout.sets);

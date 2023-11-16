@@ -318,6 +318,38 @@ const GymWorkoutStart = () => {
   };
 
   // Update the currentWorkout when needed, e.g., when moving to the next workout
+  const weightValuesKg = kgInputValues.map((value) => parseInt(value));
+  const repsValuesKg = repsInputValuesKg.map((value) => parseInt(value));
+
+  const weightValuesLbs = lbsInputValues.map((value) => parseInt(value));
+  const repsValuesLbs = repsInputValuesLbs.map((value) => parseInt(value));
+  const hasKgData = weightValuesKg.some((value) => !isNaN(value)) && repsValuesKg.some((value) => !isNaN(value));
+  const hasLbsData = weightValuesLbs.some((value) => !isNaN(value)) && repsValuesLbs.some((value) => !isNaN(value));
+  console.log(hasLbsData,"weight");
+  
+  let weight_vs_reps;
+  
+  if (hasKgData) {
+    // Convert kg data to lbs and create the weight_vs_reps array
+    weight_vs_reps = weightValuesKg.map((weight, index) => ({
+      weight: `${(weight)}kg`, // Convert kg to lbs
+      reps: repsValuesKg[index],
+    }));
+  } else if (hasLbsData) {
+    // Use lbs data directly
+    weight_vs_reps = weightValuesLbs.map((weight, index) => ({
+      weight: `${weight}lbs`,
+      reps: repsValuesLbs[index],
+    }));
+  } else {
+    // Handle the case when neither kg nor lbs data is present
+    console.log('No data entered');
+  }
+
+
+ console.log('====================================');
+ console.log(weight_vs_reps, "demo");
+ console.log('====================================');
 
   useEffect(() => {
     // Update the input arrays with the new workout's sets
